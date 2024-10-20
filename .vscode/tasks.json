@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build SmartMatrix.WebApi",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/SmartMatrix.WebApi/SmartMatrix.WebApi.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build SmartMatrix.Domain",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/SmartMatrix.Domain/SmartMatrix.Domain.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

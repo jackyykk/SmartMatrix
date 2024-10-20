@@ -35,7 +35,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Visual Studio Code files
-.vscode/
+# .vscode/
 .history/
 
 # Rider files
