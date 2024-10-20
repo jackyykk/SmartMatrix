@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import packageJson from '../package.json';
 
 interface WeatherForecast {
   date: string;
@@ -30,7 +31,9 @@ export default function Home() {
 
   return (
     <main className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Weather Forecast</h1>
+      <h1 className="text-2xl font-bold mb-4">{packageJson.name}</h1>
+      <p className="text-sm text-gray-500 mb-4">Version: {packageJson.version}</p>
+      <p className="text-sm text-gray-500 mb-4">Module: Weather Forecast</p>
       <div className="flex gap-4 items-center flex-col sm:flex-row mb-6">
         <button
           onClick={fetchWeatherData}
@@ -47,19 +50,19 @@ export default function Home() {
           <table className="min-w-full bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
             <thead className="bg-gray-200 dark:bg-gray-700">
               <tr>
-                <th className="px-4 py-2">#</th>
-                <th className="px-4 py-2">Date</th>
-                <th className="px-4 py-2">Temperature (C)</th>
-                <th className="px-4 py-2">Summary</th>
+                <th className="px-4 py-2 text-left">#</th>
+                <th className="px-4 py-2 text-left">Date</th>
+                <th className="px-4 py-2 text-left">Temperature (C)</th>
+                <th className="px-4 py-2 text-left">Summary</th>
               </tr>
             </thead>
             <tbody>
               {weatherData.map((forecast, index) => (
                 <tr key={index} className="border-t dark:border-gray-700">
-                  <td className="px-4 py-2">{index + 1}</td>
-                  <td className="px-4 py-2">{forecast.date}</td>
-                  <td className="px-4 py-2">{forecast.temperatureC}</td>
-                  <td className="px-4 py-2">{forecast.summary}</td>
+                  <td className="px-4 py-2 text-left">{index + 1}</td>
+                  <td className="px-4 py-2 text-left">{forecast.date}</td>
+                  <td className="px-4 py-2 text-left">{forecast.temperatureC}</td>
+                  <td className="px-4 py-2 text-left">{forecast.summary}</td>
                 </tr>
               ))}
             </tbody>
