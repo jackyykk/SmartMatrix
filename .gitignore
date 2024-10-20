@@ -1,6 +1,7 @@
 # Root-level files to ignore
 private/
 node_modules/
+publish/
 package-lock.json
 yarn.lock
 
@@ -78,3 +79,4 @@ out/
 *.tgz
 *.zip
 *.tar
+

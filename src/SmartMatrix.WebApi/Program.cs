@@ -40,6 +40,10 @@ public class Program
         // Use the CORS policy
         app.UseCors("AllowAllOrigins");
 
+        // Serve static files and default files (index.html)
+        app.UseDefaultFiles();
+        app.UseStaticFiles();
+
         app.MapControllers();
 
         app.Run();
