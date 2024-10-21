@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import packageJson from '../package.json';
+import Button from '@mui/material/Button';
 
 interface WeatherForecast {
   date: string;
@@ -36,12 +37,12 @@ export default function Home() {
       <p className="text-sm text-gray-500 mb-4">Version: {packageJson.version}</p>
       <p className="text-sm text-gray-500 mb-4">Module: Weather Forecast</p>
       <div className="flex gap-4 items-center flex-col sm:flex-row mb-6">
-        <button
-          onClick={fetchWeatherData}
-          className="mb-6 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        <Button
+          variant="contained"
+          onClick={fetchWeatherData}          
         >
           Refresh Weather Data
-        </button>        
+        </Button>        
       </div>
       
       <div className="overflow-x-auto">
