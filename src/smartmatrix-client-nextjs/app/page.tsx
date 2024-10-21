@@ -3,6 +3,13 @@
 import { useEffect, useState } from 'react';
 import packageJson from '../package.json';
 import Button from '@mui/material/Button';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 interface WeatherForecast {
   date: string;
@@ -10,12 +17,14 @@ interface WeatherForecast {
   summary: string;
 }
 
-export default function Home() {
+export default function Home() {  
   const [weatherData, setWeatherData] = useState<WeatherForecast[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const fetchWeatherData = async () => {
     try {
+      if (loading) return;      
+      setLoading(true);
       const url = process.env.NEXT_PUBLIC_APISERVER_BASE_URL + '/api/tests/WeatherForecast';
       const response = await fetch(url);
       const data = await response.json();
@@ -29,8 +38,8 @@ export default function Home() {
 
   useEffect(() => {
     fetchWeatherData();
-  }, []);
-
+  }, []); // Empty dependency array ensures this runs only once
+  
   return (
     <main className="p-4">
       <h1 className="text-2xl font-bold mb-4">{packageJson.name}</h1>
@@ -39,7 +48,7 @@ export default function Home() {
       <div className="flex gap-4 items-center flex-col sm:flex-row mb-6">
         <Button
           variant="contained"
-          onClick={fetchWeatherData}          
+          onClick={fetchWeatherData}
         >
           Refresh Weather Data
         </Button>        
@@ -48,27 +57,34 @@ export default function Home() {
       <div className="overflow-x-auto">
         {loading ? (
           <p>Loading...</p>
-        ) : (
-          <table className="min-w-full bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden">
-            <thead className="bg-gray-200 dark:bg-gray-700">
-              <tr>
-                <th className="px-4 py-2 text-left">#</th>
-                <th className="px-4 py-2 text-left">Date</th>
-                <th className="px-4 py-2 text-left">Temperature (C)</th>
-                <th className="px-4 py-2 text-left">Summary</th>
-              </tr>
-            </thead>
-            <tbody>
-              {weatherData.map((forecast, index) => (
-                <tr key={index} className="border-t dark:border-gray-700">
-                  <td className="px-4 py-2 text-left">{index + 1}</td>
-                  <td className="px-4 py-2 text-left">{forecast.date}</td>
-                  <td className="px-4 py-2 text-left">{forecast.temperatureC}</td>
-                  <td className="px-4 py-2 text-left">{forecast.summary}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        ) : (          
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>#</TableCell>
+                  <TableCell align="left">Date</TableCell>
+                  <TableCell align="left">Temperature (C)</TableCell>
+                  <TableCell align="left">Summary</TableCell>                  
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {weatherData.map((row, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell align="left">{row.date}</TableCell>
+                    <TableCell align="left">{row.temperatureC}</TableCell>
+                    <TableCell align="left">{row.summary}</TableCell>                    
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         )}
       </div>
       <footer className="mt-6 flex gap-6 flex-wrap items-center justify-center">
