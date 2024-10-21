@@ -15,7 +15,8 @@ export default function Home() {
 
   const fetchWeatherData = async () => {
     try {
-      const response = await fetch('https://smartmatrix.azurewebsites.net/api/tests/WeatherForecast');
+      const url = process.env.NEXT_PUBLIC_APISERVER_BASE_URL + '/api/tests/WeatherForecast';
+      const response = await fetch(url);
       const data = await response.json();
       setWeatherData(data);
     } catch (error) {
