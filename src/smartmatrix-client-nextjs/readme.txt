@@ -1,3 +1,5 @@
+Please use Node.js v20.18.01 with long-term support
+
 *** Publish smartmatrix-client-nextjs ***
 
 1. Install packages

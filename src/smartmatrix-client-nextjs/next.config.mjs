@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  trailingSlash: true,
-  webpack: (config, { dev, isServer }) => {
-    if (dev) {
-      config.devtool = 'source-map';
+  trailingSlash: true,  
+  webpack: (config, options) => {
+    if (options.dev) {
+      config.devtool = 'eval-source-map';
     }
     return config;
-  },
+  },  
   // Add other configurations if needed
 };
 
