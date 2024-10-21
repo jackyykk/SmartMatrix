@@ -1,4 +1,4 @@
-Publish smartmatrix-client-nextjs
+*** Publish smartmatrix-client-nextjs ***
 
 1. Install packages
 npm install
@@ -12,3 +12,13 @@ npm run build
 4. After GitHub Action runs successfully, it will deploy the packages to Azure Static Web App
 
 
+*** Update Outdated Packages ***
+
+1. Install npm-check-updates globally
+npm install -g npm-check-updates
+
+2. Update package.json with the latest versions
+npx npm-check-updates -u
+
+3. Install the updated dependencies
+npm install
