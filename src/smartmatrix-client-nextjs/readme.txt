@@ -1,4 +1,4 @@
-Please use Node.js v20.18.01 with long-term support
+Please use Node.js v20.18.0 with long-term support
 
 *** Publish smartmatrix-client-nextjs ***
 
