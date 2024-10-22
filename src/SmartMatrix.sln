@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMatrix.Application", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMatrix.Infrastructure", "SmartMatrix.Infrastructure\SmartMatrix.Infrastructure.csproj", "{B80F64DA-8DAE-480C-8477-B5C8F740E155}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMatrix.Core", "SmartMatrix.Core\SmartMatrix.Core.csproj", "{BEF975F2-7B7C-42CC-B06A-078C4B632275}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{B80F64DA-8DAE-480C-8477-B5C8F740E155}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B80F64DA-8DAE-480C-8477-B5C8F740E155}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B80F64DA-8DAE-480C-8477-B5C8F740E155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEF975F2-7B7C-42CC-B06A-078C4B632275}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEF975F2-7B7C-42CC-B06A-078C4B632275}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEF975F2-7B7C-42CC-B06A-078C4B632275}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEF975F2-7B7C-42CC-B06A-078C4B632275}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
