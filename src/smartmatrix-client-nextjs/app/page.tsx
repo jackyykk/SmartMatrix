@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import packageJson from '../package.json';
 import Button from '@mui/material/Button';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 
 interface WeatherForecast {
@@ -49,6 +49,17 @@ export default function Home() {
 
   const paginationModel = { page: 0, pageSize: 5 };
 
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarDensitySelector />
+        <GridToolbarExport />
+      </GridToolbarContainer>
+    );
+  }
+
   return (
     <main className="p-4">
       <h1 className="text-2xl font-bold mb-4">{packageJson.name}</h1>
@@ -75,6 +86,7 @@ export default function Home() {
               pageSizeOptions={[5, 10]}
               checkboxSelection
               sx={{ border: 0 }}
+              slots={{ toolbar: CustomToolbar }}
             />
           </Paper>          
         )}
