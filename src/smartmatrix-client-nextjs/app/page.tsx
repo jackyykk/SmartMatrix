@@ -3,15 +3,11 @@
 import { useEffect, useState } from 'react';
 import packageJson from '../package.json';
 import Button from '@mui/material/Button';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 
 interface WeatherForecast {
+  id: number;
   date: string;
   temperatureC: number;
   summary: string;
@@ -28,6 +24,10 @@ export default function Home() {
       const url = process.env.NEXT_PUBLIC_APISERVER_BASE_URL + '/api/tests/WeatherForecast';
       const response = await fetch(url);
       const data = await response.json();
+      // fill in the id field
+      data.forEach((item: WeatherForecast, index: number) => {
+        item.id = index + 1;
+      });
       setWeatherData(data);
     } catch (error) {
       console.error('Error fetching weather data:', error);
@@ -40,6 +40,15 @@ export default function Home() {
     fetchWeatherData();
   }, []); // Empty dependency array ensures this runs only once
   
+  // table definition
+  const columns: GridColDef[] = [
+    { field: 'id', headerName: 'Id', width: 100 },
+    { field: 'temperatureC', headerName: 'Temperature (C)', width: 300 },
+    { field: 'summary', headerName: 'Summary', width: 300 },    
+  ];
+
+  const paginationModel = { page: 0, pageSize: 5 };
+
   return (
     <main className="p-4">
       <h1 className="text-2xl font-bold mb-4">{packageJson.name}</h1>
@@ -57,34 +66,17 @@ export default function Home() {
       <div className="overflow-x-auto">
         {loading ? (
           <p>Loading...</p>
-        ) : (          
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>#</TableCell>
-                  <TableCell align="left">Date</TableCell>
-                  <TableCell align="left">Temperature (C)</TableCell>
-                  <TableCell align="left">Summary</TableCell>                  
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {weatherData.map((row, index) => (
-                  <TableRow
-                    key={index}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {index + 1}
-                    </TableCell>
-                    <TableCell align="left">{row.date}</TableCell>
-                    <TableCell align="left">{row.temperatureC}</TableCell>
-                    <TableCell align="left">{row.summary}</TableCell>                    
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+        ) : (
+          <Paper sx={{ width: '100%' }}>
+            <DataGrid
+              rows={weatherData}
+              columns={columns}
+              initialState={{ pagination: { paginationModel } }}
+              pageSizeOptions={[5, 10]}
+              checkboxSelection
+              sx={{ border: 0 }}
+            />
+          </Paper>          
         )}
       </div>
       <footer className="mt-6 flex gap-6 flex-wrap items-center justify-center">
