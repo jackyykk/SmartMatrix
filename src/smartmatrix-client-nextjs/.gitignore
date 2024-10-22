@@ -30,9 +30,9 @@ yarn-error.log*
 
 # environment variables
 .env
-.env.development
-.env.test
-.env.production
+#.env.development
+#.env.test
+#.env.production
 
 # vercel
 .vercel
