@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMatrix.Domain", "Smart
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMatrix.WebApi", "SmartMatrix.WebApi\SmartMatrix.WebApi.csproj", "{0548D509-A29B-4D66-8F9B-5410D3FD99F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMatrix.Persistence", "SmartMatrix.Persistence\SmartMatrix.Persistence.csproj", "{BDD5E962-8E0A-4176-AD9B-28978FEC4263}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMatrix.Application", "SmartMatrix.Application\SmartMatrix.Application.csproj", "{BF1ACCE4-361B-479D-91CB-717332E3E151}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMatrix.Infrastructure", "SmartMatrix.Infrastructure\SmartMatrix.Infrastructure.csproj", "{B80F64DA-8DAE-480C-8477-B5C8F740E155}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +30,17 @@ Global
 		{0548D509-A29B-4D66-8F9B-5410D3FD99F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0548D509-A29B-4D66-8F9B-5410D3FD99F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0548D509-A29B-4D66-8F9B-5410D3FD99F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDD5E962-8E0A-4176-AD9B-28978FEC4263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDD5E962-8E0A-4176-AD9B-28978FEC4263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDD5E962-8E0A-4176-AD9B-28978FEC4263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDD5E962-8E0A-4176-AD9B-28978FEC4263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF1ACCE4-361B-479D-91CB-717332E3E151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF1ACCE4-361B-479D-91CB-717332E3E151}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF1ACCE4-361B-479D-91CB-717332E3E151}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF1ACCE4-361B-479D-91CB-717332E3E151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B80F64DA-8DAE-480C-8477-B5C8F740E155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B80F64DA-8DAE-480C-8477-B5C8F740E155}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B80F64DA-8DAE-480C-8477-B5C8F740E155}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B80F64DA-8DAE-480C-8477-B5C8F740E155}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
