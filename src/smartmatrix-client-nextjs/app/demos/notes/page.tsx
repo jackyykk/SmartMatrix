@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 
-export default function CountriesPage() {
+export default function NotesPage() {
     const router = useRouter();
 
     const backToHome = () => {
@@ -12,7 +12,7 @@ export default function CountriesPage() {
 
     return (
         <main className="p-4">
-            <p className="text-sm text-gray-500 mb-4">Demo: Countries</p>
+            <p className="text-sm text-gray-500 mb-4">Demo: Notes</p>
             <div className="flex gap-4 items-center flex-col sm:flex-row mb-6">
                 <Button
                     variant="contained"

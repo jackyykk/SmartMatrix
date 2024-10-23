@@ -29,7 +29,7 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
-      <h1 className="text-4xl font-bold mb-4 text-center">{packageJson.name}</h1>
+      <h1 className="text-4xl font-bold mb-4 text-center">Smart Matrix</h1>
       <p className="text-lg text-gray-600 mb-8 text-center">Version: {packageJson.version}</p>
       <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
         <Box sx={{ minWidth: 200 }}>
@@ -43,7 +43,7 @@ export default function Home() {
               onChange={handleDemoChange}
             >
               <MenuItem value={'weather-forecast'}>Weather Forecast</MenuItem>
-              <MenuItem value={'list-of-countries'}>List Of Countries</MenuItem>
+              <MenuItem value={'notes'}>Notes</MenuItem>
             </Select>
           </FormControl>
         </Box>
