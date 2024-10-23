@@ -43,7 +43,7 @@ export default function Home() {
               onChange={handleDemoChange}
             >
               <MenuItem value={'weather-forecast'}>Weather Forecast</MenuItem>
-              <MenuItem value={'notes'}>Notes</MenuItem>
+              <MenuItem value={'simple-notes'}>Simple Notes</MenuItem>
             </Select>
           </FormControl>
         </Box>
