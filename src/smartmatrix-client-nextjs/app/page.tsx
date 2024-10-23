@@ -21,7 +21,7 @@ export default function Home() {
     try {
       if (loading) return;      
       setLoading(true);
-      const url = process.env.NEXT_PUBLIC_APISERVER_BASE_URL + '/api/examples/WeatherForecast';
+      const url = process.env.NEXT_PUBLIC_APISERVER_BASE_URL + '/api/demos/WeatherForecast';
       const response = await fetch(url);
       const data = await response.json();
       // fill in the id field
