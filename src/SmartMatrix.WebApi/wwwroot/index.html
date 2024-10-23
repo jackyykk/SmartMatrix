@@ -34,6 +34,10 @@
             font-size: 1.2em;
             margin: 10px 0;
         }
+        .environment {
+            font-size: 1em;
+            color: #888;
+        }
         .version {
             font-size: 1em;
             color: #888;
@@ -69,14 +73,15 @@
             <h1>Welcome to SmartMatrix</h1>
             <p>Your intelligent data management solution</p>
         </header>
-        <p id="version" class="version">Version: Loading...</p>
+        <p id="environment" class="environment">Environment: Loading...</p>
+        <p id="version" class="version">Version: Loading...</p>        
     </div>
     <footer>
         &copy; 2023 SmartMatrix. All rights reserved.
     </footer>
     <script>
         // Fetch the version number from the API and display it
-        fetch('/api/version')
+        fetch('/api/version/getversion')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('version').innerText = `Version: ${data.version}`;
@@ -84,6 +89,17 @@
             .catch(error => {
                 console.error('Error fetching version:', error);
                 document.getElementById('version').innerText = 'Version: Error loading version';
+            });
+
+        // Fetch the main config from the API and display the environment
+        fetch('/api/config/getmainconfig')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('environment').innerText = `Environment: ${data.environment}`;
+            })
+            .catch(error => {
+                console.error('Error fetching environment:', error);
+                document.getElementById('environment').innerText = 'Environment: Error loading environment';
             });
     </script>
 </body>

@@ -2,7 +2,7 @@ Command Tips
 
 # Publish SmartMatrix.WebApi
 PS C:\GitRepos\GitHub\jackyykk\SmartMatrix\src\SmartMatrix.WebApi>
-dotnet publish --configuration Release --output ./publish
+dotnet publish --configuration Release --output ../publish/SmartMatrix.WebApi
 
 # Navigate to the solution directory
 cd path/to/your/solution

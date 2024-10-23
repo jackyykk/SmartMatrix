@@ -24,6 +24,13 @@ public class Program
                 });
         });
 
+        // Add configuration to read from appsettings.json
+        builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.development.json", optional: true, reloadOnChange: true)
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddEnvironmentVariables();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

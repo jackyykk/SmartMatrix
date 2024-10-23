@@ -5,16 +5,14 @@ namespace SmartMatrix.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class VersionController : ControllerBase
-    {
-        private readonly ILogger<VersionController> _logger;
-
-        public VersionController(ILogger<VersionController> logger)
+    public class VersionController : BaseController<VersionController>
+    {        
+         public VersionController(ILogger<VersionController> logger, IConfiguration configuration)
+            : base(logger, configuration)
         {
-            _logger = logger;
         }
 
-        [HttpGet]
+        [HttpGet("GetVersion", Name = "VersionController.GetVersion")]
         public IActionResult GetVersion()
         {
             var version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
