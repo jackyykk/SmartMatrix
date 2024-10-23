@@ -22,7 +22,7 @@ export default function SimpleNotesPage() {
                 </Button>
             </div>
 
-            <footer className="mt-6 flex gap-6 flex-wrap items-center justify-center">
+            <footer className="mt-6 flex gap-6 flex-wrap text-gray-600 items-center justify-center">
                 &copy; 2024 SmartMatrix. All rights reserved.
             </footer>
         </main>
