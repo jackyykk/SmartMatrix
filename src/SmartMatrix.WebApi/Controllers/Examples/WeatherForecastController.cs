@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace SmartMatrix.WebApi.Controllers.Tests
 {
     [ApiController]
-    [Route("api/tests/[controller]")]
+    [Route("api/examples/[controller]")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]

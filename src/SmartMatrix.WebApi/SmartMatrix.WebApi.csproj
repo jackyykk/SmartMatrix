@@ -4,6 +4,22 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Specify the major and minor version numbers -->
+    <MajorVersion>1</MajorVersion>
+    <MinorVersion>0</MinorVersion>    
+
+    <!-- Generate the date part of the version number in YYMMDD format -->  
+    <BuildPart>$([System.DateTime]::UtcNow.ToString("yyMMdd"))</BuildPart>
+
+    <!-- Specify the revision number -->
+    <Revision>1</Revision>
+
+    <!-- Combine the parts to form the full version number -->
+    <Version>$(MajorVersion).$(MinorVersion).$(BuildPart).$(Revision)</Version>
+    <AssemblyVersion>$(MajorVersion).$(MinorVersion).0.0</AssemblyVersion>
+    <FileVersion>$(MajorVersion).$(MinorVersion).0.0</FileVersion>
+    <InformationalVersion>$(MajorVersion).$(MinorVersion).$(BuildPart).$(Revision)</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>

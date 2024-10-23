@@ -3,10 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartMatrix Web API</title>
+    <title>SmartMatrix</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #4CAF50;
+        }
+        p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        .version {
+            font-size: 1em;
+            color: #888;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: calc(100% - 20px); /* Slightly smaller to prevent scrollbars */
+            height: calc(100% - 20px); /* Slightly smaller to prevent scrollbars */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 10px; /* Center the container */
+        }
+        footer {
+            margin-top: auto; /* Pushes the footer to the bottom */
+            font-size: 0.9em;
+            color: #aaa;
+            text-align: center;
+            width: 100%;
+            padding: 10px 0;
+            background-color: #f4f4f9;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to SmartMatrix Web API</h1>
-    <p>This is the index page.</p>
+    <div class="container">
+        <header>
+            <h1>Welcome to SmartMatrix</h1>
+            <p>Your intelligent data management solution</p>
+        </header>
+        <p id="version" class="version">Version: Loading...</p>
+    </div>
+    <footer>
+        &copy; 2023 SmartMatrix. All rights reserved.
+    </footer>
+    <script>
+        // Fetch the version number from the API and display it
+        fetch('/api/version')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('version').innerText = `Version: ${data.version}`;
+            })
+            .catch(error => {
+                console.error('Error fetching version:', error);
+                document.getElementById('version').innerText = 'Version: Error loading version';
+            });
+    </script>
 </body>
 </html>
