@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SmartMatrix.Domain\SmartMatrix.Domain.csproj" />
     <ProjectReference Include="..\SmartMatrix.Application\SmartMatrix.Application.csproj" />
   </ItemGroup>
 

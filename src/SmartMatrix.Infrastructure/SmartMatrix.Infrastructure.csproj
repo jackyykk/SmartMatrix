@@ -2,7 +2,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SmartMatrix.Application\SmartMatrix.Application.csproj" />
-    <ProjectReference Include="..\SmartMatrix.Domain\SmartMatrix.Domain.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
