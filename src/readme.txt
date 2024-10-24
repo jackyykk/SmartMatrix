@@ -22,3 +22,5 @@ dotnet add reference ..\SmartMatrix.Application/SmartMatrix.Application.csproj
 
 # Add the Dapper package
 dotnet add package Dapper
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer

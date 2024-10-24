@@ -30,6 +30,6 @@ namespace SmartMatrix.Domain.Entities.Identities
 
         // Status
         public string LoginType { get; set; } = "Default";
-        public string Status { get; set; } = CommonConstants.EntityStatus.Active;
+        public new string Status { get; set; } = CommonConstants.EntityStatus.Active;
     }
 }

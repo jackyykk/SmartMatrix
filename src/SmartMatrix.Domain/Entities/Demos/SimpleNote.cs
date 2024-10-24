@@ -6,5 +6,6 @@ namespace SmartMatrix.Domain.Entities.Demos
     {
         public string Title { get; set; }
         public string Content { get; set; }
+        public string Owner { get; set; }
     }
 }
