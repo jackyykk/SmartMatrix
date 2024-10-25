@@ -24,6 +24,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SmartMatrix.Application\SmartMatrix.Application.csproj" />
+    <ProjectReference Include="..\SmartMatrix.Infrastructure\SmartMatrix.Infrastructure.csproj" />
+    <ProjectReference Include="..\SmartMatrix.DataAccess\SmartMatrix.DataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>

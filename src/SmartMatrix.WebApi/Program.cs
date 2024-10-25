@@ -1,3 +1,8 @@
+using SmartMatrix.Application.Extensions;
+using SmartMatrix.DataAccess.Extensions;
+using SmartMatrix.Infrastructure.Extensions;
+using SmartMatrix.WebApi.Extensions;
+
 public class Program
 {
     public static void Main(string[] args)
@@ -30,6 +35,12 @@ public class Program
             .AddJsonFile("appsettings.development.json", optional: true, reloadOnChange: true)
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .AddEnvironmentVariables();
+
+        // Register services from other projects
+        builder.Services.AddApplicationServices(builder.Configuration);
+        builder.Services.AddInfrastructureServices(builder.Configuration);
+        builder.Services.AddDataAccessServices(builder.Configuration);
+        builder.Services.AddWebApiServices(builder.Configuration);
 
         var app = builder.Build();
 
