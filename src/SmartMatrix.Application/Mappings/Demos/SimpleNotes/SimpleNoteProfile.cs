@@ -8,7 +8,7 @@ namespace SmartMatrix.Application.Mappings.Demos.SimpleNotes
     {
         public SimpleNoteProfile()
         {
-            CreateMap<SimpleNote, GetSimpleNoteByIdRequest>().ReverseMap();            
+            CreateMap<SimpleNote, GetSimpleNoteByIdResponse>().ReverseMap();                     
         }
     }
 }
