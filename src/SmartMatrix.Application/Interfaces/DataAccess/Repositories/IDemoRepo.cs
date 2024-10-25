@@ -1,6 +1,6 @@
 using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
 using SmartMatrix.Application.Interfaces.DataAccess.Specifications;
-using SmartMatrix.Core.Abstractions.Domain;
+using SmartMatrix.Core.BaseClasses.Common;
 
 namespace SmartMatrix.Application.Interfaces.DataAccess.Repositories
 {

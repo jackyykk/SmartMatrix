@@ -24,3 +24,7 @@ dotnet add reference ..\SmartMatrix.Application/SmartMatrix.Application.csproj
 dotnet add package Dapper
 dotnet add package Microsoft.EntityFrameworkCore
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package MediatR
+dotnet add package MediatR.Extensions.Microsoft.DependencyInjection
+dotnet add package AutoMapper
+dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection

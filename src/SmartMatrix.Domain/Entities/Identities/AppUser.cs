@@ -1,4 +1,4 @@
-using SmartMatrix.Core.Abstractions.Domain;
+using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.Domain.Constants;
 
 namespace SmartMatrix.Domain.Entities.Identities

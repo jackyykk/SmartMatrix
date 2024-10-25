@@ -1,4 +1,4 @@
-namespace SmartMatrix.Core.ErrorHandling
+namespace SmartMatrix.Core.Validations
 {
     public interface IThrow
     {

@@ -1,4 +1,4 @@
-namespace SmartMatrix.Core.Abstractions.Domain
+namespace SmartMatrix.Core.BaseClasses.Common
 {
     public interface IEntity
     {

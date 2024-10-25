@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
 using SmartMatrix.Application.Interfaces.Services.Common;
 using SmartMatrix.Application.Interfaces.Services.Identities;
-using SmartMatrix.Core.Abstractions.Domain;
+using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.DataAccess.AuditLogs;
 using SmartMatrix.Domain.Entities.Demos;
 

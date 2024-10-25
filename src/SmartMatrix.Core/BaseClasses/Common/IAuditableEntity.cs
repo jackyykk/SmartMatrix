@@ -1,6 +1,6 @@
 using System;
 
-namespace SmartMatrix.Core.Abstractions.Domain
+namespace SmartMatrix.Core.BaseClasses.Common
 {
     public interface IAuditableEntity<TId> : IAuditableEntity, IEntity<TId>
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace SmartMatrix.Core.ErrorHandling.Exceptions
+namespace SmartMatrix.Core.Validations.Exceptions
 {
     public class AppException : Exception
     {

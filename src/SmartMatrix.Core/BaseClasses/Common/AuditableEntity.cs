@@ -1,6 +1,6 @@
 using System;
 
-namespace SmartMatrix.Core.Abstractions.Domain
+namespace SmartMatrix.Core.BaseClasses.Common
 {
     public abstract class AuditableEntity<TId> : IAuditableEntity<TId>
     {
