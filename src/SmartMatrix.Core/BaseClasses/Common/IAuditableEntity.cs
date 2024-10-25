@@ -7,7 +7,8 @@ namespace SmartMatrix.Core.BaseClasses.Common
     }
 
     public interface IAuditableEntity : IEntity
-    {        
+    {
+        public string Status { get; set; }
         string CreatedBy { get; set; }
         DateTime? CreatedAt { get; set; }
         string ModifiedBy { get; set; }

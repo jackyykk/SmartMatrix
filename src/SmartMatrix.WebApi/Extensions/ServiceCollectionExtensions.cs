@@ -10,11 +10,13 @@ namespace SmartMatrix.WebApi.Extensions
     {
         public static IServiceCollection AddWebApiServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddHttpContextAccessor();
-            services.AddScoped<IAuthenticatedUserService, CurrentUserService>();
+            services.AddDistributedMemoryCache();
 
             services.TryAddTransient(typeof(IStringLocalizer<>), typeof(ServerLocalizer<>));
 
+            services.AddHttpContextAccessor();
+            services.AddScoped<IAuthenticatedUserService, CurrentUserService>();
+            
             return services;
         }
     }

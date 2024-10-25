@@ -1,4 +1,5 @@
 using System.Reflection;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SmartMatrix.WebApi.Controllers
@@ -7,8 +8,8 @@ namespace SmartMatrix.WebApi.Controllers
     [Route("api/[controller]")]
     public class VersionController : BaseController<VersionController>
     {        
-         public VersionController(ILogger<VersionController> logger, IConfiguration configuration)
-            : base(logger, configuration)
+        public VersionController(ILogger<VersionController> logger, IConfiguration configuration, IMediator mediator)
+            : base(logger, configuration, mediator)
         {
         }
 

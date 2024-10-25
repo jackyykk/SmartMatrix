@@ -1,21 +1,20 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace SmartMatrix.WebApi.Controllers.Tests
+namespace SmartMatrix.WebApi.Controllers.Demos
 {
     [ApiController]
     [Route("api/demos/[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController : BaseController<WeatherForecastController>
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfiguration configuration, IMediator mediator)
+            : base(logger, configuration, mediator)
         {
-            _logger = logger;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]

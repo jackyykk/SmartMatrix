@@ -27,7 +27,7 @@ namespace SmartMatrix.DataAccess.Repositories.Demos.SimpleNotes
         public IQueryable<SimpleNote> SimpleNotes => _repo.Entities;
 
         public async Task<SimpleNote?> GetByIdAsync(int id)
-        {
+        {            
             return await _repo.Entities.Where(p => p.Id == id).FirstOrDefaultAsync();
         }
 

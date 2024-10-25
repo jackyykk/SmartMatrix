@@ -1,3 +1,4 @@
+using AutoMapper;
 using SmartMatrix.Application.Extensions;
 using SmartMatrix.DataAccess.Extensions;
 using SmartMatrix.Infrastructure.Extensions;
@@ -41,6 +42,11 @@ public class Program
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddDataAccessServices(builder.Configuration);
         builder.Services.AddWebApiServices(builder.Configuration);
+
+        // Enable AutoMapper diagnostics
+        var serviceProvider = builder.Services.BuildServiceProvider();
+        var mapper = serviceProvider.GetRequiredService<IMapper>();
+        mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
         var app = builder.Build();
 

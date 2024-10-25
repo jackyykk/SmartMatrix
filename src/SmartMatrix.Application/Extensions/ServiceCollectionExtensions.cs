@@ -1,3 +1,4 @@
+using System.Reflection;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,8 +9,11 @@ namespace SmartMatrix.Application.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddAutoMapper(typeof(ServiceCollectionExtensions).Assembly);            
-            services.AddMediatR(typeof(ServiceCollectionExtensions).Assembly);
+            // Register AutoMapper by providing the assembly that contains the mapping profiles
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+            // Register MediatR by providing the assembly that contains the handlers            
+            services.AddMediatR(Assembly.GetExecutingAssembly());
 
             return services;
         }

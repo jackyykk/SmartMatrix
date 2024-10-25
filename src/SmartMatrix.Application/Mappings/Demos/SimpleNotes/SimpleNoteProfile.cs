@@ -4,9 +4,9 @@ using SmartMatrix.Domain.Messages.Demos.SimpleNotes;
 
 namespace SmartMatrix.Application.Mappings.Demos.SimpleNotes
 {
-    internal class MappingProfile : Profile
+    public class SimpleNoteProfile : Profile
     {
-        public MappingProfile()
+        public SimpleNoteProfile()
         {
             CreateMap<SimpleNote, GetSimpleNoteByIdRequest>().ReverseMap();            
         }

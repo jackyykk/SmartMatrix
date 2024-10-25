@@ -1,5 +1,5 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using SmartMatrix.Application.Configurations;
 
 namespace SmartMatrix.WebApi.Controllers
@@ -8,8 +8,8 @@ namespace SmartMatrix.WebApi.Controllers
     [Route("api/[controller]")]
     public class ConfigController : BaseController<ConfigController>
     {
-        public ConfigController(ILogger<ConfigController> logger, IConfiguration configuration)
-            : base(logger, configuration)
+        public ConfigController(ILogger<ConfigController> logger, IConfiguration configuration, IMediator mediator)
+            : base(logger, configuration, mediator)
         {
         }
 
