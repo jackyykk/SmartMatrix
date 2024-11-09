@@ -1,6 +1,6 @@
 namespace SmartMatrix.Application.Interfaces.DataAccess.DbConnections
 {
-    public interface IAppWriteDbConnection : IBaseWriteDbConnection
+    public interface ICoreReadDbConnection : IBaseReadDbConnection
     {
     }
 }

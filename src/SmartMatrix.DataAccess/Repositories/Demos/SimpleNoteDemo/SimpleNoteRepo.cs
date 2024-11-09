@@ -37,5 +37,11 @@ namespace SmartMatrix.DataAccess.Repositories.Demos.SimpleNoteDemo
         {
             return await _readRepo.Entities.Where(p => p.Owner == owner).ToListAsync();
         }
+
+        public async Task<int> InsertAsync(SimpleNote entity)
+        {
+            await _writeRepo.InsertAsync(entity);
+            return entity.Id;
+        }
     }
 }

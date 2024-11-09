@@ -11,7 +11,7 @@ namespace SmartMatrix.DataAccess.Repositories
     public class DemoWriteRepo<T, TId> : IDemoWriteRepo<T, TId> where T : AuditableEntity<TId>
     {
         const double DefaultCommandTimeoutInSeconds = 60;
-        
+
         private readonly DemoWriteDbContext _writeDbContext;        
         public IDemoWriteDbContext DemoWriteDb => _writeDbContext;
         public IQueryable<T> Entities => _writeDbContext.Set<T>();
@@ -58,7 +58,7 @@ namespace SmartMatrix.DataAccess.Repositories
                 .ToListAsync();
         }
 
-        public async Task<T> AddAsync(T entity)
+        public async Task<T> InsertAsync(T entity)
         {
             await _writeDbContext.Set<T>().AddAsync(entity);
             return entity;
@@ -67,7 +67,6 @@ namespace SmartMatrix.DataAccess.Repositories
         public Task UpdateAsync(T entity)
         {
             _writeDbContext.Entry(entity).CurrentValues.SetValues(entity);
-
             return Task.CompletedTask;
         }
 

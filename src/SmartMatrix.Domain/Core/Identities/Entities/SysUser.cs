@@ -3,7 +3,7 @@ using SmartMatrix.Domain.Constants;
 
 namespace SmartMatrix.Domain.Core.Identities.Entities
 {
-    public class AppUser : AuditableEntity<int>
+    public class SysUser : AuditableEntity<int>
     {
         // User Information
         public string UserName { get; set; }    // This is unique and used for login

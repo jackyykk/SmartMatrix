@@ -16,7 +16,7 @@ namespace SmartMatrix.Application.Interfaces.DataAccess.Repositories
         Task<List<T>> FindAsync(ISpec<T> spec);
         Task<List<T>> FindPagedAsync(int pageNumber, int pageSize, ISpec<T> spec);
         
-        Task<T> AddAsync(T entity);
+        Task<T> InsertAsync(T entity);
 
         Task UpdateAsync(T entity);
 

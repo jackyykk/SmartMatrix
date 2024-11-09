@@ -2,8 +2,8 @@ using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
 
 namespace SmartMatrix.Application.Interfaces.DataAccess.Transactions
 {
-    public interface IAppUnitOfWork : IBaseUnitOfWork
+    public interface ICoreUnitOfWork : IBaseUnitOfWork
     {
-        IAppDbContext DbContext { get; }
+        ICoreWriteDbContext WriteDbContext { get; }
     }
 }

@@ -3,9 +3,9 @@ using SmartMatrix.Domain.Core.Identities.Entities;
 
 namespace SmartMatrix.Application.Interfaces.DataAccess.DbContexts
 {
-    public interface IAppDbContext : IBaseDbContext
+    public interface ICoreWriteDbContext : IBaseDbContext
     {        
         // DbSet
-        DbSet<AppUser> AppUsers { get; set; }
+        DbSet<SysUser> SysUsers { get; set; }
     }
 }
