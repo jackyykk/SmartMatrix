@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using SmartMatrix.Domain.Interfaces.Services.Essential;
+using SmartMatrix.Application.Interfaces.Services.Essential;
 
 namespace SmartMatrix.WebApi.Services
 {

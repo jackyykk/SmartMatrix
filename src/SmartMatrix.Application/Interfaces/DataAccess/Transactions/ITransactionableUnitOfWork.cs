@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace SmartMatrix.Domain.Interfaces.DataAccess.Transactions
+namespace SmartMatrix.Application.Interfaces.DataAccess.Transactions
 {
     public interface ITransactionableUnitOfWork : IDisposable
     {

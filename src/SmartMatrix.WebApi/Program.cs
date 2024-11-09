@@ -1,5 +1,5 @@
 using AutoMapper;
-using SmartMatrix.Domain.Extensions;
+using SmartMatrix.Application.Extensions;
 using SmartMatrix.DataAccess.Extensions;
 using SmartMatrix.Infrastructure.Extensions;
 using SmartMatrix.WebApi.Extensions;

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SmartMatrix.Domain.Demos.SimpleNotes.Entities;
 
-namespace SmartMatrix.Domain.Interfaces.DataAccess.DbContexts
+namespace SmartMatrix.Application.Interfaces.DataAccess.DbContexts
 {
     public interface IDemoDbContext : IBaseDbContext
     {        

@@ -1,4 +1,4 @@
-namespace SmartMatrix.Domain.Demos.SimpleNotes.Features.Queries
+namespace SmartMatrix.Application.Demos.SimpleNotes.Features.Queries
 {
     
 }

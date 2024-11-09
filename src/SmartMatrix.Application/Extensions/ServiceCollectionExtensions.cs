@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SmartMatrix.Domain.Extensions
+namespace SmartMatrix.Application.Extensions
 {
     public static class ServiceCollectionExtensions
     {

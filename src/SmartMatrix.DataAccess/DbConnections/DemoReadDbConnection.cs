@@ -2,8 +2,8 @@ using System.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using SmartMatrix.Domain.Interfaces.DataAccess.Common;
-using SmartMatrix.Domain.Interfaces.DataAccess.DbConnections;
+using SmartMatrix.Application.Interfaces.DataAccess.Common;
+using SmartMatrix.Application.Interfaces.DataAccess.DbConnections;
 using SmartMatrix.DataAccess.Common;
 
 namespace SmartMatrix.DataAccess.DbConnections

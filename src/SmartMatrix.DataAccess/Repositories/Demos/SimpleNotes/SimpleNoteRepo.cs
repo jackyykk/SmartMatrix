@@ -1,9 +1,9 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using SmartMatrix.Domain.Interfaces.DataAccess.DbConnections;
-using SmartMatrix.Domain.Interfaces.DataAccess.Repositories;
-using SmartMatrix.Domain.Interfaces.DataAccess.Repositories.Demos.SimpleNotes;
+using SmartMatrix.Application.Interfaces.DataAccess.DbConnections;
+using SmartMatrix.Application.Interfaces.DataAccess.Repositories;
+using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNotes;
 using SmartMatrix.Domain.Demos.SimpleNotes.Entities;
 
 namespace SmartMatrix.DataAccess.Repositories.Demos.SimpleNotes

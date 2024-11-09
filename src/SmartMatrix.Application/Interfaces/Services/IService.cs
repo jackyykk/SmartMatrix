@@ -1,4 +1,4 @@
-namespace SmartMatrix.Domain.Interfaces.Services
+namespace SmartMatrix.Application.Interfaces.Services
 {
     public interface IService
     {

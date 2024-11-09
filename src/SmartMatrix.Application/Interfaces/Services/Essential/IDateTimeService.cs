@@ -1,4 +1,4 @@
-namespace SmartMatrix.Domain.Interfaces.Services.Essential
+namespace SmartMatrix.Application.Interfaces.Services.Essential
 {
     public interface IDateTimeService : IService
     {

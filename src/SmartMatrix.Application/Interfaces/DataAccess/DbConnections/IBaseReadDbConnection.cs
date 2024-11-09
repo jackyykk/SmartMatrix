@@ -1,7 +1,7 @@
 using System.Data;
-using SmartMatrix.Domain.Interfaces.DataAccess.Common;
+using SmartMatrix.Application.Interfaces.DataAccess.Common;
 
-namespace SmartMatrix.Domain.Interfaces.DataAccess.DbConnections
+namespace SmartMatrix.Application.Interfaces.DataAccess.DbConnections
 {
     public interface IBaseReadDbConnection
     {

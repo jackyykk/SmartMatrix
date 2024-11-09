@@ -1,12 +1,11 @@
 using System.Transactions;
 using AutoMapper;
 using MediatR;
-using SmartMatrix.Domain.Interfaces.DataAccess.Repositories.Demos.SimpleNotes;
+using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNotes;
 using SmartMatrix.Core.BaseClasses.Web;
 using SmartMatrix.Domain.Demos.SimpleNotes.Messages;
 
-
-namespace SmartMatrix.Domain.Demos.SimpleNotes.Features.Queries
+namespace SmartMatrix.Application.Demos.SimpleNotes.Features.Queries
 {
     public class GetSimpleNoteByIdQuery : IRequest<Result<GetSimpleNoteByIdResponse>>
     {

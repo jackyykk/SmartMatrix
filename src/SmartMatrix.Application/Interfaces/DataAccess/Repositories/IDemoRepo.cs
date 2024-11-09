@@ -1,8 +1,8 @@
-using SmartMatrix.Domain.Interfaces.DataAccess.DbContexts;
-using SmartMatrix.Domain.Interfaces.DataAccess.Specifications;
+using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
+using SmartMatrix.Application.Interfaces.DataAccess.Specifications;
 using SmartMatrix.Core.BaseClasses.Common;
 
-namespace SmartMatrix.Domain.Interfaces.DataAccess.Repositories
+namespace SmartMatrix.Application.Interfaces.DataAccess.Repositories
 {
     public interface IDemoRepo<T, in TId> where T : class, IEntity<TId>
     {
