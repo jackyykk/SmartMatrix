@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SmartMatrix.Application.Configurations;
+using SmartMatrix.Domain.Configurations;
 
 namespace SmartMatrix.WebApi.Controllers
 {

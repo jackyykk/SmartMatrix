@@ -1,6 +1,6 @@
-using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
+using SmartMatrix.Domain.Interfaces.DataAccess.DbContexts;
 
-namespace SmartMatrix.Application.Interfaces.DataAccess.Transactions
+namespace SmartMatrix.Domain.Interfaces.DataAccess.Transactions
 {
     public interface IAppUnitOfWork : IBaseUnitOfWork
     {

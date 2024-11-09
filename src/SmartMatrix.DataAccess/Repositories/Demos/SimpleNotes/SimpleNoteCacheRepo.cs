@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
-using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNotes;
+using SmartMatrix.Domain.Interfaces.DataAccess.Repositories.Demos.SimpleNotes;
 using SmartMatrix.Core.Validations;
 using SmartMatrix.DataAccess.Constants;
 using SmartMatrix.Domain.Demos.SimpleNotes.Entities;

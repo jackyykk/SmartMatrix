@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SmartMatrix.Application.Demos.SimpleNotes.Features.Queries;
+using SmartMatrix.Domain.Demos.SimpleNotes.Features.Queries;
 using SmartMatrix.Domain.Demos.SimpleNotes.Entities;
 using SmartMatrix.Domain.Demos.SimpleNotes.Messages;
 

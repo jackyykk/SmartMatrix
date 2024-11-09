@@ -1,8 +1,7 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore;
-using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
-using SmartMatrix.Application.Interfaces.Services.Essential;
-using SmartMatrix.Application.Interfaces.Services.Essential;
+using SmartMatrix.Domain.Interfaces.DataAccess.DbContexts;
+using SmartMatrix.Domain.Interfaces.Services.Essential;
 using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.DataAccess.AuditLogs;
 using SmartMatrix.Domain.Demos.SimpleNotes.Entities;

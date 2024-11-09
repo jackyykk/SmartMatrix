@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SmartMatrix.Application.Interfaces.DataAccess.DbConnections;
-using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
-using SmartMatrix.Application.Interfaces.DataAccess.Repositories;
-using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNotes;
+using SmartMatrix.Domain.Interfaces.DataAccess.DbConnections;
+using SmartMatrix.Domain.Interfaces.DataAccess.DbContexts;
+using SmartMatrix.Domain.Interfaces.DataAccess.Repositories;
+using SmartMatrix.Domain.Interfaces.DataAccess.Repositories.Demos.SimpleNotes;
 using SmartMatrix.DataAccess.DbConnections;
 using SmartMatrix.DataAccess.DbContexts;
 using SmartMatrix.DataAccess.Repositories;

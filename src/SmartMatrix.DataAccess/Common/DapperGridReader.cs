@@ -1,4 +1,4 @@
-using SmartMatrix.Application.Interfaces.DataAccess.Common;
+using SmartMatrix.Domain.Interfaces.DataAccess.Common;
 using static Dapper.SqlMapper;
 
 namespace SmartMatrix.DataAccess.Common

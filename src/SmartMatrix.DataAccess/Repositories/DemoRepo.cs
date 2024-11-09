@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
-using SmartMatrix.Application.Interfaces.DataAccess.Repositories;
-using SmartMatrix.Application.Interfaces.DataAccess.Specifications;
+using SmartMatrix.Domain.Interfaces.DataAccess.DbContexts;
+using SmartMatrix.Domain.Interfaces.DataAccess.Repositories;
+using SmartMatrix.Domain.Interfaces.DataAccess.Specifications;
 using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.DataAccess.DbContexts;
 using SmartMatrix.DataAccess.Specifications;

@@ -1,4 +1,4 @@
-namespace SmartMatrix.Application.Interfaces.DataAccess.Common
+namespace SmartMatrix.Domain.Interfaces.DataAccess.Common
 {
     public interface IGridReader : IDisposable
     {

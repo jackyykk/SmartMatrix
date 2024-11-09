@@ -2,7 +2,7 @@ using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace SmartMatrix.Application.Interfaces.DataAccess.DbContexts
+namespace SmartMatrix.Domain.Interfaces.DataAccess.DbContexts
 {
     public interface IBaseDbContext : IDisposable
     {

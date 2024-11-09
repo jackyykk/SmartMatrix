@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Localization;
-using SmartMatrix.Application.Interfaces.Services.Essential;
+using SmartMatrix.Domain.Interfaces.Services.Essential;
 using SmartMatrix.WebApi.Localization;
 using SmartMatrix.WebApi.Services;
 

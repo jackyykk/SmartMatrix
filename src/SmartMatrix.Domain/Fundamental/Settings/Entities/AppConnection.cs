@@ -1,6 +1,6 @@
 using SmartMatrix.Core.BaseClasses.Common;
 
-namespace SmartMatrix.Domain.Core.Settings.Entities
+namespace SmartMatrix.Domain.Fundamental.Settings.Entities
 {
     public class AppConnection : AuditableEntity<int>
     {

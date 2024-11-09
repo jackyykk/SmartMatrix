@@ -1,4 +1,4 @@
-using SmartMatrix.Application.Interfaces.Services.Essential;
+using SmartMatrix.Domain.Interfaces.Services.Essential;
 
 namespace SmartMatrix.Infrastructure.Services.Essential
 {

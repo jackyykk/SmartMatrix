@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using SmartMatrix.Application.Interfaces.DataAccess.Specifications;
+using SmartMatrix.Domain.Interfaces.DataAccess.Specifications;
 
 namespace SmartMatrix.DataAccess.Specifications
 {

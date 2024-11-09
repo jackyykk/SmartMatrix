@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace SmartMatrix.Application.Interfaces.DataAccess.Transactions
+namespace SmartMatrix.Domain.Interfaces.DataAccess.Transactions
 {
     public interface IBaseUnitOfWork : ITransactionableUnitOfWork
     {

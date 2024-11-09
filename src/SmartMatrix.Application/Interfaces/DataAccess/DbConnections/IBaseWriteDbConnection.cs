@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace SmartMatrix.Application.Interfaces.DataAccess.DbConnections
+namespace SmartMatrix.Domain.Interfaces.DataAccess.DbConnections
 {
     public interface IBaseWriteDbConnection : IBaseReadDbConnection
     {

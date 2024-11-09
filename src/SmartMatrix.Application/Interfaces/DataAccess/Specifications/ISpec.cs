@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace SmartMatrix.Application.Interfaces.DataAccess.Specifications
+namespace SmartMatrix.Domain.Interfaces.DataAccess.Specifications
 {
     public interface ISpec<T>
     {

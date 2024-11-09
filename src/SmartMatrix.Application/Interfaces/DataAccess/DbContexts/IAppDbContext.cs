@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using SmartMatrix.Domain.Core.Identities.Entities;
+using SmartMatrix.Domain.Fundamental.Identities.Entities;
 
-namespace SmartMatrix.Application.Interfaces.DataAccess.DbContexts
+namespace SmartMatrix.Domain.Interfaces.DataAccess.DbContexts
 {
     public interface IAppDbContext : IBaseDbContext
     {        

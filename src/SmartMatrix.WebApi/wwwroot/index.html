@@ -38,6 +38,10 @@
             font-size: 1em;
             color: #888;
         }
+        .description {
+            font-size: 1em;
+            color: #888;
+        }
         .version {
             font-size: 1em;
             color: #888;
@@ -74,6 +78,7 @@
             <p>Your intelligent data management solution</p>
         </header>
         <p id="environment" class="environment">Environment: Loading...</p>
+        <p id="description" class="description">Description: Loading...</p>
         <p id="version" class="version">Version: Loading...</p>        
     </div>
     <footer>
@@ -96,6 +101,7 @@
             .then(response => response.json())
             .then(data => {
                 document.getElementById('environment').innerText = `Environment: ${data.environment}`;
+                document.getElementById('description').innerText = `Description: ${data.description}`;
             })
             .catch(error => {
                 console.error('Error fetching environment:', error);
