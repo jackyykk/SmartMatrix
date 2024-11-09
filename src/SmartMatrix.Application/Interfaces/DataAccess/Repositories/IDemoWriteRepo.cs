@@ -4,9 +4,9 @@ using SmartMatrix.Core.BaseClasses.Common;
 
 namespace SmartMatrix.Application.Interfaces.DataAccess.Repositories
 {
-    public interface IDemoRepo<T, in TId> where T : class, IEntity<TId>
-    {
-        IDemoDbContext DemoDb { get; }
+    public interface IDemoWriteRepo<T, in TId> where T : class, IEntity<TId>
+    {        
+        IDemoWriteDbContext DemoWriteDb { get; }
         IQueryable<T> Entities { get; }
 
         Task<T?> GetByIdAsync(TId id);

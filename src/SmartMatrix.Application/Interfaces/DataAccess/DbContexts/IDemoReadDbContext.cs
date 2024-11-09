@@ -3,9 +3,9 @@ using SmartMatrix.Domain.Demos.SimpleNoteDemo.Entities;
 
 namespace SmartMatrix.Application.Interfaces.DataAccess.DbContexts
 {
-    public interface IDemoDbContext : IBaseDbContext
+    public interface IDemoReadDbContext : IBaseDbContext
     {        
         // DbSet
-        public DbSet<SimpleNote> SimpleNotes { get; set; }
+        DbSet<SimpleNote> SimpleNotes { get; set; }
     }
 }

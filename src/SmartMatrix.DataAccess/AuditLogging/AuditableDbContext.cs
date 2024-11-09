@@ -61,7 +61,7 @@ namespace SmartMatrix.DataAccess.AuditLogging
                         case EntityState.Modified:
                             if (property.IsModified)
                             {
-                                auditEntry.ChangedColumns.Add(propertyName);
+                                auditEntry.AffectedColumns.Add(propertyName);
                                 auditEntry.AuditType = AuditType.Update;
                                 auditEntry.OldValues[propertyName] = property.OriginalValue ?? "";
                                 auditEntry.NewValues[propertyName] = property.CurrentValue ?? "";

@@ -17,7 +17,7 @@ namespace SmartMatrix.DataAccess.AuditLogging
         public Dictionary<string, object> OldValues { get; } = new Dictionary<string, object>();
         public Dictionary<string, object> NewValues { get; } = new Dictionary<string, object>();
         public AuditType AuditType { get; set; }
-        public List<string> ChangedColumns { get; } = new List<string>();
+        public List<string> AffectedColumns { get; } = new List<string>();
         public Audit ToAudit()
         {
             var audit = new Audit()
@@ -29,7 +29,7 @@ namespace SmartMatrix.DataAccess.AuditLogging
                 PrimaryKey = JsonSerializer.Serialize(KeyValues),
                 OldValues = OldValues.Count == 0 ? null : JsonSerializer.Serialize(OldValues),
                 NewValues = NewValues.Count == 0 ? null : JsonSerializer.Serialize(NewValues),
-                AffectedColumns = ChangedColumns.Count == 0 ? null : JsonSerializer.Serialize(ChangedColumns)
+                AffectedColumns = AffectedColumns.Count == 0 ? null : JsonSerializer.Serialize(AffectedColumns)
             };
             return audit;
         }

@@ -3,28 +3,27 @@ using Microsoft.EntityFrameworkCore;
 using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
 using SmartMatrix.Application.Interfaces.Services.Essential;
 using SmartMatrix.Core.BaseClasses.Common;
-using SmartMatrix.DataAccess.AuditLogging;
 using SmartMatrix.Domain.Demos.SimpleNoteDemo.Entities;
 
 namespace SmartMatrix.DataAccess.DbContexts
 {
-    public class DemoDbContext : AuditableDbContext, IDemoDbContext
+    public class DemoWriteDbContext : DemoBaseDbContext, IDemoWriteDbContext
     {
         private readonly IDateTimeService _dateTimeSvc;
         private readonly IAuthenticatedUserService _userSvc;
-        public DbContext DbContext => this;
+        public DbContext DbContext => this;        
+        public IDbConnection Connection => Database.GetDbConnection();
+        public bool HasChanges => ChangeTracker.HasChanges();
 
-        public DemoDbContext(DbContextOptions<DemoDbContext> options, IDateTimeService dateTimeSvc, IAuthenticatedUserService userSvc) : base(options)
+        // DBSet
+        public DbSet<SimpleNote> SimpleNotes { get; set; }
+
+        public DemoWriteDbContext(DbContextOptions<DemoWriteDbContext> options, IDateTimeService dateTimeSvc, IAuthenticatedUserService userSvc) : base(options)
         {
             _dateTimeSvc = dateTimeSvc;
             _userSvc = userSvc;
         }
-
-        public DbSet<SimpleNote> SimpleNotes { get; set; }
-
-        public IDbConnection Connection => Database.GetDbConnection();
-        public bool HasChanges => ChangeTracker.HasChanges();
-
+        
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             List<bool> skipAudits = new List<bool>();
@@ -55,35 +54,10 @@ namespace SmartMatrix.DataAccess.DbContexts
             }
             else
             {
-                // skip audit logs if any entity has SkipAudit flag set to true
+                // skip audit logging if any entity has SkipAudit flag set to true
                 bool skipAudit = skipAudits.Any(b => b == true);
                 return await base.SaveChangesAsync(skipAudit, _dateTimeSvc.UtcNow, _userSvc.UserAccountName);
             }
-        }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            foreach (var property in builder.Model.GetEntityTypes()
-            .SelectMany(t => t.GetProperties())
-            .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
-            {
-                property.SetColumnType("decimal(18,4)");
-            }
-
-            base.OnModelCreating(builder);
-
-            builder.Entity<Audit>(b =>
-            {
-                b.HasKey("Id");
-                b.ToTable("AuditLogs");
-            });
-
-            builder.Entity<SimpleNote>(b =>
-            {
-                b.HasKey("Id");
-                b.ToTable("SimpleNotes");
-                b.Ignore(c => c.SkipAudit);
-            });
-        }
+        }        
     }
 }

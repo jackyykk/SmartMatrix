@@ -17,13 +17,15 @@ namespace SmartMatrix.DataAccess.Extensions
         public static IServiceCollection AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Register DbContext
-            services.AddDbContext<DemoDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DemoConnection")));
+            services.AddDbContext<DemoReadDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DemoReadConnection")));
+            services.AddDbContext<DemoWriteDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DemoWriteConnection")));
             
-            services.AddScoped<IDemoDbContext>(provider => provider.GetService<DemoDbContext>()!);
+            services.AddScoped<IDemoReadDbContext>(provider => provider.GetService<DemoReadDbContext>()!);
+            services.AddScoped<IDemoWriteDbContext>(provider => provider.GetService<DemoWriteDbContext>()!);
 
             // Register Repositories
-            services.AddTransient(typeof(IDemoRepo<,>), typeof(DemoRepo<,>));
+            services.AddTransient(typeof(IDemoReadRepo<,>), typeof(DemoReadRepo<,>));
+            services.AddTransient(typeof(IDemoWriteRepo<,>), typeof(DemoWriteRepo<,>));
             services.AddScoped<ISimpleNoteRepo, SimpleNoteRepo>();
 
             // Register Connections

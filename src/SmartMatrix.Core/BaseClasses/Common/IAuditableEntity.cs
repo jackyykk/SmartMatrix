@@ -9,13 +9,13 @@ namespace SmartMatrix.Core.BaseClasses.Common
     public interface IAuditableEntity : IEntity
     {
         public string? Status { get; set; }
-        string? CreatedBy { get; set; }
         DateTime? CreatedAt { get; set; }
-        string? ModifiedBy { get; set; }
+        string? CreatedBy { get; set; }        
         DateTime? ModifiedAt { get; set; }
+        string? ModifiedBy { get; set; }        
         bool IsDeleted { get; set; }
-        string? DeletedBy { get; set; }
         DateTime? DeletedAt { get; set; }
+        string? DeletedBy { get; set; }        
         bool SkipAudit { get; }
     }
 }

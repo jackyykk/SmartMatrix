@@ -12,28 +12,30 @@ namespace SmartMatrix.DataAccess.Repositories.Demos.SimpleNoteDemo
     {
         private IDbTransaction? _transaction;
         private readonly IDistributedCache _cache;
-        private readonly IDemoRepo<SimpleNote, int> _repo;
         private readonly IDemoReadDbConnection _readDbConnection;
         private readonly IDemoWriteDbConnection _writeDbConnection;
-
-        public SimpleNoteRepo(IDistributedCache cache, IDemoRepo<SimpleNote, int> repo, IDemoReadDbConnection readDbConnection, IDemoWriteDbConnection writeDbConnection)
+        private readonly IDemoReadRepo<SimpleNote, int> _readRepo;
+        private readonly IDemoWriteRepo<SimpleNote, int> _writeRepo;
+        
+        public SimpleNoteRepo(IDistributedCache cache, IDemoReadDbConnection readDbConnection, IDemoWriteDbConnection writeDbConnection, IDemoReadRepo<SimpleNote, int> readRepo, IDemoWriteRepo<SimpleNote, int> writeRepo)
         {
-            _cache = cache;
-            _repo = repo;
+            _cache = cache;            
             _readDbConnection = readDbConnection;
             _writeDbConnection = writeDbConnection;
+            _readRepo = readRepo;
+            _writeRepo = writeRepo;
         }
 
-        public IQueryable<SimpleNote> SimpleNotes => _repo.Entities;
+        public IQueryable<SimpleNote> SimpleNotes => _readRepo.Entities;
 
         public async Task<SimpleNote?> GetByIdAsync(int id)
         {            
-            return await _repo.Entities.Where(p => p.Id == id).FirstOrDefaultAsync();
+            return await _readRepo.Entities.Where(p => p.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<List<SimpleNote>> GetListAsync(string owner)
         {
-            return await _repo.Entities.Where(p => p.Owner == owner).ToListAsync();
+            return await _readRepo.Entities.Where(p => p.Owner == owner).ToListAsync();
         }
     }
 }
