@@ -2,9 +2,9 @@ using AutoMapper;
 using SmartMatrix.Domain.Demos.SimpleNotes.Entities;
 using SmartMatrix.Domain.Demos.SimpleNotes.Messages;
 
-namespace SmartMatrix.Application.Mappings.Demos.SimpleNotes
+namespace SmartMatrix.Application.Demos.SimpleNotes.Mappings
 {
-    public class SimpleNoteProfile : Profile
+    internal class SimpleNoteProfile : Profile
     {
         public SimpleNoteProfile()
         {

@@ -1,4 +1,4 @@
-namespace SmartMatrix.Application.Interfaces.Services.Identities
+namespace SmartMatrix.Application.Interfaces.Services.Essential
 {
     public interface IAuthenticatedUserService
     {

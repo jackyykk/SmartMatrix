@@ -6,7 +6,7 @@ using SmartMatrix.Core.BaseClasses.Web;
 using SmartMatrix.Domain.Demos.SimpleNotes.Messages;
 
 
-namespace SmartMatrix.Application.Features.Demos.SimpleNotes.Queries
+namespace SmartMatrix.Application.Demos.SimpleNotes.Features.Queries
 {
     public class GetSimpleNoteByIdQuery : IRequest<Result<GetSimpleNoteByIdResponse>>
     {

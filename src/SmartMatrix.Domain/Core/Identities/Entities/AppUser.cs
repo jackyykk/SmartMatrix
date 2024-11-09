@@ -1,7 +1,7 @@
 using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.Domain.Constants;
 
-namespace SmartMatrix.Domain.Core.Identities
+namespace SmartMatrix.Domain.Core.Identities.Entities
 {
     public class AppUser : AuditableEntity<int>
     {
@@ -30,6 +30,13 @@ namespace SmartMatrix.Domain.Core.Identities
 
         // Status
         public string LoginType { get; set; } = "Default";
-        public new string Status { get; set; } = CommonConstants.EntityStatus.Active;
+        public new string Status { get; set; } = StatusOption.Active;
+
+        public class StatusOption
+        {
+            public const string Active = CommonConstants.EntityStatus.Active;
+            public const string Inactive = CommonConstants.EntityStatus.Inactive;
+            public const string Deleted = CommonConstants.EntityStatus.Deleted;
+        }
     }
 }

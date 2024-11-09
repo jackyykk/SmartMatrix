@@ -1,6 +1,6 @@
 using SmartMatrix.Core.BaseClasses.Common;
 
-namespace SmartMatrix.Domain.Core.Identities
+namespace SmartMatrix.Domain.Core.Identities.Entities
 {
     public class AppRole : AuditableEntity<int>
     {

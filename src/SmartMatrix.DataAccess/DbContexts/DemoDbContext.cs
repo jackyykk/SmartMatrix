@@ -1,8 +1,8 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
-using SmartMatrix.Application.Interfaces.Services.Common;
-using SmartMatrix.Application.Interfaces.Services.Identities;
+using SmartMatrix.Application.Interfaces.Services.Essential;
+using SmartMatrix.Application.Interfaces.Services.Essential;
 using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.DataAccess.AuditLogs;
 using SmartMatrix.Domain.Demos.SimpleNotes.Entities;
@@ -36,13 +36,13 @@ namespace SmartMatrix.DataAccess.DbContexts
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedAt = _dateTimeSvc.NowUtc;
+                        entry.Entity.CreatedAt = _dateTimeSvc.UtcNow;
                         // Set CreatedBy to be the current user if it's empty
                         entry.Entity.CreatedBy = string.IsNullOrEmpty(entry.Entity.CreatedBy) ? _userSvc.UserAccountName : entry.Entity.CreatedBy;
                         break;
 
                     case EntityState.Modified:
-                        entry.Entity.ModifiedAt = _dateTimeSvc.NowUtc;
+                        entry.Entity.ModifiedAt = _dateTimeSvc.UtcNow;
                         // Set ModifiedBy to be the current user if it's empty
                         entry.Entity.ModifiedBy = string.IsNullOrEmpty(entry.Entity.ModifiedBy) ? _userSvc.UserAccountName : entry.Entity.ModifiedBy;
                         break;
@@ -58,7 +58,7 @@ namespace SmartMatrix.DataAccess.DbContexts
             {
                 // skip audit logs if any entity has SkipAudit flag set to true
                 bool skipAudit = skipAudits.Any(b => b == true);
-                return await base.SaveChangesAsync(skipAudit, _dateTimeSvc.NowUtc, _userSvc.UserAccountName);
+                return await base.SaveChangesAsync(skipAudit, _dateTimeSvc.UtcNow, _userSvc.UserAccountName);
             }
         }
 

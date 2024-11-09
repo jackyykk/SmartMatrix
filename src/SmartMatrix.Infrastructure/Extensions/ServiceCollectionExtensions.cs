@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SmartMatrix.Application.Interfaces.Services.Common;
-using SmartMatrix.Infrastructure.Services.Common;
+using SmartMatrix.Application.Interfaces.Services.Essential;
+using SmartMatrix.Infrastructure.Services.Essential;
 
 namespace SmartMatrix.Infrastructure.Extensions
 {
