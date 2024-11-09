@@ -1,4 +1,4 @@
-namespace SmartMatrix.Domain.Fundamental.Identities.Entities
+namespace SmartMatrix.Domain.Core.Identities.Entities
 {
     public class AppUserRole
     {
