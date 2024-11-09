@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
 using SmartMatrix.Application.Interfaces.Services.Essential;
 using SmartMatrix.Core.BaseClasses.Common;
-using SmartMatrix.DataAccess.AuditLogs;
-using SmartMatrix.Domain.Demos.SimpleNotes.Entities;
+using SmartMatrix.DataAccess.AuditLogging;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.Entities;
 
 namespace SmartMatrix.DataAccess.DbContexts
 {

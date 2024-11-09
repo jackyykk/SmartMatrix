@@ -1,8 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SmartMatrix.Application.Demos.SimpleNotes.Features.Queries;
-using SmartMatrix.Domain.Demos.SimpleNotes.Entities;
-using SmartMatrix.Domain.Demos.SimpleNotes.Messages;
+using SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.Entities;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages;
 
 namespace SmartMatrix.WebApi.Controllers.Demos
 {
