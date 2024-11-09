@@ -13,7 +13,7 @@ namespace SmartMatrix.WebApi.Controllers
         {
         }
 
-        [HttpGet("GetVersion", Name = "VersionController.GetVersion")]
+        [HttpGet("get-version", Name = "VersionController.GetVersion")]
         public IActionResult GetVersion()
         {
             var version = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;

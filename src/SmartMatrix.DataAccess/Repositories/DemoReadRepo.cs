@@ -12,7 +12,7 @@ namespace SmartMatrix.DataAccess.Repositories
     {
         const double DefaultCommandTimeoutInSeconds = 60;
 
-        private readonly DemoReadDbContext _readDbContext;        
+        private DemoReadDbContext _readDbContext;        
         public IDemoReadDbContext DemoReadDb => _readDbContext;        
         public IQueryable<T> Entities => _readDbContext.Set<T>();
 
@@ -20,6 +20,11 @@ namespace SmartMatrix.DataAccess.Repositories
         {
             _readDbContext = (DemoReadDbContext)readDbContext;
             _readDbContext.Database.SetCommandTimeout(TimeSpan.FromSeconds(DefaultCommandTimeoutInSeconds));
+        }
+
+        public void SetConnection(string connectionString)
+        {
+            _readDbContext.SetConnection(connectionString);
         }
 
         public async Task<T?> GetByIdAsync(TId id)

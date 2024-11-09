@@ -1,4 +1,3 @@
-using System.Transactions;
 using AutoMapper;
 using MediatR;
 using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNoteDemo;
@@ -13,31 +12,28 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
 
         public class Handler : IRequestHandler<GetSimpleNoteByIdQuery, Result<GetSimpleNoteByIdResponse>>
         {
-            private readonly ISimpleNoteRepo _simpleNoteRepo;
             private readonly IMapper _mapper;
-
-            public Handler(ISimpleNoteRepo simpleNoteRepo, IMapper mapper)
-            {
-                _simpleNoteRepo = simpleNoteRepo;
+            private readonly ISimpleNoteRepo _simpleNoteRepo;
+            
+            public Handler(IMapper mapper, ISimpleNoteRepo simpleNoteRepo)
+            {                
                 _mapper = mapper;
+                _simpleNoteRepo = simpleNoteRepo;
             }
 
             public async Task<Result<GetSimpleNoteByIdResponse>> Handle(GetSimpleNoteByIdQuery query, CancellationToken cancellationToken)
-            {
-                using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {                
+                try
                 {
-                    try
-                    {
-                        var entity = await _simpleNoteRepo.GetByIdAsync(query.Request!.Id);
-                        var mappedEntity = _mapper.Map<GetSimpleNoteByIdResponse>(entity);
-                        scope.Complete();
-                        return Result<GetSimpleNoteByIdResponse>.Success(mappedEntity);
-                    }
-                    catch (Exception ex)
-                    {
-                        return Result<GetSimpleNoteByIdResponse>.Fail(ex.Message);
-                    }
+                    var entity = await _simpleNoteRepo.GetByIdAsync(query.Request!.Id);
+                    var mappedEntity = _mapper.Map<GetSimpleNoteByIdResponse>(entity);
+                    
+                    return Result<GetSimpleNoteByIdResponse>.Success(mappedEntity);
                 }
+                catch (Exception ex)
+                {
+                    return Result<GetSimpleNoteByIdResponse>.Fail(-1, ex.Message);
+                }                
             }
         }
     }

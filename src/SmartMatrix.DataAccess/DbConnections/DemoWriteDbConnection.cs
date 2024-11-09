@@ -11,7 +11,17 @@ namespace SmartMatrix.DataAccess.DbConnections
 {
     public class DemoWriteDbConnection : IDemoWriteDbConnection
 {
-    private readonly IDbConnection connection;
+    private IDbConnection connection;
+
+    public void SetConnection(string connectionString)
+    {
+        if (connection != null)
+        {
+            connection.Close();
+            connection.Dispose();
+        }
+        connection = new SqlConnection(connectionString);
+    }
 
     public DemoWriteDbConnection(IConfiguration configuration)
     {

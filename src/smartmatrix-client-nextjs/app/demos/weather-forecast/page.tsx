@@ -16,7 +16,7 @@ export default function WeatherForecastPage() {
         try {
             if (loading) return;
             setLoading(true);
-            const url = process.env.NEXT_PUBLIC_APISERVER_BASE_URL + '/api/demos/WeatherForecast';
+            const url = process.env.NEXT_PUBLIC_APISERVER_BASE_URL + '/api/demos/weather-forecast-demo/get-weather-forecasts';
             const response = await fetch(url);
             const data = await response.json();
             // fill in the id field

@@ -13,7 +13,7 @@ namespace SmartMatrix.WebApi.Controllers
         {
         }
 
-        [HttpGet("GetMainConfig", Name = "ConfigController.GetMainConfig")]
+        [HttpGet("get-main-config", Name = "ConfigController.GetMainConfig")]
         public IActionResult GetMainConfig()
         {
             var mainConfig = _configuration.GetSection(nameof(MainConfig))?.Get<MainConfig>() ?? new MainConfig();

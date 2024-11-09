@@ -86,7 +86,7 @@
     </footer>
     <script>
         // Fetch the version number from the API and display it
-        fetch('/api/version/getversion')
+        fetch('/api/version/get-version')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('version').innerText = `Version: ${data.version}`;
@@ -97,7 +97,7 @@
             });
 
         // Fetch the main config from the API and display the environment
-        fetch('/api/config/getmainconfig')
+        fetch('/api/config/get-main-config')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('environment').innerText = `Environment: ${data.environment}`;

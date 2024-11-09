@@ -4,21 +4,21 @@ using Microsoft.AspNetCore.Mvc;
 namespace SmartMatrix.WebApi.Controllers.Demos
 {
     [ApiController]
-    [Route("api/demos/[controller]")]
-    public class WeatherForecastController : BaseController<WeatherForecastController>
+    [Route("api/demos/weather-forecast-demo")]
+    public class WeatherForecastDemoController : BaseController<WeatherForecastDemoController>
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfiguration configuration, IMediator mediator)
+        public WeatherForecastDemoController(ILogger<WeatherForecastDemoController> logger, IConfiguration configuration, IMediator mediator)
             : base(logger, configuration, mediator)
         {
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet("get-weather-forecasts", Name = "WeatherForecastDemoController.GetWeatherForecasts")]
+        public IEnumerable<WeatherForecast> GetWeatherForecasts()
         {
             return Enumerable.Range(1, 100).Select(index => new WeatherForecast
             (

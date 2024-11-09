@@ -7,15 +7,15 @@ using SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages;
 namespace SmartMatrix.WebApi.Controllers.Demos
 {
     [ApiController]
-    [Route("api/demos/[controller]")]
-    public class SimpleNoteController : BaseController<SimpleNoteController>
+    [Route("api/demos/simple-note-demo")]
+    public class SimpleNoteDemoController : BaseController<SimpleNoteDemoController>
     {
-        public SimpleNoteController(ILogger<SimpleNoteController> logger, IConfiguration configuration, IMediator mediator)
+        public SimpleNoteDemoController(ILogger<SimpleNoteDemoController> logger, IConfiguration configuration, IMediator mediator)
             : base(logger, configuration, mediator)
         {
         }
 
-        [HttpGet(Name = "GetById")]
+        [HttpGet("get-by-id", Name = "SimpleNoteDemoController.GetById")]
         public async Task<IActionResult> GetById([FromQuery] GetSimpleNoteByIdRequest request)
         {
             SimpleNote note = new SimpleNote();
@@ -26,5 +26,13 @@ namespace SmartMatrix.WebApi.Controllers.Demos
             return Ok(entity);
         }
 
+        [HttpPost("create", Name = "SimpleNoteDemoController.Create")]
+        public async Task<IActionResult> Create([FromBody] CreateSimpleNoteRequest request)
+        {
+            var entity = await _mediator.Send(new CreateSimpleNoteCommand{
+                Request = request
+            });
+            return Ok(entity);
+        }
     }
 }

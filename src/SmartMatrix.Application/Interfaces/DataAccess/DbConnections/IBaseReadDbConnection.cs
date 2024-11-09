@@ -1,9 +1,10 @@
 using System.Data;
 using SmartMatrix.Application.Interfaces.DataAccess.Common;
+using SmartMatrix.Application.Interfaces.DataAccess.Repositories;
 
 namespace SmartMatrix.Application.Interfaces.DataAccess.DbConnections
 {
-    public interface IBaseReadDbConnection
+    public interface IBaseReadDbConnection : IDbConnectionChangeable
     {
         Task<IReadOnlyList<T>> QueryAsync<T>(string sql, object param, IDbTransaction transaction, CancellationToken cancellationToken = default);
 

@@ -17,6 +17,19 @@ namespace SmartMatrix.DataAccess.Repositories.Demos.SimpleNoteDemo
         private readonly IDemoReadRepo<SimpleNote, int> _readRepo;
         private readonly IDemoWriteRepo<SimpleNote, int> _writeRepo;
         
+        public void SetConnection(string connectionString)
+        {
+            _readRepo.SetConnection(connectionString);
+            _writeRepo.SetConnection(connectionString);
+            _readDbConnection.SetConnection(connectionString);
+            _writeDbConnection.SetConnection(connectionString);
+        }
+
+        public void SetTransaction(IDbTransaction transaction)
+        {
+            _transaction = transaction;
+        }
+
         public SimpleNoteRepo(IDistributedCache cache, IDemoReadDbConnection readDbConnection, IDemoWriteDbConnection writeDbConnection, IDemoReadRepo<SimpleNote, int> readRepo, IDemoWriteRepo<SimpleNote, int> writeRepo)
         {
             _cache = cache;            
@@ -38,10 +51,9 @@ namespace SmartMatrix.DataAccess.Repositories.Demos.SimpleNoteDemo
             return await _readRepo.Entities.Where(p => p.Owner == owner).ToListAsync();
         }
 
-        public async Task<int> InsertAsync(SimpleNote entity)
+        public async Task<SimpleNote> InsertAsync(SimpleNote entity)
         {
-            await _writeRepo.InsertAsync(entity);
-            return entity.Id;
+            return await _writeRepo.InsertAsync(entity);            
         }
     }
 }

@@ -16,11 +16,16 @@ namespace SmartMatrix.DataAccess.Repositories
         public IDemoWriteDbContext DemoWriteDb => _writeDbContext;
         public IQueryable<T> Entities => _writeDbContext.Set<T>();
 
+        public void SetConnection(string connectionString)
+        {
+            _writeDbContext.SetConnection(connectionString);
+        }
+
         public DemoWriteRepo(IDemoReadDbContext readDbContext, IDemoWriteDbContext writeDbContext)
         {            
             _writeDbContext = (DemoWriteDbContext)writeDbContext;
             _writeDbContext.Database.SetCommandTimeout(TimeSpan.FromSeconds(DefaultCommandTimeoutInSeconds));
-        }
+        }        
 
         public async Task<T?> GetByIdAsync(TId id)
         {

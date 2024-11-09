@@ -17,13 +17,13 @@ namespace SmartMatrix.DataAccess.DbContexts
 
         // DBSet
         public DbSet<SimpleNote> SimpleNotes { get; set; }
-
+        
         public DemoReadDbContext(DbContextOptions<DemoReadDbContext> options, IDateTimeService dateTimeSvc, IAuthenticatedUserService userSvc) : base(options)
         {
             _dateTimeSvc = dateTimeSvc;
             _userSvc = userSvc;
         }
-        
+                
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             return await Task.FromException<int>(new InvalidOperationException("Read-only context cannot save changes."));

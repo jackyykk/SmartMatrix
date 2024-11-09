@@ -8,6 +8,11 @@ namespace SmartMatrix.DataAccess.DbContexts
     {
         public DemoBaseDbContext(DbContextOptions options) : base(options) { }
 
+        public void SetConnection(string connectionString)
+        {            
+            this.Database.SetConnectionString(connectionString);
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             foreach (var property in builder.Model.GetEntityTypes()

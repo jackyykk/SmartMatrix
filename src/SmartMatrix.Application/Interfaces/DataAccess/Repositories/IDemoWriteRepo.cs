@@ -4,7 +4,7 @@ using SmartMatrix.Core.BaseClasses.Common;
 
 namespace SmartMatrix.Application.Interfaces.DataAccess.Repositories
 {
-    public interface IDemoWriteRepo<T, in TId> where T : class, IEntity<TId>
+    public interface IDemoWriteRepo<T, in TId> : IDbConnectionChangeable where T : class, IEntity<TId>
     {        
         IDemoWriteDbContext DemoWriteDb { get; }
         IQueryable<T> Entities { get; }

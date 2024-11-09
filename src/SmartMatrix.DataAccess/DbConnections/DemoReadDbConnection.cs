@@ -10,12 +10,22 @@ namespace SmartMatrix.DataAccess.DbConnections
 {
     public class DemoReadDbConnection : IDemoReadDbConnection, IDisposable
     {
-        private readonly IDbConnection connection;
+        private IDbConnection connection;
+
+        public void SetConnection(string connectionString)
+        {
+            if (connection != null)
+            {
+                connection.Close();
+                connection.Dispose();
+            }
+            connection = new SqlConnection(connectionString);
+        }
 
         public DemoReadDbConnection(IConfiguration configuration)
         {
             connection = new SqlConnection(configuration.GetConnectionString("DemoReadConnection"));
-        }
+        }        
 
         public async Task<IReadOnlyList<T>> QueryAsync<T>(string sql, object param, IDbTransaction transaction, CancellationToken cancellationToken = default)
         {

@@ -4,7 +4,7 @@ using SmartMatrix.Core.BaseClasses.Common;
 
 namespace SmartMatrix.Application.Interfaces.DataAccess.Repositories
 {
-    public interface IDemoReadRepo<T, in TId> where T : class, IEntity<TId>
+    public interface IDemoReadRepo<T, in TId> : IDbConnectionChangeable where T : class, IEntity<TId>
     {
         IDemoReadDbContext DemoReadDb { get; }        
         IQueryable<T> Entities { get; }

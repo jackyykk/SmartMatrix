@@ -16,14 +16,14 @@ namespace SmartMatrix.DataAccess.DbContexts
         public bool HasChanges => ChangeTracker.HasChanges();
 
         // DBSet
-        public DbSet<SimpleNote> SimpleNotes { get; set; }
+        public DbSet<SimpleNote> SimpleNotes { get; set; }        
 
         public DemoWriteDbContext(DbContextOptions<DemoWriteDbContext> options, IDateTimeService dateTimeSvc, IAuthenticatedUserService userSvc) : base(options)
         {
             _dateTimeSvc = dateTimeSvc;
             _userSvc = userSvc;
-        }
-        
+        }                
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             List<bool> skipAudits = new List<bool>();
