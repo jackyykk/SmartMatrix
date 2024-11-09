@@ -1,140 +1,139 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SmartMatrix.Core.BaseClasses.web
+namespace SmartMatrix.Core.BaseClasses.Web
 {
-    public class Result : IResult
+    public class ApiResult : IApiResult
     {
-        public Result()
+        public ApiResult()
         {
         }
         
         public List<string> Messages { get; set; } = new List<string>();
-        public bool Succeeded { get; set; }
-        public int? StatusCode { get; set; }
-        public bool Failed => !Succeeded;
+        public bool Succeeded { get; set; }        
+        public int? StatusCode { get; set; }        
 
-        public static IResult Fail()
+        public static IApiResult Fail()
         {
-            return new Result { Succeeded = false };
+            return new ApiResult { Succeeded = false };
         }
 
-        public static IResult Fail(int statusCode)
+        public static IApiResult Fail(int statusCode)
         {
-            return new Result { Succeeded = false, StatusCode = statusCode };
+            return new ApiResult { Succeeded = false, StatusCode = statusCode };
         }
 
-        public static IResult Fail(string message)
+        public static IApiResult Fail(string message)
         {
-            return new Result { Succeeded = false, Messages = new List<string> { message } };
+            return new ApiResult { Succeeded = false, Messages = new List<string> { message } };
         }
 
-        public static IResult Fail(int statusCode, string message)
+        public static IApiResult Fail(int statusCode, string message)
         {
-            return new Result { Succeeded = false, StatusCode = statusCode, Messages = new List<string> { message } };
+            return new ApiResult { Succeeded = false, StatusCode = statusCode, Messages = new List<string> { message } };
         }
 
-        public static IResult Fail(List<string> messages)
+        public static IApiResult Fail(List<string> messages)
         {
-            return new Result { Succeeded = false, Messages = messages };
+            return new ApiResult { Succeeded = false, Messages = messages };
         }
 
-        public static IResult Fail(int statusCode, List<string> messages)
+        public static IApiResult Fail(int statusCode, List<string> messages)
         {
-            return new Result { Succeeded = false, StatusCode = statusCode, Messages = messages };
+            return new ApiResult { Succeeded = false, StatusCode = statusCode, Messages = messages };
         }
 
-        public static Task<IResult> FailAsync()
+        public static Task<IApiResult> FailAsync()
         {
             return Task.FromResult(Fail());
         }
-        public static Task<IResult> FailAsync(int statusCode)
+        public static Task<IApiResult> FailAsync(int statusCode)
         {
             return Task.FromResult(Fail(statusCode));
         }
 
-        public static Task<IResult> FailAsync(string message)
+        public static Task<IApiResult> FailAsync(string message)
         {
             return Task.FromResult(Fail(message));
         }
 
-        public static Task<IResult> FailAsync(int statusCode, string message)
+        public static Task<IApiResult> FailAsync(int statusCode, string message)
         {
             return Task.FromResult(Fail(statusCode, message));
         }
 
-        public static Task<IResult> FailAsync(List<string> messages)
+        public static Task<IApiResult> FailAsync(List<string> messages)
         {
             return Task.FromResult(Fail(messages));
         }
 
-        public static Task<IResult> FailAsync(int statusCode, List<string> messages)
+        public static Task<IApiResult> FailAsync(int statusCode, List<string> messages)
         {
             return Task.FromResult(Fail(statusCode, messages));
         }
 
-        public static IResult Success()
+        public static IApiResult Success()
         {
-            return new Result { Succeeded = true };
+            return new ApiResult { Succeeded = true };
         }
 
-        public static IResult Success(int statusCode)
+        public static IApiResult Success(int statusCode)
         {
-            return new Result { Succeeded = true, StatusCode = statusCode };
+            return new ApiResult { Succeeded = true, StatusCode = statusCode };
         }
 
-        public static IResult Success(string message)
+        public static IApiResult Success(string message)
         {
-            return new Result { Succeeded = true, Messages = new List<string> { message } };
+            return new ApiResult { Succeeded = true, Messages = new List<string> { message } };
         }
 
-        public static IResult Success(int statusCode, string message)
+        public static IApiResult Success(int statusCode, string message)
         {
-            return new Result { Succeeded = true, StatusCode = statusCode, Messages = new List<string> { message } };
+            return new ApiResult { Succeeded = true, StatusCode = statusCode, Messages = new List<string> { message } };
         }
 
-        public static IResult Success(List<string> messages)
+        public static IApiResult Success(List<string> messages)
         {
-            return new Result { Succeeded = true, Messages = messages };
+            return new ApiResult { Succeeded = true, Messages = messages };
         }
 
-        public static IResult Success(int statusCode, List<string> messages)
+        public static IApiResult Success(int statusCode, List<string> messages)
         {
-            return new Result { Succeeded = true, StatusCode = statusCode, Messages = messages };
+            return new ApiResult { Succeeded = true, StatusCode = statusCode, Messages = messages };
         }
 
-        public static Task<IResult> SuccessAsync()
+        public static Task<IApiResult> SuccessAsync()
         {
             return Task.FromResult(Success());
         }
 
-        public static Task<IResult> SuccessAsync(int statusCode)
+        public static Task<IApiResult> SuccessAsync(int statusCode)
         {
             return Task.FromResult(Success(statusCode));
         }
 
-        public static Task<IResult> SuccessAsync(string message)
+        public static Task<IApiResult> SuccessAsync(string message)
         {
             return Task.FromResult(Success(message));
         }
 
-        public static Task<IResult> SuccessAsync(int statusCode, string message)
+        public static Task<IApiResult> SuccessAsync(int statusCode, string message)
         {
             return Task.FromResult(Success(statusCode, message));
         }
 
-        public static Task<IResult> SuccessAsync(List<string> messages)
+        public static Task<IApiResult> SuccessAsync(List<string> messages)
         {
             return Task.FromResult(Success(messages));
         }
 
-        public static Task<IResult> SuccessAsync(int statusCode, List<string> messages)
+        public static Task<IApiResult> SuccessAsync(int statusCode, List<string> messages)
         {
             return Task.FromResult(Success(statusCode, messages));
         }
     }
 
-    public class Result<T> : Result, IResult<T>
+    public class Result<T> : ApiResult, IApiResult<T>
     {
         public Result()
         {

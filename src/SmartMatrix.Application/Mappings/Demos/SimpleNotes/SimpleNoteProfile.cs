@@ -1,6 +1,6 @@
 using AutoMapper;
-using SmartMatrix.Domain.Entities.Demos;
-using SmartMatrix.Domain.Messages.Demos.SimpleNotes;
+using SmartMatrix.Domain.Demos.SimpleNotes.Entities;
+using SmartMatrix.Domain.Demos.SimpleNotes.Messages;
 
 namespace SmartMatrix.Application.Mappings.Demos.SimpleNotes
 {

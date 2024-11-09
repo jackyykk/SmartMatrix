@@ -4,7 +4,7 @@ using Microsoft.Extensions.Caching.Distributed;
 using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNotes;
 using SmartMatrix.Core.Validations;
 using SmartMatrix.DataAccess.Constants;
-using SmartMatrix.Domain.Entities.Demos;
+using SmartMatrix.Domain.Demos.SimpleNotes.Entities;
 
 namespace SmartMatrix.DataAccess.Repositories.Demos.SimpleNotes
 {

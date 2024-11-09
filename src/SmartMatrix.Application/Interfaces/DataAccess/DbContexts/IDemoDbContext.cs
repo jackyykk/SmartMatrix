@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using SmartMatrix.Domain.Entities.Demos;
-using SmartMatrix.Domain.Entities.Identities;
+using SmartMatrix.Domain.Demos.SimpleNotes.Entities;
 
 namespace SmartMatrix.Application.Interfaces.DataAccess.DbContexts
 {

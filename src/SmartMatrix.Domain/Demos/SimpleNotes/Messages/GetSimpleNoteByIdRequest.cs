@@ -1,4 +1,4 @@
-namespace SmartMatrix.Domain.Messages.Demos.SimpleNotes
+namespace SmartMatrix.Domain.Demos.SimpleNotes.Messages
 {
     public class GetSimpleNoteByIdRequest
     {

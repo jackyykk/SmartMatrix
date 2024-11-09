@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace SmartMatrix.Core.BaseClasses.web
+namespace SmartMatrix.Core.BaseClasses.Web
 {
-    public interface IResult
+    public interface IApiResult
     {
         List<string> Messages { get; set; }
 
@@ -10,7 +10,7 @@ namespace SmartMatrix.Core.BaseClasses.web
         int? StatusCode { get; set; }
     }
 
-    public interface IResult<out T> : IResult
+    public interface IApiResult<out T> : IApiResult
     {
         T Data { get; }
     }

@@ -1,7 +1,7 @@
 using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.Domain.Constants;
 
-namespace SmartMatrix.Domain.Entities.Identities
+namespace SmartMatrix.Domain.Core.Identities
 {
     public class AppUser : AuditableEntity<int>
     {

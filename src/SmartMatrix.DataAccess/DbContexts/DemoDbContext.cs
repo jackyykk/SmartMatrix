@@ -5,7 +5,7 @@ using SmartMatrix.Application.Interfaces.Services.Common;
 using SmartMatrix.Application.Interfaces.Services.Identities;
 using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.DataAccess.AuditLogs;
-using SmartMatrix.Domain.Entities.Demos;
+using SmartMatrix.Domain.Demos.SimpleNotes.Entities;
 
 namespace SmartMatrix.DataAccess.DbContexts
 {

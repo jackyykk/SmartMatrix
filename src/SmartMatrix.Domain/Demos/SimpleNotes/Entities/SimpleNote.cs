@@ -1,6 +1,6 @@
 using SmartMatrix.Core.BaseClasses.Common;
 
-namespace SmartMatrix.Domain.Entities.Demos
+namespace SmartMatrix.Domain.Demos.SimpleNotes.Entities
 {
     public class SimpleNote : AuditableEntity<int>
     {

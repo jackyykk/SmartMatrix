@@ -1,4 +1,4 @@
-using SmartMatrix.Domain.Entities.Demos;
+using SmartMatrix.Domain.Demos.SimpleNotes.Entities;
 
 namespace SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNotes
 {

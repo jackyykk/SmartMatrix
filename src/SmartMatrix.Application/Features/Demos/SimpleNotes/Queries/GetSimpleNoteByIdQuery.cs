@@ -2,8 +2,9 @@ using System.Transactions;
 using AutoMapper;
 using MediatR;
 using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNotes;
-using SmartMatrix.Core.BaseClasses.web;
-using SmartMatrix.Domain.Messages.Demos.SimpleNotes;
+using SmartMatrix.Core.BaseClasses.Web;
+using SmartMatrix.Domain.Demos.SimpleNotes.Messages;
+
 
 namespace SmartMatrix.Application.Features.Demos.SimpleNotes.Queries
 {
