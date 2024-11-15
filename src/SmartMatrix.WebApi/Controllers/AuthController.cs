@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -22,8 +23,13 @@ namespace SmartMatrix.WebApi.Controllers
         [HttpGet("google/login")]
         public IActionResult GoogleLogin()
         {
-            var redirectUrl = Url.Action("GoogleCallback", "Auth", null, Request.Scheme);
-            var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+            var redirectUrl = Url.Action("GoogleCallback", "Auth", null, Request.Scheme);            
+            var state = GenerateState(redirectUrl);
+            var properties = new AuthenticationProperties
+            {
+                RedirectUri = redirectUrl,
+                Items = { { "state", state } }
+            };
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
@@ -33,6 +39,10 @@ namespace SmartMatrix.WebApi.Controllers
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
             if (!result.Succeeded)
                 return Unauthorized(); // Handle failure
+
+            // Validate the state parameter
+            if (!ValidateState(result.Properties.Items["state"]))
+                return BadRequest("Invalid state parameter");
 
             // Create JWT token
             var token = GenerateJwtToken(result.Principal);
@@ -58,6 +68,32 @@ namespace SmartMatrix.WebApi.Controllers
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private string GenerateState(string redirectUrl)
+        {
+            var state = new
+            {
+                Random = new Random().Next(100000, 999999).ToString(),
+                RedirectUrl = redirectUrl
+            };
+            return JsonSerializer.Serialize(state);
+        }
+
+        private bool ValidateState(string state)
+        {
+            // Implement your state validation logic here
+            // For example, you can deserialize the state and check its contents
+            try
+            {
+                var stateObj = JsonSerializer.Deserialize<dynamic>(state);
+                // Add your validation logic here
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }    
 }
