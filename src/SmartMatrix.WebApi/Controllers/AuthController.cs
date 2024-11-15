@@ -22,14 +22,14 @@ namespace SmartMatrix.WebApi.Controllers
         [HttpGet("google/login")]
         public IActionResult GoogleLogin()
         {
-            string redirectUrl = "http://localhost:3001/auth/google/callback";
+            var redirectUrl = Url.Action("GoogleCallback", "Auth", null, Request.Scheme);
             var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
         [HttpGet("google/callback")]
-        public async Task<IActionResult> GoogleResponse()
-        {
+        public async Task<IActionResult> GoogleCallback()
+        {            
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
             if (!result.Succeeded)
                 return Unauthorized(); // Handle failure

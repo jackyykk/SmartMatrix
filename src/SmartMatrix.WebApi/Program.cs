@@ -8,6 +8,7 @@ using SmartMatrix.Infrastructure.Extensions;
 using SmartMatrix.WebApi.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 public class Program
 {
@@ -52,9 +53,25 @@ public class Program
         // Configure Google Authentication
         builder.Services.AddAuthentication(options =>
         {
+            options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+        })
+        .AddCookie()        
+        .AddGoogle(options =>
+        {
+            options.ClientId = builder.Configuration["Google:ClientId"] ?? string.Empty;
+            options.ClientSecret = builder.Configuration["Google:ClientSecret"] ?? string.Empty;
+            options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.CallbackPath = "/Auth/google/callback";
+        });
+
+/*
+        builder.Services.AddAuthentication(options =>
+        {            
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
+        })        
         .AddJwtBearer(options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
@@ -67,12 +84,8 @@ public class Program
                 ValidAudience = builder.Configuration["Jwt:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty))
             };
-        })
-        .AddGoogle(options =>
-        {
-            options.ClientId = builder.Configuration["Google:ClientId"] ?? string.Empty;
-            options.ClientSecret = builder.Configuration["Google:ClientSecret"] ?? string.Empty;
         });        
+*/
 
         var app = builder.Build();
 
@@ -98,7 +111,7 @@ public class Program
         // Serve static files and default files (index.html)
         app.UseDefaultFiles();
         app.UseStaticFiles();
-
+        
         app.MapControllers();
 
         app.Run();
