@@ -1,8 +1,13 @@
 using AutoMapper;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Google;
 using SmartMatrix.Application.Extensions;
 using SmartMatrix.DataAccess.Extensions;
 using SmartMatrix.Infrastructure.Extensions;
 using SmartMatrix.WebApi.Extensions;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 public class Program
 {
@@ -44,6 +49,31 @@ public class Program
         builder.Services.AddDataAccessServices(builder.Configuration);
         builder.Services.AddWebApiServices(builder.Configuration);
 
+        // Configure Google Authentication
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty))
+            };
+        })
+        .AddGoogle(options =>
+        {
+            options.ClientId = builder.Configuration["Google:ClientId"] ?? string.Empty;
+            options.ClientSecret = builder.Configuration["Google:ClientSecret"] ?? string.Empty;
+        });        
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -59,11 +89,12 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        app.UseAuthorization();
-
         // Use the CORS policy
         app.UseCors("AllowAllOrigins");
 
+        app.UseAuthentication();
+        app.UseAuthorization();
+        
         // Serve static files and default files (index.html)
         app.UseDefaultFiles();
         app.UseStaticFiles();
