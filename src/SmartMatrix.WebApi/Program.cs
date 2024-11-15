@@ -31,10 +31,11 @@ public class Program
         });
 
         // Add configuration to read from appsettings.json
+        var env = builder.Environment;
         builder.Configuration
             .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.development.json", optional: true, reloadOnChange: true)
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)            
             .AddEnvironmentVariables();
 
         // Register services from other projects
@@ -42,11 +43,6 @@ public class Program
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddDataAccessServices(builder.Configuration);
         builder.Services.AddWebApiServices(builder.Configuration);
-
-        // Enable AutoMapper diagnostics
-        var serviceProvider = builder.Services.BuildServiceProvider();
-        var mapper = serviceProvider.GetRequiredService<IMapper>();
-        mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
         var app = builder.Build();
 
@@ -56,6 +52,10 @@ public class Program
             app.UseSwagger(); // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwaggerUI(); // Enable middleware to serve Swagger UI.
         }
+
+        // Enable AutoMapper Diagnostics        
+        var mapper = app.Services.GetRequiredService<IMapper>();
+        mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
         app.UseHttpsRedirection();
 
