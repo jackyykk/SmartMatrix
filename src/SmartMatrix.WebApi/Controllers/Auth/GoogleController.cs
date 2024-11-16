@@ -24,17 +24,19 @@ namespace SmartMatrix.WebApi.Controllers
         public IActionResult Login()
         {            
             var state = GenerateState();
-            var redirectUrl = Url.Action("Callback", "Google", new { state, }, Request.Scheme);
+            //var redirectUrl = Url.Action("Callback", "Google", new { state });
+            var redirectUrl = Url.Action("Callback", "Google", null, Request.Scheme);
             var properties = new AuthenticationProperties
-            {
-                RedirectUri = redirectUrl,
-                Items = { { "state", state } }
+            {                
+                RedirectUri = redirectUrl,                
+                Items = { { "state", state } },
+                AllowRefresh = true
             };
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
-        [HttpGet("callback")]
-        public async Task<IActionResult> Callback(string code, string state)
+        [HttpGet("/signin-google")]
+        public async Task<IActionResult> Callback([FromQuery] string code = "", string state = "")
         {            
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
             if (!result.Succeeded)

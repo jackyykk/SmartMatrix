@@ -65,13 +65,14 @@ public class Program
         {
             options.ClientId = builder.Configuration["Google:ClientId"] ?? string.Empty;
             options.ClientSecret = builder.Configuration["Google:ClientSecret"] ?? string.Empty;            
-            options.CallbackPath = "/Auth/google/callback";            
+            //options.CallbackPath = "/Auth/google/callback";
+            //options.CallbackPath = "/signin-google";
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.SaveTokens = true;
             options.Scope.Add("email"); // Include the email scope
             options.Scope.Add("profile"); // Optionally include profile scope for more user information
 
-            // Optionally handle events
+            // Optionally handle events            
             options.Events = new OAuthEvents
             {
                 OnCreatingTicket = context =>
@@ -90,8 +91,8 @@ public class Program
                     context.HandleResponse();
                     return Task.CompletedTask;
                 }
-            };
-        })
+            };            
+        })        
         .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
