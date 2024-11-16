@@ -12,19 +12,19 @@ using Microsoft.IdentityModel.Tokens;
 namespace SmartMatrix.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class AuthController : BaseController<AuthController>
+    [Route("Auth/google")]
+    public class GoogleController : BaseController<GoogleController>
     {
-        public AuthController(ILogger<AuthController> logger, IConfiguration configuration, IMediator mediator)
+        public GoogleController(ILogger<GoogleController> logger, IConfiguration configuration, IMediator mediator)
             : base(logger, configuration, mediator)
         {
         }
 
-        [HttpGet("google/login")]
-        public IActionResult GoogleLogin()
-        {
-            var redirectUrl = Url.Action("GoogleCallback", "Auth", null, Request.Scheme);            
-            var state = GenerateState(redirectUrl);
+        [HttpGet("login")]
+        public IActionResult Login()
+        {            
+            var state = GenerateState();
+            var redirectUrl = Url.Action("Callback", "Google", new { state, }, Request.Scheme);
             var properties = new AuthenticationProperties
             {
                 RedirectUri = redirectUrl,
@@ -33,8 +33,8 @@ namespace SmartMatrix.WebApi.Controllers
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
-        [HttpGet("google/callback")]
-        public async Task<IActionResult> GoogleCallback()
+        [HttpGet("callback")]
+        public async Task<IActionResult> Callback(string code, string state)
         {            
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
             if (!result.Succeeded)
@@ -70,30 +70,16 @@ namespace SmartMatrix.WebApi.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private string GenerateState(string redirectUrl)
+        private string GenerateState()
         {
-            var state = new
-            {
-                Random = new Random().Next(100000, 999999).ToString(),
-                RedirectUrl = redirectUrl
-            };
-            return JsonSerializer.Serialize(state);
+            // Generate a random state value
+            var state = Guid.NewGuid().ToString();
+            return state;
         }
 
         private bool ValidateState(string state)
         {
-            // Implement your state validation logic here
-            // For example, you can deserialize the state and check its contents
-            try
-            {
-                var stateObj = JsonSerializer.Deserialize<dynamic>(state);
-                // Add your validation logic here
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return true;
         }
     }    
 }

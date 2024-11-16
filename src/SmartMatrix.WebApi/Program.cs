@@ -9,6 +9,7 @@ using SmartMatrix.WebApi.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 
 public class Program
 {
@@ -57,13 +58,40 @@ public class Program
             options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
         })
-        .AddCookie()        
+        .AddCookie(options =>
+        {
+            options.LoginPath = "/Auth/google/login"; // Redirect here if not authenticated
+        })        
         .AddGoogle(options =>
         {
             options.ClientId = builder.Configuration["Google:ClientId"] ?? string.Empty;
-            options.ClientSecret = builder.Configuration["Google:ClientSecret"] ?? string.Empty;
+            options.ClientSecret = builder.Configuration["Google:ClientSecret"] ?? string.Empty;            
+            options.CallbackPath = "/Auth/google/callback";            
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            options.CallbackPath = "/Auth/google/callback";
+            options.SaveTokens = true;
+            options.Scope.Add("email"); // Include the email scope
+            options.Scope.Add("profile"); // Optionally include profile scope for more user information
+
+            // Optionally handle events
+            options.Events = new OAuthEvents
+            {
+                OnCreatingTicket = context =>
+                {
+                    // Handle the event when creating the authentication ticket
+                    return Task.CompletedTask;
+                },
+                OnRemoteFailure = context =>
+                {
+                    // Log the error details
+                    var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(context.Failure, "Remote authentication failure");
+
+                    // Optionally, you can return detailed error information to the client
+                    context.Response.Redirect($"/Home/Error?message={context.Failure?.Message}");
+                    context.HandleResponse();
+                    return Task.CompletedTask;
+                }
+            };
         });
 
 /*
@@ -92,6 +120,7 @@ public class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
+            app.UseDeveloperExceptionPage();
             app.UseSwagger(); // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwaggerUI(); // Enable middleware to serve Swagger UI.
         }
@@ -107,12 +136,13 @@ public class Program
 
         app.UseAuthentication();
         app.UseAuthorization();
-        
+                
         // Serve static files and default files (index.html)
         app.UseDefaultFiles();
-        app.UseStaticFiles();
-        
+        app.UseStaticFiles();                
+
         app.MapControllers();
+        
 
         app.Run();
     }
