@@ -72,14 +72,28 @@ namespace SmartMatrix.WebApi.Controllers
 
         private string GenerateState()
         {
-            // Generate a random state value
-            var state = Guid.NewGuid().ToString();
-            return state;
+            var state = new
+            {
+                Random = new Random().Next(100000, 999999).ToString(),
+                Timestamp = DateTime.UtcNow.Ticks
+            };
+            return JsonSerializer.Serialize(state);
         }
 
         private bool ValidateState(string state)
         {
-            return true;
+            // Implement your state validation logic here
+            // For example, you can deserialize the state and check its contents
+            try
+            {
+                var stateObj = JsonSerializer.Deserialize<dynamic>(state);
+                // Add your validation logic here
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }    
 }

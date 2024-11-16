@@ -54,15 +54,14 @@ public class Program
         // Configure Google Authentication
         builder.Services.AddAuthentication(options =>
         {
-            options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-        .AddCookie(options =>
+        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
         {
             options.LoginPath = "/Auth/google/login"; // Redirect here if not authenticated
         })        
-        .AddGoogle(options =>
+        .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
         {
             options.ClientId = builder.Configuration["Google:ClientId"] ?? string.Empty;
             options.ClientSecret = builder.Configuration["Google:ClientSecret"] ?? string.Empty;            
@@ -92,15 +91,8 @@ public class Program
                     return Task.CompletedTask;
                 }
             };
-        });
-
-/*
-        builder.Services.AddAuthentication(options =>
-        {            
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })        
-        .AddJwtBearer(options =>
+        })
+        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
         {
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -112,8 +104,7 @@ public class Program
                 ValidAudience = builder.Configuration["Jwt:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty))
             };
-        });        
-*/
+        });
 
         var app = builder.Build();
 
@@ -136,14 +127,13 @@ public class Program
 
         app.UseAuthentication();
         app.UseAuthorization();
-                
+
+        app.MapControllers();
+
         // Serve static files and default files (index.html)
         app.UseDefaultFiles();
         app.UseStaticFiles();                
-
-        app.MapControllers();
-        
-
+            
         app.Run();
     }
 }
