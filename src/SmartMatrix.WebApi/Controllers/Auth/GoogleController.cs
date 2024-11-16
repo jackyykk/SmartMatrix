@@ -34,8 +34,7 @@ namespace SmartMatrix.WebApi.Controllers
             };
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
-
-        [HttpGet("/signin-google")]
+        
         public async Task<IActionResult> Callback([FromQuery] string code = "", string state = "")
         {            
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
