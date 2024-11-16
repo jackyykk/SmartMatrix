@@ -25,7 +25,7 @@ namespace SmartMatrix.WebApi.Controllers
         {            
             var state = GenerateState();
             //var redirectUrl = Url.Action("Callback", "Google", new { state });
-            var redirectUrl = Url.Action("Callback", "Google", null, Request.Scheme);
+            var redirectUrl = Url.Action("Callback", "Google", new { state }, Request.Scheme);
             var properties = new AuthenticationProperties
             {                
                 RedirectUri = redirectUrl,                
@@ -35,7 +35,8 @@ namespace SmartMatrix.WebApi.Controllers
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
         
-        public async Task<IActionResult> Callback([FromQuery] string code = "", string state = "")
+        [HttpGet()]
+        public async Task<IActionResult> Callback([FromQuery] string state = "")
         {            
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
             if (!result.Succeeded)
