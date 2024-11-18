@@ -2,7 +2,7 @@ namespace SmartMatrix.Domain.Constants
 {
     public static class CommonConstants
     {
-        public static class EntityStatus
+        public static class DbEntityStatus
         {
             public const string Active = "Active";  // This is the default status
             public const string Disabled = "Disabled";  // This is the status when the entity is disabled by the user
@@ -12,7 +12,7 @@ namespace SmartMatrix.Domain.Constants
             public const string Inactive = "Inactive";  // In case the process has failed, the entity status will become inactive
         }
 
-        public static class ProcessStatus
+        public static class DbProcessStatus
         {
             public const string Pending = "Pending";  // This is the default status of the process
             public const string Processing = "Processing";  // This is the status when the process is processing

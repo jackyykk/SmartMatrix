@@ -34,9 +34,9 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 
         public class StatusOption
         {
-            public const string Active = CommonConstants.EntityStatus.Active;
-            public const string Inactive = CommonConstants.EntityStatus.Inactive;
-            public const string Deleted = CommonConstants.EntityStatus.Deleted;
+            public const string Active = CommonConstants.DbEntityStatus.Active;
+            public const string Inactive = CommonConstants.DbEntityStatus.Inactive;
+            public const string Deleted = CommonConstants.DbEntityStatus.Deleted;
         }
     }
 }

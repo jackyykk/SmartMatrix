@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SmartMatrix.Domain.Core.Identities.Others;
+using SmartMatrix.WebApi.Utils;
 
 namespace SmartMatrix.WebApi.Controllers
 {
@@ -15,6 +17,8 @@ namespace SmartMatrix.WebApi.Controllers
     [Route("api/auth/google")]
     public class GoogleController : BaseController<GoogleController>
     {
+        const string AUTH_PROVIDER_NAME = "Google";        
+
         public GoogleController(ILogger<GoogleController> logger, IConfiguration configuration, IMediator mediator)
             : base(logger, configuration, mediator)
         {
@@ -24,7 +28,7 @@ namespace SmartMatrix.WebApi.Controllers
         public IActionResult Login()
         {            
             var state = GenerateState();            
-            var redirectUrl = Url.Action("Callback", "Google", new { state }, Request.Scheme);
+            var redirectUrl = Url.Action(nameof(GoogleResponse), "Google", new { state }, Request.Scheme);
             var properties = new AuthenticationProperties
             {                
                 RedirectUri = redirectUrl,                
@@ -36,7 +40,7 @@ namespace SmartMatrix.WebApi.Controllers
         
         // Don't need to setup the route here because it's already defined in the Login method
         [HttpGet()]
-        public async Task<IActionResult> Callback([FromQuery] string qsState = "")
+        public async Task<IActionResult> GoogleResponse()
         {            
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
             if (!result.Succeeded)
@@ -55,8 +59,35 @@ namespace SmartMatrix.WebApi.Controllers
             var surname = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
             var profilePicture = claims?.FirstOrDefault(c => c.Type == "urn:google:picture")?.Value;
 
+            // Save user information to database, email is primary key
+
+
+            // Get Jwt Content
+            string jwtKey = _configuration["Authentication:Jwt:Key"] ?? string.Empty;
+            string jwtIssuer = _configuration["Authentication:Jwt:Issuer"] ?? string.Empty;
+            string jwtAudience = _configuration["Authentication:Jwt:Audience"] ?? string.Empty;
+            double jwtExpiresInMinutes = _configuration.GetValue<double>("Authentication:Jwt:ExpiresInMinutes");
+            DateTime jwtExpires = DateTime.UtcNow.AddMinutes(jwtExpiresInMinutes);
+
             // Create JWT token
-            var token = GenerateJwtToken(result.Principal);
+            JwtContent jwtContent = new JwtContent
+            {
+                Key = jwtKey,
+                Issuer = jwtIssuer,
+                Audience = jwtAudience,
+                Expires = jwtExpires,
+                AuthProviderName = AUTH_PROVIDER_NAME,
+                NameIdentifier = nameidentifier,
+                Email = email,
+                Name = name,
+                GivenName = givenName,
+                Surname = surname                
+            };
+            var authToken = TokenUtil.GenerateJwt(jwtContent);
+            var refreshToken = TokenUtil.GenerateRefreshToken();
+            double refreshToken_ExpiresInMinutes = _configuration.GetValue<double>("Authentication:RefreshToken:ExpiresInMinutes");
+            DateTime refreshToken_Expires = DateTime.UtcNow.AddMinutes(refreshToken_ExpiresInMinutes);
+
             return Ok(new
             {                
                 email,
@@ -64,31 +95,12 @@ namespace SmartMatrix.WebApi.Controllers
                 givenName,
                 surname,
                 profilePicture,
-                token
+                authToken,
+                refreshToken,
+                refreshToken_Expires
             });
         }
-
-        private string GenerateJwtToken(ClaimsPrincipal? principal)
-        {
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, principal?.Identity?.Name ?? string.Empty),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            var key = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:Jwt:Key"] ?? string.Empty));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Authentication:Jwt:Issuer"],
-                audience: _configuration["Authentication:Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
+        
         private string GenerateState()
         {
             var state = new
