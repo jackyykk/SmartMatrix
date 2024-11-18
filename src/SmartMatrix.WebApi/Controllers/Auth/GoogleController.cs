@@ -12,7 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 namespace SmartMatrix.WebApi.Controllers
 {
     [ApiController]
-    [Route("Auth/google")]
+    [Route("api/auth/google")]
     public class GoogleController : BaseController<GoogleController>
     {
         public GoogleController(ILogger<GoogleController> logger, IConfiguration configuration, IMediator mediator)
@@ -23,8 +23,7 @@ namespace SmartMatrix.WebApi.Controllers
         [HttpGet("login")]
         public IActionResult Login()
         {            
-            var state = GenerateState();
-            //var redirectUrl = Url.Action("Callback", "Google", new { state });
+            var state = GenerateState();            
             var redirectUrl = Url.Action("Callback", "Google", new { state }, Request.Scheme);
             var properties = new AuthenticationProperties
             {                
@@ -35,36 +34,53 @@ namespace SmartMatrix.WebApi.Controllers
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
         
+        // Don't need to setup the route here because it's already defined in the Login method
         [HttpGet()]
-        public async Task<IActionResult> Callback([FromQuery] string state = "")
+        public async Task<IActionResult> Callback([FromQuery] string qsState = "")
         {            
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
             if (!result.Succeeded)
                 return Unauthorized(); // Handle failure
 
             // Validate the state parameter
-            if (!ValidateState(result.Properties.Items["state"]))
+            if (!result.Properties.Items.TryGetValue("state", out var state) || state == null || !ValidateState(state))
                 return BadRequest("Invalid state parameter");
+
+            // Extract user information
+            var claims = result.Principal?.Claims;
+            var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            var givenName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+            var surname = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+            var profilePicture = claims?.FirstOrDefault(c => c.Type == "urn:google:picture")?.Value;
 
             // Create JWT token
             var token = GenerateJwtToken(result.Principal);
-            return Ok(new { token });
+            return Ok(new
+            {                
+                email,
+                name,
+                givenName,
+                surname,
+                profilePicture,
+                token
+            });
         }
 
-        private string GenerateJwtToken(ClaimsPrincipal principal)
+        private string GenerateJwtToken(ClaimsPrincipal? principal)
         {
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, principal.Identity?.Name ?? string.Empty),
+                new Claim(JwtRegisteredClaimNames.Sub, principal?.Identity?.Name ?? string.Empty),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var key = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? string.Empty));
+            var key = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Authentication:Jwt:Key"] ?? string.Empty));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _configuration["Authentication:Jwt:Issuer"],
+                audience: _configuration["Authentication:Jwt:Audience"],
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds);

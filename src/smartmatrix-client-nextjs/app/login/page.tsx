@@ -14,7 +14,7 @@ const Login = () => {
     const handleLogin = async () => {
         try
         {
-            window.open('https://localhost:5001/auth/google/login', '_self');
+            window.open('https://localhost:5001/api/auth/google/login', '_self');
         }
         catch(err)
         {

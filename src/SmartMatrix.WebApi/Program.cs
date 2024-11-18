@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Authentication;
 
 public class Program
 {
@@ -37,7 +38,7 @@ public class Program
                 });
         });
 
-        // Add configuration to read from appsettings.json
+        // Add configuration to read from appsettings.json, then override with environment variables
         var env = builder.Environment;
         builder.Configuration
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -57,22 +58,18 @@ public class Program
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-        .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-        {
-            options.LoginPath = "/Auth/google/login"; // Redirect here if not authenticated
-        })        
+        .AddCookie()
         .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
         {
-            options.ClientId = builder.Configuration["Google:ClientId"] ?? string.Empty;
-            options.ClientSecret = builder.Configuration["Google:ClientSecret"] ?? string.Empty;            
-            //options.CallbackPath = "/Auth/google/callback";
-            //options.CallbackPath = "/signin-google";
+            options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
+            options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.SaveTokens = true;
             options.Scope.Add("email"); // Include the email scope
             options.Scope.Add("profile"); // Optionally include profile scope for more user information
+            options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
 
-            // Optionally handle events            
+            // Optionally handle events
             options.Events = new OAuthEvents
             {
                 OnCreatingTicket = context =>
@@ -101,9 +98,9 @@ public class Program
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                ValidAudience = builder.Configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty))
+                ValidIssuer = builder.Configuration["Authentication:Jwt:Issuer"],
+                ValidAudience = builder.Configuration["Authentication:Jwt:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:Jwt:Key"] ?? string.Empty))
             };
         });
 
@@ -129,12 +126,13 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.MapControllers();
-
         // Serve static files and default files (index.html)
         app.UseDefaultFiles();
-        app.UseStaticFiles();                
-            
+        app.UseStaticFiles(); 
+
+        app.UseRouting();
+        app.MapControllers();
+                    
         app.Run();
     }
 }
