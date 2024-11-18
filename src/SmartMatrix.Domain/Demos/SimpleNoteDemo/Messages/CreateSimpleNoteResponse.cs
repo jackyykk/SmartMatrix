@@ -1,4 +1,4 @@
-using SmartMatrix.Domain.Demos.SimpleNoteDemo.Entities;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.DbEntities;
 
 namespace SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages
 {

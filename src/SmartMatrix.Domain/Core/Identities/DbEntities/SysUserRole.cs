@@ -1,4 +1,4 @@
-namespace SmartMatrix.Domain.Core.Identities.Entities
+namespace SmartMatrix.Domain.Core.Identities.DbEntities
 {
     public class SysUserRole
     {

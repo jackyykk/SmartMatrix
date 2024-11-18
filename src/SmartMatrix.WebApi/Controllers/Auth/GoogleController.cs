@@ -48,6 +48,7 @@ namespace SmartMatrix.WebApi.Controllers
 
             // Extract user information
             var claims = result.Principal?.Claims;
+            var nameidentifier = claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
             var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
             var givenName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;

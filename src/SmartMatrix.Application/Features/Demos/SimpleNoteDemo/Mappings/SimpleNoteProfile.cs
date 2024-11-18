@@ -1,5 +1,5 @@
 using AutoMapper;
-using SmartMatrix.Domain.Demos.SimpleNoteDemo.Entities;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.DbEntities;
 using SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages;
 
 namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Mappings

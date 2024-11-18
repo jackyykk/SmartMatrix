@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SmartMatrix.DataAccess.AuditLogging;
-using SmartMatrix.Domain.Demos.SimpleNoteDemo.Entities;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.DbEntities;
 
 namespace SmartMatrix.DataAccess.DbContexts
 {

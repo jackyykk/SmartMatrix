@@ -3,7 +3,7 @@ using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
 using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNoteDemo;
 using SmartMatrix.DataAccess.Constants;
-using SmartMatrix.Domain.Demos.SimpleNoteDemo.Entities;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.DbEntities;
 
 namespace SmartMatrix.DataAccess.Repositories.Demos.SimpleNoteDemo
 {
