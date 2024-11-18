@@ -13,6 +13,7 @@ namespace SmartMatrix.WebApi.Utils
         {            
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.Sid, content.Sid),
                 new Claim(ClaimTypes.NameIdentifier, content.NameIdentifier),
                 new Claim(ClaimTypes.Email, content.Email),
                 new Claim(ClaimTypes.Name, content.Name),

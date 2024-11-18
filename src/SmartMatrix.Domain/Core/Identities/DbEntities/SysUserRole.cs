@@ -2,8 +2,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 {
     public class SysUserRole
     {
-        public int AppUserId { get; set; }
-        public int AppRoleId { get; set; }
+        public int SysUserId { get; set; }
+        public int SysRoleId { get; set; }
         public SysUser User { get; set; }
         public SysRole Role { get; set; }
     }

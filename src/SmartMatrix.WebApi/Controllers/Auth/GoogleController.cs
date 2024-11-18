@@ -11,13 +11,13 @@ using Microsoft.IdentityModel.Tokens;
 using SmartMatrix.Domain.Core.Identities.Others;
 using SmartMatrix.WebApi.Utils;
 
-namespace SmartMatrix.WebApi.Controllers
+namespace SmartMatrix.WebApi.Controllers.Auth
 {
     [ApiController]
     [Route("api/auth/google")]
     public class GoogleController : BaseController<GoogleController>
     {
-        const string AUTH_PROVIDER_NAME = "Google";        
+        const string LOGIN_PROVIDER_NAME = "Google";        
 
         public GoogleController(ILogger<GoogleController> logger, IConfiguration configuration, IMediator mediator)
             : base(logger, configuration, mediator)
@@ -52,12 +52,12 @@ namespace SmartMatrix.WebApi.Controllers
 
             // Extract user information
             var claims = result.Principal?.Claims;
-            var nameidentifier = claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var name = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-            var givenName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
-            var surname = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
-            var profilePicture = claims?.FirstOrDefault(c => c.Type == "urn:google:picture")?.Value;
+            var googleUserId = claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var googleEmail = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var googleUserName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            var googleGivenName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+            var googleSurname = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+            var googleProfilePicture = claims?.FirstOrDefault(c => c.Type == "urn:google:picture")?.Value;
 
             // Save user information to database, email is primary key
 
@@ -76,12 +76,13 @@ namespace SmartMatrix.WebApi.Controllers
                 Issuer = jwtIssuer,
                 Audience = jwtAudience,
                 Expires = jwtExpires,
-                AuthProviderName = AUTH_PROVIDER_NAME,
-                NameIdentifier = nameidentifier,
-                Email = email,
-                Name = name,
-                GivenName = givenName,
-                Surname = surname                
+                LoginProviderName = LOGIN_PROVIDER_NAME,
+                Sid = googleUserId,
+                NameIdentifier = googleEmail,
+                Email = googleEmail,
+                Name = googleUserName,
+                GivenName = googleGivenName,
+                Surname = googleSurname                
             };
             var authToken = TokenUtil.GenerateJwt(jwtContent);
             var refreshToken = TokenUtil.GenerateRefreshToken();
@@ -90,11 +91,11 @@ namespace SmartMatrix.WebApi.Controllers
 
             return Ok(new
             {                
-                email,
-                name,
-                givenName,
-                surname,
-                profilePicture,
+                googleEmail,
+                googleUserName,
+                googleGivenName,
+                googleSurname,
+                googleProfilePicture,
                 authToken,
                 refreshToken,
                 refreshToken_Expires
