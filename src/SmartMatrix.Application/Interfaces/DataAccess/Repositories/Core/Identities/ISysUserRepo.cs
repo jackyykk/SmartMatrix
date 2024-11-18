@@ -6,5 +6,6 @@ namespace SmartMatrix.Application.Interfaces.DataAccess.Repositories.Core.Identi
     {
         IQueryable<SysUser> SysUsers { get; }
         Task<SysUser?> GetFirstByUserNameAsync(string userName);
+        Task<SysUser?> GetFirstByLoginNameAsync(string LoginName);
     }
 }

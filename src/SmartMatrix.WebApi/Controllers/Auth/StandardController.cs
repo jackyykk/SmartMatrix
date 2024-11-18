@@ -14,10 +14,19 @@ namespace SmartMatrix.WebApi.Controllers.Auth
         {
         }
 
-        [HttpGet("get-first-by-username", Name = "StandardController.GetFirstByUserName")]
-        public async Task<IActionResult> GetFirstByUserName([FromQuery] GetFirstSysUserByUserNameRequest request)
+        [HttpGet("get-user-by-username", Name = "StandardController.GetUserByUserName")]
+        public async Task<IActionResult> GetUserByUserName([FromQuery] GetFirstSysUserByUserNameRequest request)
         {
             var entity = await _mediator.Send(new GetFirstSysUserByUserNameQuery{
+                Request = request
+            });
+            return Ok(entity);
+        }
+
+        [HttpGet("get-user-by-login-name", Name = "StandardController.GetUserByLoginName")]
+        public async Task<IActionResult> GetUserByLoginName([FromQuery] GetFirstSysUserByLoginNameRequest request)
+        {
+            var entity = await _mediator.Send(new GetFirstSysUserByLoginNameQuery{
                 Request = request
             });
             return Ok(entity);

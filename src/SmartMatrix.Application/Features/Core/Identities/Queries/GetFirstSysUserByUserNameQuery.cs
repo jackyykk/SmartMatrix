@@ -1,10 +1,8 @@
 using AutoMapper;
 using MediatR;
 using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Core.Identities;
-using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNoteDemo;
 using SmartMatrix.Core.BaseClasses.Web;
 using SmartMatrix.Domain.Core.Identities.Messages;
-using SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages;
 
 namespace SmartMatrix.Application.Features.Core.Identities.Queries
 {

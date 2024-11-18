@@ -50,6 +50,20 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
                 .FirstOrDefaultAsync();
             
             return user;
-        }        
+        }
+
+        public async Task<SysUser?> GetFirstByLoginNameAsync(string loginName)
+        {
+            var login = _readRepo.Entities.SelectMany(u => u.Logins).Where(l => l.LoginName == loginName).FirstOrDefault();
+            if (login == null)
+                return null;
+
+            var user = await _readRepo.Entities.Where(u => u.Id == login.SysUserId)
+                .Include(u => u.Logins)
+                .Select(u => SysUser.Copy(u))
+                .FirstOrDefaultAsync();
+            
+            return user;
+        }
     }
 }

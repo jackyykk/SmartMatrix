@@ -7,8 +7,9 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Mappings
     internal class SysUserProfile : Profile
     {
         public SysUserProfile()
-        {            
+        {               
             CreateMap<SysUser, GetFirstSysUserByUserNameResponse>().ReverseMap();            
+            CreateMap<SysUser, GetFirstSysUserByLoginNameResponse>().ReverseMap();         
         }
     }
 }
