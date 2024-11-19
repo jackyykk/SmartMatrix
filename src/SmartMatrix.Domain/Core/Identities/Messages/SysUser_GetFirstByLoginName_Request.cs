@@ -1,6 +1,6 @@
 namespace SmartMatrix.Domain.Core.Identities.Messages
 {
-    public class GetFirstSysUserByLoginNameRequest
+    public class SysUser_GetFirstByLoginName_Request
     {
         public string LoginName { get; set; }
     }

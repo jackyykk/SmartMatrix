@@ -6,11 +6,11 @@ using SmartMatrix.Domain.Core.Identities.Messages;
 
 namespace SmartMatrix.Application.Features.Core.Identities.Queries
 {
-    public class GetFirstSysUserByUserNameQuery : IRequest<Result<GetFirstSysUserByUserNameResponse>>
+    public class SysUser_GetFirstByUserName_Query : IRequest<Result<SysUser_GetFirstByUserName_Response>>
     {
-        public GetFirstSysUserByUserNameRequest? Request { get; set; }
+        public SysUser_GetFirstByUserName_Request? Request { get; set; }
 
-        public class Handler : IRequestHandler<GetFirstSysUserByUserNameQuery, Result<GetFirstSysUserByUserNameResponse>>
+        public class Handler : IRequestHandler<SysUser_GetFirstByUserName_Query, Result<SysUser_GetFirstByUserName_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISysUserRepo _sysUserRepo;
@@ -21,18 +21,18 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
                 _sysUserRepo = sysUserRepo;
             }
 
-            public async Task<Result<GetFirstSysUserByUserNameResponse>> Handle(GetFirstSysUserByUserNameQuery query, CancellationToken cancellationToken)
+            public async Task<Result<SysUser_GetFirstByUserName_Response>> Handle(SysUser_GetFirstByUserName_Query query, CancellationToken cancellationToken)
             {                
                 try
                 {
                     var entity = await _sysUserRepo.GetFirstByUserNameAsync(query.Request!.UserName);
-                    var mappedEntity = _mapper.Map<GetFirstSysUserByUserNameResponse>(entity);
+                    var mappedEntity = _mapper.Map<SysUser_GetFirstByUserName_Response>(entity);
                     
-                    return Result<GetFirstSysUserByUserNameResponse>.Success(mappedEntity);
+                    return Result<SysUser_GetFirstByUserName_Response>.Success(mappedEntity);
                 }
                 catch (Exception ex)
                 {
-                    return Result<GetFirstSysUserByUserNameResponse>.Fail(-1, ex.Message);
+                    return Result<SysUser_GetFirstByUserName_Response>.Fail(-1, ex.Message);
                 }                
             }
         }

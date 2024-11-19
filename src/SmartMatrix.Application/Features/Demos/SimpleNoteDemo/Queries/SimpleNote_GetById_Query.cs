@@ -6,11 +6,11 @@ using SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages;
 
 namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
 {
-    public class GetSimpleNoteByIdQuery : IRequest<Result<GetSimpleNoteByIdResponse>>
+    public class SimpleNote_GetById_Query : IRequest<Result<SimpleNote_GetById_Response>>
     {
-        public GetSimpleNoteByIdRequest? Request { get; set; }
+        public SimpleNote_GetById_Request? Request { get; set; }
 
-        public class Handler : IRequestHandler<GetSimpleNoteByIdQuery, Result<GetSimpleNoteByIdResponse>>
+        public class Handler : IRequestHandler<SimpleNote_GetById_Query, Result<SimpleNote_GetById_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISimpleNoteRepo _simpleNoteRepo;
@@ -21,18 +21,18 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
                 _simpleNoteRepo = simpleNoteRepo;
             }
 
-            public async Task<Result<GetSimpleNoteByIdResponse>> Handle(GetSimpleNoteByIdQuery query, CancellationToken cancellationToken)
+            public async Task<Result<SimpleNote_GetById_Response>> Handle(SimpleNote_GetById_Query query, CancellationToken cancellationToken)
             {                
                 try
                 {
                     var entity = await _simpleNoteRepo.GetByIdAsync(query.Request!.Id);
-                    var mappedEntity = _mapper.Map<GetSimpleNoteByIdResponse>(entity);
+                    var mappedEntity = _mapper.Map<SimpleNote_GetById_Response>(entity);
                     
-                    return Result<GetSimpleNoteByIdResponse>.Success(mappedEntity);
+                    return Result<SimpleNote_GetById_Response>.Success(mappedEntity);
                 }
                 catch (Exception ex)
                 {
-                    return Result<GetSimpleNoteByIdResponse>.Fail(-1, ex.Message);
+                    return Result<SimpleNote_GetById_Response>.Fail(-1, ex.Message);
                 }                
             }
         }

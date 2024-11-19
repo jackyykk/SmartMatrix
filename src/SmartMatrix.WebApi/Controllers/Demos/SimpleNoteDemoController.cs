@@ -16,20 +16,20 @@ namespace SmartMatrix.WebApi.Controllers.Demos
         }
 
         [HttpGet("get-by-id", Name = "SimpleNoteDemoController.GetById")]
-        public async Task<IActionResult> GetById([FromQuery] GetSimpleNoteByIdRequest request)
+        public async Task<IActionResult> GetById([FromQuery] SimpleNote_GetById_Request request)
         {
             SimpleNote note = new SimpleNote();
 
-            var entity = await _mediator.Send(new GetSimpleNoteByIdQuery{
+            var entity = await _mediator.Send(new SimpleNote_GetById_Query{
                 Request = request
             });
             return Ok(entity);
         }
 
         [HttpPost("create", Name = "SimpleNoteDemoController.Create")]
-        public async Task<IActionResult> Create([FromBody] CreateSimpleNoteRequest request)
+        public async Task<IActionResult> Create([FromBody] SimpleNote_Create_Request request)
         {
-            var entity = await _mediator.Send(new CreateSimpleNoteCommand{
+            var entity = await _mediator.Send(new SimpleNote_Create_Command{
                 Request = request
             });
             return Ok(entity);

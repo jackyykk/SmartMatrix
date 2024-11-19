@@ -8,11 +8,11 @@ using SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages;
 
 namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
 {
-    public class CreateSimpleNoteCommand : IRequest<Result<CreateSimpleNoteResponse>>
+    public class SimpleNote_Create_Command : IRequest<Result<SimpleNote_Create_Response>>
     {
-        public CreateSimpleNoteRequest? Request { get; set; }
+        public SimpleNote_Create_Request? Request { get; set; }
 
-        public class Handler : IRequestHandler<CreateSimpleNoteCommand, Result<CreateSimpleNoteResponse>>
+        public class Handler : IRequestHandler<SimpleNote_Create_Command, Result<SimpleNote_Create_Response>>
         {
             private readonly IDemoUnitOfWork _unitOfWork;
             private readonly ISimpleNoteRepo _simpleNoteRepo;
@@ -25,7 +25,7 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
                 _mapper = mapper;
             }
 
-            public async Task<Result<CreateSimpleNoteResponse>> Handle(CreateSimpleNoteCommand command, CancellationToken cancellationToken)
+            public async Task<Result<SimpleNote_Create_Response>> Handle(SimpleNote_Create_Command command, CancellationToken cancellationToken)
             {
                 
                 _unitOfWork.Open();
@@ -40,13 +40,13 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
                         await _unitOfWork.SaveChangesAsync(cancellationToken);
                         transaction.Commit();
 
-                        var mappedEntity = _mapper.Map<CreateSimpleNoteResponse>(entity);
-                        return Result<CreateSimpleNoteResponse>.Success(mappedEntity);
+                        var mappedEntity = _mapper.Map<SimpleNote_Create_Response>(entity);
+                        return Result<SimpleNote_Create_Response>.Success(mappedEntity);
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        return Result<CreateSimpleNoteResponse>.Fail(-1, ex.Message);
+                        return Result<SimpleNote_Create_Response>.Fail(-1, ex.Message);
                     }                    
                     finally
                     {

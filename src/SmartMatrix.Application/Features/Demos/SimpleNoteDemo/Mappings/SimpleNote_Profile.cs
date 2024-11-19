@@ -4,12 +4,12 @@ using SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages;
 
 namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Mappings
 {
-    internal class SimpleNoteProfile : Profile
+    internal class SimpleNote_Profile : Profile
     {
-        public SimpleNoteProfile()
+        public SimpleNote_Profile()
         {
-            CreateMap<SimpleNote, GetSimpleNoteByIdResponse>().ReverseMap();
-            CreateMap<SimpleNote, CreateSimpleNoteResponse>().ReverseMap();
+            CreateMap<SimpleNote, SimpleNote_GetById_Response>().ReverseMap();
+            CreateMap<SimpleNote, SimpleNote_Create_Response>().ReverseMap();
         }
     }
 }

@@ -6,11 +6,11 @@ using SmartMatrix.Domain.Core.Identities.Messages;
 
 namespace SmartMatrix.Application.Features.Core.Identities.Queries
 {
-    public class GetFirstSysUserByLoginNameQuery : IRequest<Result<GetFirstSysUserByLoginNameResponse>>
+    public class SysUser_GetFirstByLoginName_Query : IRequest<Result<SysUser_GetFirstByLoginName_Response>>
     {
-        public GetFirstSysUserByLoginNameRequest? Request { get; set; }
+        public SysUser_GetFirstByLoginName_Request? Request { get; set; }
 
-        public class Handler : IRequestHandler<GetFirstSysUserByLoginNameQuery, Result<GetFirstSysUserByLoginNameResponse>>
+        public class Handler : IRequestHandler<SysUser_GetFirstByLoginName_Query, Result<SysUser_GetFirstByLoginName_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISysUserRepo _sysUserRepo;
@@ -21,18 +21,18 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
                 _sysUserRepo = sysUserRepo;
             }
 
-            public async Task<Result<GetFirstSysUserByLoginNameResponse>> Handle(GetFirstSysUserByLoginNameQuery query, CancellationToken cancellationToken)
+            public async Task<Result<SysUser_GetFirstByLoginName_Response>> Handle(SysUser_GetFirstByLoginName_Query query, CancellationToken cancellationToken)
             {                
                 try
                 {
                     var entity = await _sysUserRepo.GetFirstByLoginNameAsync(query.Request!.LoginName);
-                    var mappedEntity = _mapper.Map<GetFirstSysUserByLoginNameResponse>(entity);
+                    var mappedEntity = _mapper.Map<SysUser_GetFirstByLoginName_Response>(entity);
                     
-                    return Result<GetFirstSysUserByLoginNameResponse>.Success(mappedEntity);
+                    return Result<SysUser_GetFirstByLoginName_Response>.Success(mappedEntity);
                 }
                 catch (Exception ex)
                 {
-                    return Result<GetFirstSysUserByLoginNameResponse>.Fail(-1, ex.Message);
+                    return Result<SysUser_GetFirstByLoginName_Response>.Fail(-1, ex.Message);
                 }                
             }
         }
