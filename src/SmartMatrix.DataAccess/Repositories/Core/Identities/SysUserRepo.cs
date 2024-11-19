@@ -41,12 +41,14 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
 
         public IQueryable<SysUser> SysUsers => _readRepo.Entities;
 
-        public async Task<SysUser?> GetFirstByUserNameAsync(string userName)
+        public async Task<SysUser?> GetFirstByUserNameAsync(string partitionKey, string userName)
         {
             // Get SysUser Copy To Avoid Cyclic References
             // Get Latest Un-Deleted User and Un-Deleted Logins
             var user = await _readRepo.Entities
-                .Where(x => !x.IsDeleted && x.UserName == userName)
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.PartitionKey == partitionKey)
+                .Where(x => x.UserName == userName)
                 .OrderByDescending (x => x.Id)
                 .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList()))
                 .FirstOrDefaultAsync();
@@ -54,12 +56,14 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
             return user;
         }
 
-        public async Task<SysUser?> GetFirstByLoginNameAsync(string loginName)
+        public async Task<SysUser?> GetFirstByLoginNameAsync(string partitionKey,string loginName)
         {
             // Get Un-Deleted Login
             var login = _readRepo.Entities
                 .SelectMany(x => x.Logins)
-                .Where(x => !x.IsDeleted && x.LoginName == loginName)
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.PartitionKey == partitionKey)
+                .Where(x => x.LoginName == loginName)
                 .OrderByDescending (x => x.Id)
                 .FirstOrDefault();
 

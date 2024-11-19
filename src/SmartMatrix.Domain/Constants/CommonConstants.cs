@@ -2,6 +2,21 @@ namespace SmartMatrix.Domain.Constants
 {
     public static class CommonConstants
     {
+        public static class Identities
+        {
+            public static class SysPolicies
+            {
+                public const string Admin = "Admin";
+                public const string User = "User";
+            }
+
+            public static class SysClaimTypes
+            {
+                public const string LoginNameIdentifier = "login_name_identifier";
+                public const string ApiPermission = "api_permission";
+            }
+        }
+        
         public static class DbEntityStatus
         {
             public const string Active = "active";  // This is the default status

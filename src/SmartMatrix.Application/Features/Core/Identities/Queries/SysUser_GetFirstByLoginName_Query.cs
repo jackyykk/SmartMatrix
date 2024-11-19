@@ -25,7 +25,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
             {                
                 try
                 {
-                    var entity = await _sysUserRepo.GetFirstByLoginNameAsync(query.Request!.LoginName);
+                    var entity = await _sysUserRepo.GetFirstByLoginNameAsync(query.Request!.PartitionKey, query.Request!.LoginName);
                     var mappedEntity = _mapper.Map<SysUser_GetFirstByLoginName_Response>(entity);
                     
                     return Result<SysUser_GetFirstByLoginName_Response>.Success(mappedEntity);

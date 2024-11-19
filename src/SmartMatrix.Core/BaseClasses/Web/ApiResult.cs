@@ -10,8 +10,8 @@ namespace SmartMatrix.Core.BaseClasses.Web
         }
         
         public List<string> Messages { get; set; } = new List<string>();
-        public bool Succeeded { get; set; }        
-        public int? StatusCode { get; set; }        
+        public bool Succeeded { get; set; }
+        public int? StatusCode { get; set; } = 0;
 
         public static IApiResult Fail()
         {

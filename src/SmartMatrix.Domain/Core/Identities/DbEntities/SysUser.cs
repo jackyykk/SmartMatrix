@@ -8,6 +8,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
     public class SysUser : AuditableEntity<int>
     {
         // User Information
+        public string PartitionKey { get; set; }
         public string Type { get; set; }
         public string UserName { get; set; }
         public string DisplayName { get; set; }
@@ -38,6 +39,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 ModifiedBy = u.ModifiedBy,
                 DeletedAt = u.DeletedAt,
                 DeletedBy = u.DeletedBy,
+                PartitionKey = u.PartitionKey,
                 Type = u.Type,
                 UserName = u.UserName,
                 DisplayName = u.DisplayName,
@@ -66,6 +68,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 ModifiedBy = u.ModifiedBy,
                 DeletedAt = u.DeletedAt,
                 DeletedBy = u.DeletedBy,
+                PartitionKey = u.PartitionKey,
                 Type = u.Type,
                 UserName = u.UserName,
                 DisplayName = u.DisplayName,

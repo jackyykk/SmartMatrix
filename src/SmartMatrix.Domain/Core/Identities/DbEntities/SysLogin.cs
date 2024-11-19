@@ -4,7 +4,8 @@ using SmartMatrix.Domain.Constants;
 namespace SmartMatrix.Domain.Core.Identities.DbEntities
 {
     public class SysLogin : AuditableEntity<int>
-    {        
+    {
+        public string PartitionKey { get; set; }
         public int SysUserId { get; set; }
         public string LoginProvider { get; set; }
         public string LoginType { get; set; }
@@ -36,6 +37,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 ModifiedBy = l.ModifiedBy,
                 DeletedAt = l.DeletedAt,
                 DeletedBy = l.DeletedBy,
+                PartitionKey = l.PartitionKey,
                 SysUserId = l.SysUserId,
                 LoginProvider = l.LoginProvider,
                 LoginType = l.LoginType,

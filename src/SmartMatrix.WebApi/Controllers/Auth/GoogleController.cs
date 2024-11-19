@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using SmartMatrix.Domain.Core.Identities.Others;
+using SmartMatrix.Domain.Core.Identities;
 using SmartMatrix.WebApi.Utils;
 
 namespace SmartMatrix.WebApi.Controllers.Auth
@@ -77,8 +77,9 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 Audience = jwtAudience,
                 Expires = jwtExpires,
                 LoginProviderName = LOGIN_PROVIDER_NAME,
+                LoginNameIdentifier = googleEmail,
                 Sid = googleUserId,
-                NameIdentifier = googleEmail,
+                UserNameIdentifier = googleEmail,
                 Email = googleEmail,
                 Name = googleUserName,
                 GivenName = googleGivenName,

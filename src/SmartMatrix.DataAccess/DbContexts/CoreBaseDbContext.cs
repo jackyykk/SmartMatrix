@@ -53,6 +53,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.ModifiedBy).HasColumnName("modified_by");                
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
+                b.Property(p => p.PartitionKey).HasColumnName("partition_key");
                 b.Property(p => p.Type).HasColumnName("type");
                 b.Property(p => p.UserName).HasColumnName("username");
                 b.Property(p => p.DisplayName).HasColumnName("display_name");
@@ -75,7 +76,8 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.ModifiedAt).HasColumnName("modified_at");
                 b.Property(p => p.ModifiedBy).HasColumnName("modified_by");                
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
-                b.Property(p => p.DeletedBy).HasColumnName("deleted_by");                
+                b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
+                b.Property(p => p.PartitionKey).HasColumnName("partition_key");                
                 b.Property(p => p.SysUserId).HasColumnName("sysuser_id");
                 b.Property(p => p.LoginProvider).HasColumnName("login_provider");
                 b.Property(p => p.LoginType).HasColumnName("login_type");
