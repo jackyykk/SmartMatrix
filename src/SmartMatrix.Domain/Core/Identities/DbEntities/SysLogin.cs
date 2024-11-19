@@ -13,7 +13,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         public string PasswordHash { get; set; }
         public string Description { get; set; }
 
-        public new string Status { get; set; } = StatusOption.Active;
+        public new string Status { get; set; } = StatusOptions.Active;
 
         public SysUser User { get; set; }
 
@@ -35,7 +35,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             public const string API = "api";            
         }
 
-        public class StatusOption
+        public class StatusOptions
         {
             public const string Active = CommonConstants.DbEntityStatus.Active;
             public const string Disabled = CommonConstants.DbEntityStatus.Disabled;

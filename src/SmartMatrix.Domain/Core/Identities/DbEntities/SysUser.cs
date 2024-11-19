@@ -20,6 +20,14 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         public List<SysLogin> Logins { get; set; } = new List<SysLogin>();
         public List<SysRole> Roles { get; set; } = new List<SysRole>();
 
+        public void ClearLoginPasswords()
+        {
+            foreach (var login in Logins)
+            {
+                login.PasswordHash = string.Empty;
+            }
+        }
+
         // Options
         public class PartitionKeyOptions
         {

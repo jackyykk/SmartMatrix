@@ -14,6 +14,15 @@ namespace SmartMatrix.WebApi.Controllers.Auth
         {
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(SysUser_GetFirstByLoginName_Request request)
+        {
+            var entity = await _mediator.Send(new SysUser_GetFirstByLoginName_Query{
+                Request = request
+            });
+            return Ok(entity);
+        }
+
         [HttpGet("get-first-by-username")]
         public async Task<IActionResult> GetFirstByUserName([FromQuery] SysUser_GetFirstByUserName_Request request)
         {
@@ -30,6 +39,6 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 Request = request
             });
             return Ok(entity);
-        }
+        }        
     }
 }
