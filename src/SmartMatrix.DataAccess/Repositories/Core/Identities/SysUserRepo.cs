@@ -50,7 +50,7 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
                 .Where(x => x.PartitionKey == partitionKey)
                 .Where(x => x.UserName == userName)
                 .OrderByDescending (x => x.Id)
-                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList()))
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.Roles.Where(r => !r.IsDeleted).ToList()))
                 .FirstOrDefaultAsync();
             
             return user;
@@ -73,7 +73,7 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
             // Get SysUser Copy To Avoid Cyclic References
             var user = await _readRepo.Entities
                 .Where(x => !x.IsDeleted &&  x.Id == login.SysUserId)                
-                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList()))
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.Roles.Where(r => !r.IsDeleted).ToList()))
                 .FirstOrDefaultAsync();
             
             return user;

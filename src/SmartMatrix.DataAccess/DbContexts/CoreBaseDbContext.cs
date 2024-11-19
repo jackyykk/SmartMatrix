@@ -62,6 +62,12 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Ignore(p => p.SkipAudit);
                 b.HasMany(u => u.Logins)
                     .WithOne(l => l.User).HasForeignKey(l => l.SysUserId);
+                b.HasMany(u => u.Roles)
+                    .WithMany(r => r.Users)
+                    .UsingEntity<SysUserRole>(
+                        x => x.HasOne<SysRole>().WithMany().HasForeignKey(x => x.SysRoleId),
+                        x => x.HasOne<SysUser>().WithMany().HasForeignKey(x => x.SysUserId)
+                    ).ToTable("sm_core_sysuser_roles");
             });
 
             builder.Entity<SysLogin>(b =>
@@ -83,6 +89,34 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.LoginType).HasColumnName("login_type");
                 b.Property(p => p.LoginName).HasColumnName("login_name");
                 b.Property(p => p.PasswordHash).HasColumnName("password_hash");
+            });
+
+            builder.Entity<SysRole>(b =>
+            {
+                b.HasKey("Id");
+                b.ToTable("sm_core_sysroles");
+                b.Property(p => p.Id).HasColumnName("id");
+                b.Property(p => p.Status).HasColumnName("status");
+                b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
+                b.Property(p => p.CreatedAt).HasColumnName("created_at");
+                b.Property(p => p.CreatedBy).HasColumnName("created_by");                                
+                b.Property(p => p.ModifiedAt).HasColumnName("modified_at");
+                b.Property(p => p.ModifiedBy).HasColumnName("modified_by");                
+                b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
+                b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
+                b.Property(p => p.PartitionKey).HasColumnName("partition_key");                
+                b.Property(p => p.Type).HasColumnName("type");
+                b.Property(p => p.RoleCode).HasColumnName("role_code");
+                b.Property(p => p.RoleName).HasColumnName("role_name");
+                b.Property(p => p.Description).HasColumnName("description");                
+            });
+
+            builder.Entity<SysUserRole>(b =>
+            {
+                b.HasKey("SysUserId", "SysRoleId");
+                b.ToTable("sm_core_sysuser_roles");
+                b.Property(p => p.SysUserId).HasColumnName("sysuser_id");
+                b.Property(p => p.SysRoleId).HasColumnName("sysrole_id");
             });
         }
     }

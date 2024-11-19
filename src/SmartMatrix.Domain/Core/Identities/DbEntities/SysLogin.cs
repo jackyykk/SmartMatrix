@@ -24,26 +24,26 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 
         public SysUser User { get; set; }
 
-        public static SysLogin Copy(SysLogin l)
+        public static SysLogin Copy(SysLogin x)
         {
             return new SysLogin
             {
-                Id = l.Id,
-                Status = l.Status,
-                IsDeleted = l.IsDeleted,
-                CreatedAt = l.CreatedAt,
-                CreatedBy = l.CreatedBy,
-                ModifiedAt = l.ModifiedAt,
-                ModifiedBy = l.ModifiedBy,
-                DeletedAt = l.DeletedAt,
-                DeletedBy = l.DeletedBy,
-                PartitionKey = l.PartitionKey,
-                SysUserId = l.SysUserId,
-                LoginProvider = l.LoginProvider,
-                LoginType = l.LoginType,
-                LoginName = l.LoginName,
-                PasswordHash = l.PasswordHash,
-                Description = l.Description
+                Id = x.Id,
+                Status = x.Status,
+                IsDeleted = x.IsDeleted,
+                CreatedAt = x.CreatedAt,
+                CreatedBy = x.CreatedBy,
+                ModifiedAt = x.ModifiedAt,
+                ModifiedBy = x.ModifiedBy,
+                DeletedAt = x.DeletedAt,
+                DeletedBy = x.DeletedBy,
+                PartitionKey = x.PartitionKey,
+                SysUserId = x.SysUserId,
+                LoginProvider = x.LoginProvider,
+                LoginType = x.LoginType,
+                LoginName = x.LoginName,
+                PasswordHash = x.PasswordHash,
+                Description = x.Description
             };
         }
     }

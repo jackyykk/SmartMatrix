@@ -25,6 +25,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         }
 
         public List<SysLogin> Logins { get; set; } = new List<SysLogin>();
+        public List<SysRole> Roles { get; set; } = new List<SysRole>();
 
         public static SysUser Copy(SysUser u)
         {
@@ -52,10 +53,15 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 user.Logins.Add(SysLogin.Copy(login));
             }
 
+            foreach (var role in u.Roles)
+            {
+                user.Roles.Add(SysRole.Copy(role));
+            }
+
             return user;
         }
 
-        public static SysUser Copy(SysUser u, List<SysLogin> logins)
+        public static SysUser Copy(SysUser u, List<SysLogin> logins, List<SysRole> roles)
         {
             var user = new SysUser  
             {
@@ -81,6 +87,11 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 user.Logins.Add(SysLogin.Copy(login));
             }
             
+            foreach (var role in roles)
+            {
+                user.Roles.Add(SysRole.Copy(role));
+            }
+
             return user;
         }
     }
