@@ -2,6 +2,11 @@ namespace SmartMatrix.Domain.Constants
 {
     public static class CommonConstants
     {
+        public static class PartitionKeys
+        {
+            public const string SmartMatrix = "smartmatrix";
+        }
+
         public static class Identities
         {
             public static class SysPolicies

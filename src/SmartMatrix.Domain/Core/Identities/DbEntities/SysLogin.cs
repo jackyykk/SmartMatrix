@@ -5,9 +5,9 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 {
     public class SysLogin : AuditableEntity<int>
     {
-        public string PartitionKey { get; set; }
+        public string PartitionKey { get; set; } = PartitionKeyOptions.SmartMatrix;
         public int SysUserId { get; set; }
-        public string LoginProvider { get; set; }
+        public string LoginProvider { get; set; } = LoginProviderOptions.Standard;
         public string LoginType { get; set; }
         public string LoginName { get; set; }
         public string PasswordHash { get; set; }
@@ -15,14 +15,32 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 
         public new string Status { get; set; } = StatusOption.Active;
 
+        public SysUser User { get; set; }
+
+        // Options
+        public class PartitionKeyOptions
+        {
+            public const string SmartMatrix = CommonConstants.PartitionKeys.SmartMatrix;
+        }
+
+        public class LoginProviderOptions
+        {
+            public const string Standard = "standard";
+            public const string Google = "google";
+        }
+
+        public class LoginTypeOptions
+        {
+            public const string Web = "web";
+            public const string API = "api";            
+        }
+
         public class StatusOption
         {
             public const string Active = CommonConstants.DbEntityStatus.Active;
             public const string Disabled = CommonConstants.DbEntityStatus.Disabled;
             public const string Deleted = CommonConstants.DbEntityStatus.Deleted;
         }
-
-        public SysUser User { get; set; }
 
         public static SysLogin Copy(SysLogin x)
         {

@@ -106,6 +106,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
                 b.Property(p => p.PartitionKey).HasColumnName("partition_key");                
                 b.Property(p => p.Type).HasColumnName("type");
+                b.Property(p => p.Category).HasColumnName("category");
                 b.Property(p => p.RoleCode).HasColumnName("role_code");
                 b.Property(p => p.RoleName).HasColumnName("role_name");
                 b.Property(p => p.Description).HasColumnName("description");                

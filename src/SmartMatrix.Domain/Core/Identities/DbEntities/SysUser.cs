@@ -8,24 +8,37 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
     public class SysUser : AuditableEntity<int>
     {
         // User Information
-        public string PartitionKey { get; set; }
-        public string Type { get; set; }
+        public string PartitionKey { get; set; } = PartitionKeyOptions.SmartMatrix;
+        public string Type { get; set; } = TypeOptions.NormalUser;
         public string UserName { get; set; }
         public string DisplayName { get; set; }
         public string GivenName { get; set; }
         public string Surname { get; set; }
         
-        public new string Status { get; set; } = StatusOption.Active;
+        public new string Status { get; set; } = StatusOptions.Active;
 
-        public class StatusOption
+        public List<SysLogin> Logins { get; set; } = new List<SysLogin>();
+        public List<SysRole> Roles { get; set; } = new List<SysRole>();
+
+        // Options
+        public class PartitionKeyOptions
+        {
+            public const string SmartMatrix = CommonConstants.PartitionKeys.SmartMatrix;
+        }
+
+        public class TypeOptions
+        {
+            public const string BuiltInUserProfile = "built-in-user-profile";
+            public const string BuiltInUser = "built-in-user";
+            public const string NormalUser = "normal-user";
+        }
+
+        public class StatusOptions
         {
             public const string Active = CommonConstants.DbEntityStatus.Active;
             public const string Disabled = CommonConstants.DbEntityStatus.Disabled;
             public const string Deleted = CommonConstants.DbEntityStatus.Deleted;
         }
-
-        public List<SysLogin> Logins { get; set; } = new List<SysLogin>();
-        public List<SysRole> Roles { get; set; } = new List<SysRole>();
 
         public static SysUser Copy(SysUser u)
         {
