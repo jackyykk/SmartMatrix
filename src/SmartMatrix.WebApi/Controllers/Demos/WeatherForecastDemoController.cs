@@ -17,8 +17,8 @@ namespace SmartMatrix.WebApi.Controllers.Demos
         {
         }
 
-        [HttpGet("get-weather-forecasts", Name = "WeatherForecastDemoController.GetWeatherForecasts")]
-        public IEnumerable<WeatherForecast> GetWeatherForecasts()
+        [HttpGet("get-list")]
+        public IEnumerable<WeatherForecast> GetList()
         {
             return Enumerable.Range(1, 100).Select(index => new WeatherForecast
             (
