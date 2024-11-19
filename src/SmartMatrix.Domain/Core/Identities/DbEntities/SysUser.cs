@@ -19,7 +19,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         public class StatusOption
         {
             public const string Active = CommonConstants.DbEntityStatus.Active;
-            public const string Inactive = CommonConstants.DbEntityStatus.Inactive;
+            public const string Disabled = CommonConstants.DbEntityStatus.Disabled;
             public const string Deleted = CommonConstants.DbEntityStatus.Deleted;
         }
 
@@ -50,6 +50,34 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 user.Logins.Add(SysLogin.Copy(login));
             }
 
+            return user;
+        }
+
+        public static SysUser Copy(SysUser u, List<SysLogin> logins)
+        {
+            var user = new SysUser  
+            {
+                Id = u.Id,
+                Status = u.Status,
+                IsDeleted = u.IsDeleted,
+                CreatedAt = u.CreatedAt,
+                CreatedBy = u.CreatedBy,
+                ModifiedAt = u.ModifiedAt,
+                ModifiedBy = u.ModifiedBy,
+                DeletedAt = u.DeletedAt,
+                DeletedBy = u.DeletedBy,
+                Type = u.Type,
+                UserName = u.UserName,
+                DisplayName = u.DisplayName,
+                GivenName = u.GivenName,
+                Surname = u.Surname
+            };
+
+            foreach (var login in logins)
+            {
+                user.Logins.Add(SysLogin.Copy(login));
+            }
+            
             return user;
         }
     }

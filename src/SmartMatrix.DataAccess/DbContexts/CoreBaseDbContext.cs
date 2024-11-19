@@ -78,6 +78,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");                
                 b.Property(p => p.SysUserId).HasColumnName("sysuser_id");
                 b.Property(p => p.LoginProvider).HasColumnName("login_provider");
+                b.Property(p => p.LoginType).HasColumnName("login_type");
                 b.Property(p => p.LoginName).HasColumnName("login_name");
                 b.Property(p => p.PasswordHash).HasColumnName("password_hash");
             });

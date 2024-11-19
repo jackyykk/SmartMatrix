@@ -44,9 +44,11 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
         public async Task<SysUser?> GetFirstByUserNameAsync(string userName)
         {
             // Get SysUser Copy To Avoid Cyclic References
-            var user = await _readRepo.Entities.Where(u => u.UserName == userName)
-                .Include(u => u.Logins)                
-                .Select(u => SysUser.Copy(u))
+            // Get Latest Un-Deleted User and Un-Deleted Logins
+            var user = await _readRepo.Entities
+                .Where(x => !x.IsDeleted && x.UserName == userName)
+                .OrderByDescending (x => x.Id)
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList()))
                 .FirstOrDefaultAsync();
             
             return user;
@@ -54,13 +56,20 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
 
         public async Task<SysUser?> GetFirstByLoginNameAsync(string loginName)
         {
-            var login = _readRepo.Entities.SelectMany(u => u.Logins).Where(l => l.LoginName == loginName).FirstOrDefault();
+            // Get Un-Deleted Login
+            var login = _readRepo.Entities
+                .SelectMany(x => x.Logins)
+                .Where(x => !x.IsDeleted && x.LoginName == loginName)
+                .OrderByDescending (x => x.Id)
+                .FirstOrDefault();
+
             if (login == null)
                 return null;
 
-            var user = await _readRepo.Entities.Where(u => u.Id == login.SysUserId)
-                .Include(u => u.Logins)
-                .Select(u => SysUser.Copy(u))
+            // Get SysUser Copy To Avoid Cyclic References
+            var user = await _readRepo.Entities
+                .Where(x => !x.IsDeleted &&  x.Id == login.SysUserId)                
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList()))
                 .FirstOrDefaultAsync();
             
             return user;

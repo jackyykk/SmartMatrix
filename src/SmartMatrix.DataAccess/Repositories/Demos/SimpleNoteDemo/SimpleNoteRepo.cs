@@ -43,12 +43,12 @@ namespace SmartMatrix.DataAccess.Repositories.Demos.SimpleNoteDemo
 
         public async Task<SimpleNote?> GetByIdAsync(int id)
         {            
-            return await _readRepo.Entities.Where(p => p.Id == id).FirstOrDefaultAsync();
+            return await _readRepo.Entities.Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<List<SimpleNote>> GetListAsync(string owner)
         {
-            return await _readRepo.Entities.Where(p => p.Owner == owner).ToListAsync();
+            return await _readRepo.Entities.Where(x => x.Owner == owner).ToListAsync();
         }
 
         public async Task<SimpleNote> InsertAsync(SimpleNote entity)
