@@ -79,7 +79,10 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 Password = x.Password,
                 PasswordHash = x.PasswordHash,
                 PasswordSalt = x.PasswordSalt,
-                Description = x.Description
+                RefreshToken = x.RefreshToken,
+                RefreshTokenExpires = x.RefreshTokenExpires,
+                Description = x.Description,
+                Remark = x.Remark
             };
         }
     }

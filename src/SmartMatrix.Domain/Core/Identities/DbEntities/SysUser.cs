@@ -67,7 +67,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 UserName = u.UserName,
                 DisplayName = u.DisplayName,
                 GivenName = u.GivenName,
-                Surname = u.Surname
+                Surname = u.Surname,
+                Email = u.Email
             };
             
             foreach (var login in u.Logins)
@@ -101,7 +102,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 UserName = u.UserName,
                 DisplayName = u.DisplayName,
                 GivenName = u.GivenName,
-                Surname = u.Surname
+                Surname = u.Surname,
+                Email = u.Email
             };
 
             foreach (var login in logins)
