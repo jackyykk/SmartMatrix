@@ -10,8 +10,11 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         public string LoginProvider { get; set; } = LoginProviderOptions.Standard;
         public string LoginType { get; set; }
         public string LoginName { get; set; }
+        public string Password { get; set; }
         public string PasswordHash { get; set; }
+        public string PasswordSalt { get; set; }
         public string Description { get; set; }
+        public string Remark { get; set; }  // For Internal Use Only, Not Expose to Client
 
         public new string Status { get; set; } = StatusOptions.Active;
 
@@ -42,6 +45,14 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             public const string Deleted = CommonConstants.DbEntityStatus.Deleted;
         }
 
+        public void ClearSecrets()
+        {
+            Password = string.Empty;
+            PasswordHash = string.Empty;
+            PasswordSalt = string.Empty;
+            Remark = string.Empty;
+        }
+
         public static SysLogin Copy(SysLogin x)
         {
             return new SysLogin
@@ -60,7 +71,9 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 LoginProvider = x.LoginProvider,
                 LoginType = x.LoginType,
                 LoginName = x.LoginName,
+                Password = x.Password,
                 PasswordHash = x.PasswordHash,
+                PasswordSalt = x.PasswordSalt,
                 Description = x.Description
             };
         }

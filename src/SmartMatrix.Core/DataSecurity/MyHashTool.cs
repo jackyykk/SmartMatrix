@@ -1,41 +1,39 @@
-using System.Text;
-using System.Text.Json;
+using System;
+using System.Security.Cryptography;
 
 namespace SmartMatrix.Core.DataSecurity
 {
     public class MyHashTool
     {
-        private const string UNIVERSAL_SECRET = "SMARTMATRIX!HKG!UNIVERSAL!SECRET!N0PA22W0RD!";
-        private const string UNIVERSAL_SALT = "SMARTMATRIX!HKG!SALTYSALT";
+        private const int SaltSize = 16; // 128 bit
+        private const int KeySize = 32; // 256 bit
+        private const int Iterations = 10000;
 
-        public static string ComputePasswordHash(string loginName, string password)
+        public static string ComputePasswordHash(string password, out string salt)
         {
-            StringBuilder sb = new StringBuilder();
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                var saltBytes = new byte[SaltSize];
+                rng.GetBytes(saltBytes);
+                salt = Convert.ToBase64String(saltBytes);
 
-            loginName = loginName ?? "";
-            password = password ?? "";
-            loginName = loginName.Trim();
-            password = password.Trim();
+                using (var deriveBytes = new Rfc2898DeriveBytes(password, saltBytes, Iterations))
+                {
+                    var hash = deriveBytes.GetBytes(KeySize);
+                    return Convert.ToBase64String(hash);
+                }
+            }
+        }
 
-            string salt1 = loginName.Length >= 4 ? loginName.Substring(3, loginName.Length - 3) : loginName;
-            string salt2 = password.Length >= 4 ? password.Substring(3, password.Length - 3) : password;
-            string salt = salt1 + salt2 + UNIVERSAL_SALT;
-
-            sb.Append("<ROOT>");
-            sb.Append("<US>");
-            sb.Append(JsonSerializer.Serialize(new { UniversalSecret = UNIVERSAL_SECRET }));
-            sb.Append("</US>");
-            sb.Append("<U>");
-                sb.Append(JsonSerializer.Serialize(new { Salt = salt, Password = password }));
-            sb.Append("</U>");
-            sb.Append("</ROOT>");
-            return CryptographyTool.GetSHA512(sb.ToString());
-        }        
-
-        public static bool Verify(string loginName, string password, string hash)
+        public static bool VerifyPasswordHash(string password, string salt, string hash)
         {
-            string newHash = ComputePasswordHash(loginName, password);
-            return hash == newHash;
+            var saltBytes = Convert.FromBase64String(salt);
+            using (var deriveBytes = new Rfc2898DeriveBytes(password, saltBytes, Iterations))
+            {
+                var hashBytes = deriveBytes.GetBytes(KeySize);
+                var hashToCompare = Convert.ToBase64String(hashBytes);
+                return hash == hashToCompare;
+            }
         }
     }
 }

@@ -14,15 +14,15 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
 
         public class Handler : IRequestHandler<SimpleNote_Create_Command, Result<SimpleNote_Create_Response>>
         {
-            private readonly IDemoUnitOfWork _unitOfWork;
-            private readonly ISimpleNoteRepo _simpleNoteRepo;
             private readonly IMapper _mapper;
-
-            public Handler(IDemoUnitOfWork unitOfWork, ISimpleNoteRepo simpleNoteRepo, IMapper mapper)
+            private readonly ISimpleNoteRepo _simpleNoteRepo;
+            private readonly IDemoUnitOfWork _unitOfWork;
+            
+            public Handler(IMapper mapper, ISimpleNoteRepo simpleNoteRepo, IDemoUnitOfWork unitOfWork)
             {
-                _unitOfWork = unitOfWork;
-                _simpleNoteRepo = simpleNoteRepo;
                 _mapper = mapper;
+                _simpleNoteRepo = simpleNoteRepo;
+                _unitOfWork = unitOfWork;                                
             }
 
             public async Task<Result<SimpleNote_Create_Response>> Handle(SimpleNote_Create_Command command, CancellationToken cancellationToken)

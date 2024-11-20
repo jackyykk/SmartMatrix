@@ -7,5 +7,6 @@ namespace SmartMatrix.Application.Interfaces.DataAccess.DbContexts
     {        
         // DbSet
         DbSet<SysUser> SysUsers { get; set; }
+        DbSet<SysLogin> SysLogins { get; set; }
     }
 }

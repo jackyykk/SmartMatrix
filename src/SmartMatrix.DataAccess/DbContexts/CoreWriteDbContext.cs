@@ -17,7 +17,8 @@ namespace SmartMatrix.DataAccess.DbContexts
         public bool HasChanges => ChangeTracker.HasChanges();
 
         // DBSet
-        public DbSet<SysUser> SysUsers { get; set; }        
+        public DbSet<SysUser> SysUsers { get; set; }
+        public DbSet<SysLogin> SysLogins { get; set; }
 
         public CoreWriteDbContext(DbContextOptions<CoreWriteDbContext> options, IDateTimeService dateTimeSvc, IAuthenticatedUserService userSvc) : base(options)
         {
@@ -44,6 +45,12 @@ namespace SmartMatrix.DataAccess.DbContexts
                         entry.Entity.ModifiedAt = _dateTimeSvc.UtcNow;
                         // Set ModifiedBy to be the current user if it's empty
                         entry.Entity.ModifiedBy = string.IsNullOrEmpty(entry.Entity.ModifiedBy) ? _userSvc.UserAccountName : entry.Entity.ModifiedBy;
+                        break;
+                        
+                    case EntityState.Deleted:
+                        entry.Entity.DeletedAt = _dateTimeSvc.UtcNow;
+                        // Set DeletedBy to be the current user if it's empty
+                        entry.Entity.DeletedBy = string.IsNullOrEmpty(entry.Entity.DeletedBy) ? _userSvc.UserAccountName : entry.Entity.DeletedBy;
                         break;
                 }
             }

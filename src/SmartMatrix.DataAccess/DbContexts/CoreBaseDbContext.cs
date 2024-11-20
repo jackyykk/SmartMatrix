@@ -88,7 +88,10 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.LoginProvider).HasColumnName("login_provider");
                 b.Property(p => p.LoginType).HasColumnName("login_type");
                 b.Property(p => p.LoginName).HasColumnName("login_name");
+                b.Property(p => p.Password).HasColumnName("password");
                 b.Property(p => p.PasswordHash).HasColumnName("password_hash");
+                b.Property(p => p.PasswordSalt).HasColumnName("password_salt");
+                b.Property(p => p.Description).HasColumnName("description");
             });
 
             builder.Entity<SysRole>(b =>

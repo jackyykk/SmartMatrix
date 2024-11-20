@@ -18,6 +18,7 @@ namespace SmartMatrix.DataAccess.DbContexts
 
         // DBSet
         public DbSet<SysUser> SysUsers { get; set; }
+        public DbSet<SysLogin> SysLogins { get; set; }
         
         public CoreReadDbContext(DbContextOptions<CoreReadDbContext> options, IDateTimeService dateTimeSvc, IAuthenticatedUserService userSvc) : base(options)
         {

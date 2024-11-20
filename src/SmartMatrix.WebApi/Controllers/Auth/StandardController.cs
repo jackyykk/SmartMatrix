@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SmartMatrix.Application.Features.Core.Identities.Commands;
 using SmartMatrix.Application.Features.Core.Identities.Queries;
 using SmartMatrix.Domain.Core.Identities.Messages;
 
@@ -15,9 +16,18 @@ namespace SmartMatrix.WebApi.Controllers.Auth
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(SysUser_GetFirstByLoginName_Request request)
+        public async Task<IActionResult> Login(SysUser_PerformLogin_Request request)
         {
-            var entity = await _mediator.Send(new SysUser_GetFirstByLoginName_Query{
+            var entity = await _mediator.Send(new SysUser_PerformLogin_Command{
+                Request = request
+            });
+            return Ok(entity);
+        }
+
+        [HttpPost("compute-secrets")]
+        public async Task<IActionResult> ComputeSecrets(SysLogin_ComputeSecrets_Request request)
+        {
+            var entity = await _mediator.Send(new SysLogin_ComputeSecrets_Command{
                 Request = request
             });
             return Ok(entity);

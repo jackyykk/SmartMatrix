@@ -44,6 +44,12 @@ namespace SmartMatrix.DataAccess.DbContexts
                         // Set ModifiedBy to be the current user if it's empty
                         entry.Entity.ModifiedBy = string.IsNullOrEmpty(entry.Entity.ModifiedBy) ? _userSvc.UserAccountName : entry.Entity.ModifiedBy;
                         break;
+
+                    case EntityState.Deleted:
+                        entry.Entity.DeletedAt = _dateTimeSvc.UtcNow;
+                        // Set DeletedBy to be the current user if it's empty
+                        entry.Entity.DeletedBy = string.IsNullOrEmpty(entry.Entity.DeletedBy) ? _userSvc.UserAccountName : entry.Entity.DeletedBy;
+                        break;
                 }
             }
 
