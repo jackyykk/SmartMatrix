@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,8 +13,8 @@ namespace SmartMatrix.WebApi.Controllers.Demos
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        public WeatherForecastDemoController(ILogger<WeatherForecastDemoController> logger, IConfiguration configuration, IMediator mediator)
-            : base(logger, configuration, mediator)
+        public WeatherForecastDemoController(ILogger<WeatherForecastDemoController> logger, IConfiguration configuration, IMediator mediator, IMapper mapper)
+            : base(logger, configuration, mediator, mapper)
         {
         }
 

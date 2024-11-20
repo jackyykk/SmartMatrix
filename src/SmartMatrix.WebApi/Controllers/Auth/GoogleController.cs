@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -21,8 +22,8 @@ namespace SmartMatrix.WebApi.Controllers.Auth
     {
         const string LOGIN_PROVIDER_NAME = "Google";
 
-        public GoogleController(ILogger<GoogleController> logger, IConfiguration configuration, IMediator mediator)
-            : base(logger, configuration, mediator)
+        public GoogleController(ILogger<GoogleController> logger, IConfiguration configuration, IMediator mediator, IMapper mapper)
+            : base(logger, configuration, mediator, mapper)
         {
         }
 

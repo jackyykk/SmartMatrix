@@ -10,10 +10,11 @@ namespace SmartMatrix.WebApi.Utils
 {
     public static class TokenUtil
     {
-        public static string GenerateJwt(JwtContent content)
+        public static string EncodeJwt(JwtContent content)
         {            
             var claims = new List<Claim>
             {
+                new Claim(SysClaimTypes.LoginProviderName, content.LoginProviderName),
                 new Claim(SysClaimTypes.LoginNameIdentifier, content.LoginNameIdentifier),
                 new Claim(ClaimTypes.Sid, content.Sid),
                 new Claim(ClaimTypes.NameIdentifier, content.UserNameIdentifier),
@@ -23,18 +24,62 @@ namespace SmartMatrix.WebApi.Utils
                 new Claim(ClaimTypes.Surname, content.Surname),                                            
             };            
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(content.Key));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(content.Secret.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);            
 
             var token = new JwtSecurityToken(
-                content.Issuer,
-                content.Audience,
+                content.Secret.Issuer,
+                content.Secret.Audience,
                 claims,
-                expires: content.Expires,
+                expires: content.Secret.Expires,
                 signingCredentials: creds
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public static JwtContent DecodeJwt(JwtSecret secret, string token)
+        {
+            JwtContent content = new JwtContent
+            {
+                Secret = secret.Copy()
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+            if (jwtToken == null)
+            {
+                throw new SecurityTokenException("Invalid token");
+            }
+
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = secret.Issuer,
+                ValidAudience = secret.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret.Key))
+            };
+
+            var principal = tokenHandler.ValidateToken(token, validationParameters, out var securityToken);
+            if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+                StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new SecurityTokenException("Invalid token");
+            }
+
+            content.LoginProviderName = principal.FindFirst(SysClaimTypes.LoginProviderName)?.Value;
+            content.LoginNameIdentifier = principal.FindFirst(SysClaimTypes.LoginNameIdentifier)?.Value;
+            content.Sid = principal.FindFirst(ClaimTypes.Sid)?.Value;
+            content.UserNameIdentifier = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            content.Email = principal.FindFirst(ClaimTypes.Email)?.Value;
+            content.Name = principal.FindFirst(ClaimTypes.Name)?.Value;
+            content.GivenName = principal.FindFirst(ClaimTypes.GivenName)?.Value;
+            content.Surname = principal.FindFirst(ClaimTypes.Surname)?.Value;
+
+            return content;
         }
 
         public static string GenerateRefreshToken()

@@ -17,6 +17,7 @@ namespace SmartMatrix.Domain.Constants
 
             public static class SysClaimTypes
             {
+                public const string LoginProviderName = "login_provider_name";
                 public const string LoginNameIdentifier = "login_name_identifier";
                 public const string ApiPermission = "api_permission";
             }

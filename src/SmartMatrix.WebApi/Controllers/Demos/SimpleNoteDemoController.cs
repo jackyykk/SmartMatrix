@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries;
@@ -10,8 +11,8 @@ namespace SmartMatrix.WebApi.Controllers.Demos
     [Route("api/demos/simple-note-demo")]
     public class SimpleNoteDemoController : BaseController<SimpleNoteDemoController>
     {
-        public SimpleNoteDemoController(ILogger<SimpleNoteDemoController> logger, IConfiguration configuration, IMediator mediator)
-            : base(logger, configuration, mediator)
+        public SimpleNoteDemoController(ILogger<SimpleNoteDemoController> logger, IConfiguration configuration, IMediator mediator, IMapper mapper)
+            : base(logger, configuration, mediator, mapper)
         {
         }
 

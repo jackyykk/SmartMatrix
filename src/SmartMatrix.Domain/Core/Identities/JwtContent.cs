@@ -5,10 +5,7 @@ namespace SmartMatrix.Domain.Core.Identities
 {
     public class JwtContent
     {
-        public string Key { get; set; }
-        public string Issuer { get; set; }
-        public string Audience { get; set; }
-        public DateTime? Expires { get; set; }
+        public JwtSecret Secret { get; set; } = new JwtSecret();        
         public string LoginProviderName { get; set; }
         public string LoginNameIdentifier { get; set; }
         public string Sid { get; set; }

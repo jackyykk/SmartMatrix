@@ -1,3 +1,4 @@
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SmartMatrix.Domain.Configurations;
@@ -8,8 +9,8 @@ namespace SmartMatrix.WebApi.Controllers
     [Route("api/[controller]")]
     public class ConfigController : BaseController<ConfigController>
     {
-        public ConfigController(ILogger<ConfigController> logger, IConfiguration configuration, IMediator mediator)
-            : base(logger, configuration, mediator)
+        public ConfigController(ILogger<ConfigController> logger, IConfiguration configuration, IMediator mediator, IMapper mapper)
+            : base(logger, configuration, mediator, mapper)
         {
         }
 
