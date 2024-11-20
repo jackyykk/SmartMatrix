@@ -1,6 +1,6 @@
 namespace SmartMatrix.Domain.Core.Identities.Messages
 {
-    public class SysLogin_ComputeSecrets_Request
+    public class SysLogin_UpdateSecrets_Request
     {
         public string PartitionKey { get; set; }        
     }

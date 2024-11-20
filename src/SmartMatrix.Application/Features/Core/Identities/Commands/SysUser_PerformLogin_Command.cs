@@ -3,6 +3,7 @@ using MediatR;
 using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Core.Identities;
 using SmartMatrix.Core.BaseClasses.Web;
 using SmartMatrix.Core.DataSecurity;
+using SmartMatrix.Domain.Core.Identities;
 using SmartMatrix.Domain.Core.Identities.DbEntities;
 using SmartMatrix.Domain.Core.Identities.Messages;
 
@@ -79,10 +80,13 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     {
                         return Result<SysUser_PerformLogin_Response>.Fail(StatusCodes.InvalidPassword, "Login failed");
                     }
-
-                    var mappedUser = _mapper.Map<SysUser_PerformLogin_Response>(user);
-                    mappedUser.ClearSecrets();                    
-                    return Result<SysUser_PerformLogin_Response>.Success(mappedUser);
+                    
+                    var response = new SysUser_PerformLogin_Response
+                    {
+                        User = user,
+                        Token = new TokenContent()
+                    };                            
+                    return Result<SysUser_PerformLogin_Response>.Success(response);
                 }
                 catch (Exception ex)
                 {

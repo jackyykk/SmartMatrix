@@ -69,5 +69,24 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task UpdateRefreshTokenAsync(SysLogin entity)
+        {
+            try
+            {
+                var entityToUpdate = await _writeRepo.GetByIdAsync(entity.Id);
+                if (entityToUpdate == null)
+                {
+                    throw new Exception("Login not found");
+                }
+                
+                entityToUpdate.RefreshToken = entity.RefreshToken;
+                entityToUpdate.RefreshTokenExpires = entity.RefreshTokenExpires;                
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }    
 }

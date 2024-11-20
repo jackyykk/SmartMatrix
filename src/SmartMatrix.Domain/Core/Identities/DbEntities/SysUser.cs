@@ -14,6 +14,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         public string DisplayName { get; set; }
         public string GivenName { get; set; }
         public string Surname { get; set; }
+        public string Email { get; set; }
         
         public new string Status { get; set; } = StatusOptions.Active;
 

@@ -9,7 +9,7 @@ using SmartMatrix.Domain.Core.Identities.Messages;
 
 namespace SmartMatrix.Application.Features.Core.Identities.Commands
 {
-    public class SysLogin_ComputeSecrets_Command : IRequest<Result<SysLogin_ComputeSecrets_Response>>
+    public class SysLogin_UpdateSecrets_Command : IRequest<Result<SysLogin_UpdateSecrets_Response>>
     {
         public static class StatusCodes
         {
@@ -18,9 +18,9 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
             public const int InvalidRequest = -101;
         }
 
-        public SysLogin_ComputeSecrets_Request? Request { get; set; }
+        public SysLogin_UpdateSecrets_Request? Request { get; set; }
 
-        public class Handler : IRequestHandler<SysLogin_ComputeSecrets_Command, Result<SysLogin_ComputeSecrets_Response>>
+        public class Handler : IRequestHandler<SysLogin_UpdateSecrets_Command, Result<SysLogin_UpdateSecrets_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISysLoginRepo _sysLoginRepo;
@@ -33,18 +33,18 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                 _unitOfWork = unitOfWork;
             }
 
-            public async Task<Result<SysLogin_ComputeSecrets_Response>> Handle(SysLogin_ComputeSecrets_Command query, CancellationToken cancellationToken)
+            public async Task<Result<SysLogin_UpdateSecrets_Response>> Handle(SysLogin_UpdateSecrets_Command query, CancellationToken cancellationToken)
             {
-                SysLogin_ComputeSecrets_Response response = new SysLogin_ComputeSecrets_Response();
+                SysLogin_UpdateSecrets_Response response = new SysLogin_UpdateSecrets_Response();
 
                 if (query.Request == null)
                 {
-                    return Result<SysLogin_ComputeSecrets_Response>.Fail(StatusCodes.InvalidRequest, "Request is null");
+                    return Result<SysLogin_UpdateSecrets_Response>.Fail(StatusCodes.InvalidRequest, "Request is null");
                 }
 
                 if (string.IsNullOrEmpty(query.Request!.PartitionKey))                        
                 {
-                    return Result<SysLogin_ComputeSecrets_Response>.Fail(StatusCodes.InvalidRequest, "Invalid Request");
+                    return Result<SysLogin_UpdateSecrets_Response>.Fail(StatusCodes.InvalidRequest, "Invalid Request");
                 }
 
                 _unitOfWork.Open();
@@ -88,7 +88,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        return Result<SysLogin_ComputeSecrets_Response>.Fail(-1, ex.Message);
+                        return Result<SysLogin_UpdateSecrets_Response>.Fail(-1, ex.Message);
                     }                    
                     finally
                     {
@@ -96,7 +96,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     }
                 }
 
-                return Result<SysLogin_ComputeSecrets_Response>.Success(response);                        
+                return Result<SysLogin_UpdateSecrets_Response>.Success(response);                        
             }
         }
     }

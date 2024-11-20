@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using SmartMatrix.Core.BaseClasses.Web;
 using SmartMatrix.Domain.Core.Identities;
+using SmartMatrix.Domain.Core.Identities.Messages;
 using SmartMatrix.WebApi.Utils;
 
 namespace SmartMatrix.WebApi.Controllers.Auth
@@ -17,7 +19,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
     [Route("api/auth/google")]
     public class GoogleController : BaseController<GoogleController>
     {
-        const string LOGIN_PROVIDER_NAME = "Google";        
+        const string LOGIN_PROVIDER_NAME = "Google";
 
         public GoogleController(ILogger<GoogleController> logger, IConfiguration configuration, IMediator mediator)
             : base(logger, configuration, mediator)
@@ -43,64 +45,29 @@ namespace SmartMatrix.WebApi.Controllers.Auth
         public async Task<IActionResult> GoogleResponse()
         {            
             var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
-            if (!result.Succeeded)
-                return Unauthorized(); // Handle failure
+            if (!result.Succeeded)                
+                return Ok(Result<SysUser_PerformLogin_Response>.Fail("Unauthorized"));
 
             // Validate the state parameter
             if (!result.Properties.Items.TryGetValue("state", out var state) || state == null || !ValidateState(state))
-                return BadRequest("Invalid state parameter");
+                return Ok(Result<SysUser_PerformLogin_Response>.Fail("Invalid state parameter"));
 
             // Extract user information
             var claims = result.Principal?.Claims;
-            var googleUserId = claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var googleEmail = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var googleUserName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-            var googleGivenName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
-            var googleSurname = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
-            var googleProfilePicture = claims?.FirstOrDefault(c => c.Type == "urn:google:picture")?.Value;
+            if (claims == null)
+                return Ok(Result<SysUser_PerformLogin_Response>.Fail("Invalid claims"));
 
-            // Save user information to database, email is primary key
+            var userProfile = Auth_Google_Get_UserProfile(claims);
+            var token = Auth_Google_Generate_TokenContent(LOGIN_PROVIDER_NAME, userProfile);
 
+            // Check if the user is already registered
 
-            // Get Jwt Content
-            string jwtKey = _configuration["Authentication:Jwt:Key"] ?? string.Empty;
-            string jwtIssuer = _configuration["Authentication:Jwt:Issuer"] ?? string.Empty;
-            string jwtAudience = _configuration["Authentication:Jwt:Audience"] ?? string.Empty;
-            double jwtExpiresInMinutes = _configuration.GetValue<double>("Authentication:Jwt:ExpiresInMinutes");
-            DateTime jwtExpires = DateTime.UtcNow.AddMinutes(jwtExpiresInMinutes);
-
-            // Create JWT token
-            JwtContent jwtContent = new JwtContent
+            var response = new SysUser_PerformLogin_Response
             {
-                Key = jwtKey,
-                Issuer = jwtIssuer,
-                Audience = jwtAudience,
-                Expires = jwtExpires,
-                LoginProviderName = LOGIN_PROVIDER_NAME,
-                LoginNameIdentifier = googleEmail,
-                Sid = googleUserId,
-                UserNameIdentifier = googleEmail,
-                Email = googleEmail,
-                Name = googleUserName,
-                GivenName = googleGivenName,
-                Surname = googleSurname                
-            };
-            var authToken = TokenUtil.GenerateJwt(jwtContent);
-            var refreshToken = TokenUtil.GenerateRefreshToken();
-            double refreshToken_ExpiresInMinutes = _configuration.GetValue<double>("Authentication:RefreshToken:ExpiresInMinutes");
-            DateTime refreshToken_Expires = DateTime.UtcNow.AddMinutes(refreshToken_ExpiresInMinutes);
 
-            return Ok(new
-            {                
-                googleEmail,
-                googleUserName,
-                googleGivenName,
-                googleSurname,
-                googleProfilePicture,
-                authToken,
-                refreshToken,
-                refreshToken_Expires
-            });
+                Token = token
+            };  
+            return Ok(Result<SysUser_PerformLogin_Response>.Success(response));
         }
         
         private string GenerateState()

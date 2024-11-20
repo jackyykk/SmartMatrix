@@ -6,5 +6,6 @@ namespace SmartMatrix.Application.Interfaces.DataAccess.Repositories.Core.Identi
     {
         Task<List<SysLogin>> GetListAsync(string partitionKey);
         Task UpdateSecretAsync(SysLogin entity);
+        Task UpdateRefreshTokenAsync(SysLogin entity);
     }
 }

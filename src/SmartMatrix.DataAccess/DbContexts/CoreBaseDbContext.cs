@@ -59,6 +59,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.DisplayName).HasColumnName("display_name");
                 b.Property(p => p.GivenName).HasColumnName("given_name");
                 b.Property(p => p.Surname).HasColumnName("surname");
+                b.Property(p => p.Email).HasColumnName("email");
                 b.Ignore(p => p.SkipAudit);
                 b.HasMany(u => u.Logins)
                     .WithOne(l => l.User).HasForeignKey(l => l.SysUserId);
@@ -91,7 +92,10 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.Password).HasColumnName("password");
                 b.Property(p => p.PasswordHash).HasColumnName("password_hash");
                 b.Property(p => p.PasswordSalt).HasColumnName("password_salt");
+                b.Property(p => p.RefreshToken).HasColumnName("refresh_token");
+                b.Property(p => p.RefreshTokenExpires).HasColumnName("refresh_token_expires");
                 b.Property(p => p.Description).HasColumnName("description");
+                b.Property(p => p.Remark).HasColumnName("remark");
             });
 
             builder.Entity<SysRole>(b =>

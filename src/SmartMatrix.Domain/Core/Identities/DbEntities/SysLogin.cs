@@ -1,3 +1,4 @@
+using System;
 using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.Domain.Constants;
 
@@ -13,6 +14,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         public string Password { get; set; }
         public string PasswordHash { get; set; }
         public string PasswordSalt { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpires { get; set; }
         public string Description { get; set; }
         public string Remark { get; set; }  // For Internal Use Only, Not Expose to Client
 
@@ -50,6 +53,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             Password = string.Empty;
             PasswordHash = string.Empty;
             PasswordSalt = string.Empty;
+            RefreshToken = string.Empty;
+            RefreshTokenExpires = null;
             Remark = string.Empty;
         }
 
