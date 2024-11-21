@@ -41,7 +41,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     return Ok(Result<SysUser_PerformLogin_Response>.Fail(-999, "Login failed"));
                 }
 
-                var token = Auth_Standard_Generate_TokenContent(LOGIN_PROVIDER_NAME, request.LoginName, user);
+                var token = Auth_Standard_Generate_SysToken(LOGIN_PROVIDER_NAME, request.LoginName, user);
                 
                 login.RefreshToken = token.RefreshToken;                
                 login.RefreshTokenExpires = token.RefreshToken_Expires;
@@ -65,20 +65,20 @@ namespace SmartMatrix.WebApi.Controllers.Auth
             return Ok(result);
         }
 
-        [HttpPost("renew-refresh-token")]
-        public async Task<IActionResult> RenewRefreshToken(SysLogin_RenewRefreshToken_Request request)
+        [HttpPost("renew-token")]
+        public async Task<IActionResult> RenewToken(SysLogin_RenewToken_Request request)
         {            
-            JwtSecret secret = Auth_Get_JwtSecret();
-            JwtContent jwtContent = TokenUtil.DecodeJwt(secret, request.AuthToken);
+            SysSecret secret = Auth_Get_AccessToken_Secret();
+            SysTokenContent content = TokenUtil.DecodeJwt(secret, request.AccessToken);
             
-            if (jwtContent == null)
+            if (content == null)
             {
-                return Ok(Result<SysLogin_RenewRefreshToken_Response>.Fail(-999, "Invalid token"));
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Invalid token"));
             }
             
-            if (string.IsNullOrEmpty(jwtContent.LoginNameIdentifier) || string.IsNullOrEmpty(jwtContent.UserNameIdentifier))
+            if (string.IsNullOrEmpty(content.LoginNameIdentifier) || string.IsNullOrEmpty(content.UserNameIdentifier))
             {
-                return Ok(Result<SysLogin_RenewRefreshToken_Response>.Fail(-999, "Invalid token"));
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Invalid token"));
             }
 
             var getUserResult = await _mediator.Send(new SysUser_GetFirstByUserName_Query
@@ -86,34 +86,34 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 Request = new SysUser_GetFirstByUserName_Request
                 {
                     PartitionKey = PartitionKeyOptions.SmartMatrix,
-                    UserName = jwtContent.UserNameIdentifier                    
+                    UserName = content.UserNameIdentifier                    
                 }
             });
 
             if (!getUserResult.Succeeded || getUserResult.Data == null)
             {
-                return Ok(Result<SysLogin_RenewRefreshToken_Response>.Fail(-999, "User not found"));
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "User not found"));
             }
             
             var user = getUserResult.Data;
-            var login = user.Logins.FirstOrDefault(x => x.LoginName == jwtContent.LoginNameIdentifier);            
+            var login = user.Logins.FirstOrDefault(x => x.LoginName == content.LoginNameIdentifier);            
             
             if (login == null)
             {
-                return Ok(Result<SysLogin_RenewRefreshToken_Response>.Fail(-999, "Login not found"));
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Login not found"));
             }
 
             if (login.RefreshToken != request.RefreshToken)
             {
-                return Ok(Result<SysLogin_RenewRefreshToken_Response>.Fail(-999, "Invalid refresh token"));
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Invalid refresh token"));
             }
 
             if (login.RefreshTokenExpires < DateTime.UtcNow)
             {
-                return Ok(Result<SysLogin_RenewRefreshToken_Response>.Fail(-999, "Invalid refresh token"));
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Invalid refresh token"));
             }
 
-            var token = Auth_Standard_Generate_TokenContent(LOGIN_PROVIDER_NAME, jwtContent.LoginNameIdentifier, user);
+            var token = Auth_Standard_Generate_SysToken(LOGIN_PROVIDER_NAME, content.LoginNameIdentifier, user);
 
             login.RefreshToken = token.RefreshToken;                
             login.RefreshTokenExpires = token.RefreshToken_Expires;
@@ -130,9 +130,9 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 return Ok(Result<SysUser_PerformLogin_Response>.Fail(-999, "Update refresh token failed"));
             }
 
-            var mappedToken = _mapper.Map<SysLogin_RenewRefreshToken_Response>(token);
+            var mappedToken = _mapper.Map<SysLogin_RenewToken_Response>(token);
 
-            return Ok(Result<SysLogin_RenewRefreshToken_Response>.Success(mappedToken));
+            return Ok(Result<SysLogin_RenewToken_Response>.Success(mappedToken));
         }
 
         [HttpPost("update-secrets")]

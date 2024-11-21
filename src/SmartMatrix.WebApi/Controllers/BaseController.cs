@@ -27,39 +27,61 @@ namespace SmartMatrix.WebApi.Controllers
             _mapper = mapper;
         }
 
-        protected JwtSecret Auth_Get_JwtSecret()
+        protected SysSecret Auth_Get_AccessToken_Secret()
         {
-            string jwtKey = _configuration["Authentication:Jwt:Key"] ?? string.Empty;
-            string jwtIssuer = _configuration["Authentication:Jwt:Issuer"] ?? string.Empty;
-            string jwtAudience = _configuration["Authentication:Jwt:Audience"] ?? string.Empty;
-            double jwtLifeInMinutes = _configuration.GetValue<double>("Authentication:Jwt:LifeInMinutes");
-            DateTime jwtExpires = DateTime.UtcNow.AddMinutes(jwtLifeInMinutes);
+            SysSecret secret;
+            string accessToken_Format = _configuration["Authentication:AccessToken:Format"] ?? string.Empty;
+            double accessToken_LifeInMinutes = _configuration.GetValue<double>("Authentication:AccessToken:LifeInMinutes");
+            DateTime accessToken_Expires = DateTime.UtcNow.AddMinutes(accessToken_LifeInMinutes);
 
-            // Create JWT token
-            JwtSecret secret = new JwtSecret
+            if (string.Equals(accessToken_Format, "Jwt", System.StringComparison.InvariantCultureIgnoreCase))
             {
-                Key = jwtKey ?? string.Empty,
-                Issuer = jwtIssuer ?? string.Empty,
-                Audience = jwtAudience ?? string.Empty,
-                LifeInMinutes = jwtLifeInMinutes,
-                Expires = jwtExpires,                
-            };
+                string jwtKey = _configuration["Authentication:Jwt:Key"] ?? string.Empty;
+                string jwtIssuer = _configuration["Authentication:Jwt:Issuer"] ?? string.Empty;
+                string jwtAudience = _configuration["Authentication:Jwt:Audience"] ?? string.Empty;    
 
+                // Create JWT token
+                secret = new SysSecret
+                {
+                    Format = accessToken_Format,
+                    Key = jwtKey ?? string.Empty,
+                    Issuer = jwtIssuer ?? string.Empty,
+                    Audience = jwtAudience ?? string.Empty,
+                    LifeInMinutes = accessToken_LifeInMinutes,
+                    Expires = accessToken_Expires,                
+                };
+            }
+            else
+            {
+                throw new System.Exception("Invalid access token format");                
+            }
+                                            
             return secret;
         }
 
-        protected TokenContent Auth_Generate_TokenContent(JwtContent jwtContent)
+        protected SysToken Auth_Generate_SysToken(SysTokenContent content)
         {
-            TokenContent token = new TokenContent();
+            SysToken token = new SysToken();
+            
+            if (content.Secret == null || string.IsNullOrEmpty(content.Secret.Format))
+            {
+                throw new System.Exception("Invalid secret");
+            }
 
-            var authToken = TokenUtil.EncodeJwt(jwtContent);
+            if (string.Equals(content.Secret.Format, "Jwt", System.StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new System.Exception("Invalid access token format");
+            }
+
+            // Only support Jwt for now
+            var accessToken = TokenUtil.EncodeJwt(content);
             var refreshToken = TokenUtil.GenerateRefreshToken();
             double refreshToken_LifeInMinutes = _configuration.GetValue<double>("Authentication:RefreshToken:LifeInMinutes");
             DateTime refreshToken_Expires = DateTime.UtcNow.AddMinutes(refreshToken_LifeInMinutes);
 
-            token.AuthToken = authToken;
-            token.AuthToken_LifeInMinutes = jwtContent.Secret.LifeInMinutes;
-            token.AuthToken_Expires = jwtContent.Secret.Expires;            
+            token.AccessToken = accessToken;
+            token.AccessToken_LifeInMinutes = content.Secret.LifeInMinutes;
+            token.AccessToken_Expires = content.Secret.Expires;            
             token.RefreshToken = refreshToken;
             token.RefreshToken_LifeInMinutes = refreshToken_LifeInMinutes;
             token.RefreshToken_Expires = refreshToken_Expires;
@@ -89,12 +111,12 @@ namespace SmartMatrix.WebApi.Controllers
             return userProfile;
         }
 
-        protected TokenContent Auth_Google_Generate_TokenContent(string provider, GoogleUserProfile userProfile)
+        protected SysToken Auth_Google_Generate_SysToken(string provider, GoogleUserProfile userProfile)
         {
             // Create JWT token
-            JwtSecret secret = Auth_Get_JwtSecret();
+            SysSecret secret = Auth_Get_AccessToken_Secret();
 
-            JwtContent jwtContent = new JwtContent
+            SysTokenContent content = new SysTokenContent
             {
                 Secret = secret,
                 LoginProviderName = provider ?? string.Empty,
@@ -107,14 +129,14 @@ namespace SmartMatrix.WebApi.Controllers
                 Surname = userProfile?.Surname ?? string.Empty
             };
             
-            return Auth_Generate_TokenContent(jwtContent);
+            return Auth_Generate_SysToken(content);
         }
 
-        protected TokenContent Auth_Standard_Generate_TokenContent(string provider, string loginName, SysUser user)
+        protected SysToken Auth_Standard_Generate_SysToken(string provider, string loginName, SysUser user)
         {            
-            JwtSecret secret = Auth_Get_JwtSecret();
+            SysSecret secret = Auth_Get_AccessToken_Secret();
 
-            JwtContent jwtContent = new JwtContent
+            SysTokenContent content = new SysTokenContent
             {
                 Secret = secret,
                 LoginProviderName = provider ?? string.Empty,
@@ -127,7 +149,7 @@ namespace SmartMatrix.WebApi.Controllers
                 Surname = user?.Surname ?? string.Empty
             };
                     
-            return Auth_Generate_TokenContent(jwtContent);
+            return Auth_Generate_SysToken(content);
         }
     }
 }

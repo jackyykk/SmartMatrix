@@ -84,7 +84,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     var response = new SysUser_PerformLogin_Response
                     {
                         User = user,
-                        Token = new TokenContent()
+                        Token = new SysToken()
                     };                            
                     return Result<SysUser_PerformLogin_Response>.Success(response);
                 }

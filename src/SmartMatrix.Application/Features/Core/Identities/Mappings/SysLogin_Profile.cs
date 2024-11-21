@@ -9,7 +9,7 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Mappings
     {
         public SysLogin_Profile()
         {
-            CreateMap<TokenContent, SysLogin_RenewRefreshToken_Response>().ReverseMap();                        
+            CreateMap<SysToken, SysLogin_RenewToken_Response>().ReverseMap();                        
         }
     }
 }

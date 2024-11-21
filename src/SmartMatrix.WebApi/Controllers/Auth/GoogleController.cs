@@ -59,7 +59,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 return Ok(Result<SysUser_PerformLogin_Response>.Fail("Invalid claims"));
 
             var userProfile = Auth_Google_Get_UserProfile(claims);
-            var token = Auth_Google_Generate_TokenContent(LOGIN_PROVIDER_NAME, userProfile);
+            var token = Auth_Google_Generate_SysToken(LOGIN_PROVIDER_NAME, userProfile);
 
             // Check if the user is already registered
 

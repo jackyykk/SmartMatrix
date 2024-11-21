@@ -10,7 +10,7 @@ namespace SmartMatrix.WebApi.Utils
 {
     public static class TokenUtil
     {
-        public static string EncodeJwt(JwtContent content)
+        public static string EncodeJwt(SysTokenContent content)
         {            
             var claims = new List<Claim>
             {
@@ -38,9 +38,9 @@ namespace SmartMatrix.WebApi.Utils
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public static JwtContent DecodeJwt(JwtSecret secret, string token)
+        public static SysTokenContent DecodeJwt(SysSecret secret, string token)
         {
-            JwtContent content = new JwtContent
+            SysTokenContent content = new SysTokenContent
             {
                 Secret = secret.Copy()
             };
