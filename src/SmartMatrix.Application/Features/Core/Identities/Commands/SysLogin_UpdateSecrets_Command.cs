@@ -10,14 +10,7 @@ using SmartMatrix.Domain.Core.Identities.Messages;
 namespace SmartMatrix.Application.Features.Core.Identities.Commands
 {
     public class SysLogin_UpdateSecrets_Command : IRequest<Result<SysLogin_UpdateSecrets_Response>>
-    {
-        public static class StatusCodes
-        {
-            public const int Success = 0;            
-            public const int UnknownError = -1;
-            public const int InvalidRequest = -101;
-        }
-
+    {        
         public SysLogin_UpdateSecrets_Request? Request { get; set; }
 
         public class Handler : IRequestHandler<SysLogin_UpdateSecrets_Command, Result<SysLogin_UpdateSecrets_Response>>
@@ -39,12 +32,12 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
 
                 if (query.Request == null)
                 {
-                    return Result<SysLogin_UpdateSecrets_Response>.Fail(StatusCodes.InvalidRequest, "Request is null");
+                    return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Invalid_Request, SysLogin_UpdateSecrets_Response.StatusTexts.Invalid_Request);
                 }
 
                 if (string.IsNullOrEmpty(query.Request!.PartitionKey))                        
                 {
-                    return Result<SysLogin_UpdateSecrets_Response>.Fail(StatusCodes.InvalidRequest, "Invalid Request");
+                    return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Invalid_Request, SysLogin_UpdateSecrets_Response.StatusTexts.Invalid_Request);
                 }
 
                 _unitOfWork.Open();
@@ -88,7 +81,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        return Result<SysLogin_UpdateSecrets_Response>.Fail(-1, ex.Message);
+                        return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Unknown_Error, ex.Message);
                     }                    
                     finally
                     {

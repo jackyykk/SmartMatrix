@@ -30,14 +30,14 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                 {
                     if (command.Request == null)
                     {
-                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.InvalidRequest, "Invalid Request");
+                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Invalid_Request, SysUser_PerformLogin_Response.StatusTexts.Invalid_Request);
                     }
 
                     if (string.IsNullOrEmpty(command.Request!.PartitionKey)
                         || string.IsNullOrEmpty(command.Request!.LoginName)
                         || string.IsNullOrEmpty(command.Request!.Password))
                     {
-                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.InvalidRequest, "Invalid Request");
+                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Invalid_Request, SysUser_PerformLogin_Response.StatusTexts.Invalid_Request);
                     }
 
                     string partitionKey = command.Request!.PartitionKey;
@@ -47,26 +47,26 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     var user = await _sysUserRepo.GetFirstByLoginNameAsync(partitionKey, loginName);
                     if (user == null)
                     {
-                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.UserNotFound, "Login failed");
+                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.User_NotFound, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }
 
                     var login = user.Logins.FirstOrDefault(x => x.LoginName == loginName);
                     if (login == null)
                     {
                         // Suppose user should have the login
-                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.LoginNotFound, "Login failed");
+                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Login_NotFound, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }
                     if (login.Status == SysLogin.StatusOptions.Disabled)
                     {
-                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.LoginDisabled, "Login failed");
+                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Login_Disabled, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }
                     if (login.Status == SysLogin.StatusOptions.Deleted || login.IsDeleted)
                     {
-                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.LoginDeleted, "Login failed");
+                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Login_Deleted, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }                    
                     if (!MyHashTool.VerifyPasswordHash(password, login.PasswordSalt, login.PasswordHash))
                     {
-                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.InvalidPassword, "Login failed");
+                        return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Password_NotMatch, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }
                     
                     var response = new SysUser_PerformLogin_Response
@@ -78,7 +78,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                 }
                 catch (Exception ex)
                 {
-                    return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.UnknownError, ex.Message);
+                    return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Unknown_Error, ex.Message);
                 }                
             }
         }

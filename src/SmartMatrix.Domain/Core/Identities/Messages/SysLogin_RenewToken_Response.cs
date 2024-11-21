@@ -1,19 +1,33 @@
+using SmartMatrix.Domain.Constants;
+
 namespace SmartMatrix.Domain.Core.Identities.Messages
 {
     public class SysLogin_RenewToken_Response : SysToken
     {
         public static class StatusCodes
         {
-            public const int Success = 0;            
-            public const int UnknownError = -999;
+            public const int Success = MessageConstants.StatusCodes.Success;
+            public const int Unknown_Error = MessageConstants.StatusCodes.Unknown_Error;
+            public const int Invalid_Request = MessageConstants.StatusCodes.Invalid_Request;
+                        
+            // Other errors
+            public const int User_NotFound = MessageConstants.StatusCodes.SysUser_Codes.User_NotFound;
+            public const int User_Disabled = MessageConstants.StatusCodes.SysUser_Codes.User_Disabled;
+            public const int User_Deleted = MessageConstants.StatusCodes.SysUser_Codes.User_Deleted;
 
-            // Other errors            
-            public const int InvalidRequest = -101;
-            public const int LoginNotFound = -201;
-            public const int EmptyLoginName = -202;
-            public const int RefreshTokenExpired = -203;
-            public const int LoginDisabled = -204;
-            public const int LoginDeleted = -205;
+            public const int Login_NotFound = MessageConstants.StatusCodes.SysLogin_Codes.Login_NotFound;            
+            public const int Login_Disabled = MessageConstants.StatusCodes.SysLogin_Codes.Login_Disabled;
+            public const int Login_Deleted = MessageConstants.StatusCodes.SysLogin_Codes.Login_Deleted;
+            public const int LoginName_Empty = MessageConstants.StatusCodes.SysLogin_Codes.LoginName_Empty;
+                                    
+            public const int RefreshToken_Expired = MessageConstants.StatusCodes.SysLogin_Codes.RefreshToken_Expired;
+            public const int RefreshToken_Update_Failed = MessageConstants.StatusCodes.SysLogin_Codes.RefreshToken_Update_Failed;
+        }
+
+        public static class StatusTexts
+        {
+            public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;
+            public const string Invalid_Token = "The token is invalid.";            
         }
     }
 }
