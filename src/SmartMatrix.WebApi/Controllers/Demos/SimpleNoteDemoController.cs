@@ -8,7 +8,7 @@ using SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages;
 namespace SmartMatrix.WebApi.Controllers.Demos
 {
     [ApiController]
-    [Route("api/demos/simple-note-demo")]
+    [Route("api/demos/simple_note_demo")]
     public class SimpleNoteDemoController : BaseController<SimpleNoteDemoController>
     {
         public SimpleNoteDemoController(ILogger<SimpleNoteDemoController> logger, IConfiguration configuration, IMediator mediator, IMapper mapper)
@@ -16,7 +16,7 @@ namespace SmartMatrix.WebApi.Controllers.Demos
         {
         }
 
-        [HttpGet("get-by-id")]
+        [HttpGet("get-by_id")]
         public async Task<IActionResult> GetById([FromQuery] SimpleNote_GetById_Request request)
         {
             SimpleNote note = new SimpleNote();

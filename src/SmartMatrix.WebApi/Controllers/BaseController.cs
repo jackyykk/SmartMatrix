@@ -11,6 +11,21 @@ using SmartMatrix.WebApi.Utils;
 
 namespace SmartMatrix.WebApi.Controllers
 {
+    // Endpoint Instructions for Web API functions
+    //
+    // Controller should be properly categorized
+    //    
+    // Function Name should be in lower case
+    //
+    // {action}-{conditions}[optional]-{entity}[optional]
+    //
+    // {action}: e.g. create, update, delete, get, getfirst, getlist, login, logout, etc.
+    // {conditions}: e.g. by_id, by_name, by_email, by_xxx, etc.
+    // {entity}: e.g. main_config
+    //
+    // Use - to separte the entity into category and sub-category
+    // Use _ to connect the words to the same entity
+
     [ApiController]
     public abstract class BaseController<T> : ControllerBase
     {

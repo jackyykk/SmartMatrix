@@ -1,10 +1,15 @@
 namespace SmartMatrix.Domain.Constants
 {
+    // This class contains all the common constants that are used in the application
+    // Naming Convention:
+    // Use : or - to separate the category and the sub-category
+    // Use _ to connect the word in the same category
+    
     public static class CommonConstants
     {
         public static class PartitionKeys
         {
-            public const string SmartMatrix = "smartmatrix";
+            public const string Sys_SmartMatrix = "sys:smart_matrix";
         }
 
         public static class Identities

@@ -20,7 +20,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         // Options
         public class PartitionKeyOptions
         {
-            public const string SmartMatrix = CommonConstants.PartitionKeys.SmartMatrix;
+            public const string SmartMatrix = CommonConstants.PartitionKeys.Sys_SmartMatrix;
         }
 
         public class TypeOptions

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace SmartMatrix.WebApi.Controllers.Demos
 {
     [ApiController]
-    [Route("api/demos/weather-forecast-demo")]
+    [Route("api/demos/weather_forecast_demo")]
     public class WeatherForecastDemoController : BaseController<WeatherForecastDemoController>
     {
         private static readonly string[] Summaries = new[]
@@ -18,7 +18,7 @@ namespace SmartMatrix.WebApi.Controllers.Demos
         {
         }
 
-        [HttpGet("get-list")]
+        [HttpGet("getlist")]
         public IEnumerable<WeatherForecast> GetList()
         {
             return Enumerable.Range(1, 100).Select(index => new WeatherForecast
