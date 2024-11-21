@@ -72,7 +72,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     {
                         return Result<SysUser_PerformLogin_Response>.Fail(StatusCodes.LoginDisabled, "Login failed");
                     }
-                    if (login.Status == SysLogin.StatusOptions.Deleted || user.IsDeleted)
+                    if (login.Status == SysLogin.StatusOptions.Deleted || login.IsDeleted)
                     {
                         return Result<SysUser_PerformLogin_Response>.Fail(StatusCodes.LoginDeleted, "Login failed");
                     }                    

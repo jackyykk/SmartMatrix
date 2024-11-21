@@ -26,94 +26,117 @@ namespace SmartMatrix.WebApi.Controllers.Auth
         [HttpPost("login")]
         public async Task<IActionResult> Login(SysUser_PerformLogin_Request request)
         {
-            var result = await _mediator.Send(new SysUser_PerformLogin_Command
+            try
             {
-                Request = request
-            });
-
-            if (result.Succeeded && result.Data != null && result.Data.User != null)
-            {
-                var user = result.Data.User;
-                // suppose login is valid
-                var login = user.Logins.FirstOrDefault(x => x.LoginName == request.LoginName);
-                if (login == null)
+                var result = await _mediator.Send(new SysUser_PerformLogin_Command
                 {
-                    return Ok(Result<SysUser_PerformLogin_Response>.Fail(-999, "Login failed"));
-                }
-
-                var token = Auth_Standard_Generate_SysToken(LOGIN_PROVIDER_NAME, request.LoginName, user);
-                
-                login.RefreshToken = token.RefreshToken;                
-                login.RefreshTokenExpires = token.RefreshToken_Expires;
-
-                var updateRefreshTokenResult = await _mediator.Send(new SysLogin_UpdateRefreshToken_Command
-                {
-                    Request = new SysLogin_UpdateRefreshToken_Request
-                    {
-                        Login = login
-                    }
+                    Request = request
                 });
-                if (!updateRefreshTokenResult.Succeeded)
+
+                if (result.Succeeded && result.Data != null && result.Data.User != null)
                 {
-                    return Ok(Result<SysUser_PerformLogin_Response>.Fail(-999, "Update refresh token failed"));
+                    var user = result.Data.User;
+                    // suppose login is valid
+                    var login = user.Logins.FirstOrDefault(x => x.LoginName == request.LoginName);
+                    if (login == null)
+                    {
+                        return Ok(Result<SysUser_PerformLogin_Response>.Fail(-999, "Login failed"));
+                    }                 
+
+                    var token = Auth_Standard_Generate_SysToken(LOGIN_PROVIDER_NAME, request.LoginName, user);
+                    
+                    login.RefreshToken = token.RefreshToken;                
+                    login.RefreshTokenExpires = token.RefreshToken_Expires;
+
+                    var updateRefreshTokenResult = await _mediator.Send(new SysLogin_UpdateRefreshToken_Command
+                    {
+                        Request = new SysLogin_UpdateRefreshToken_Request
+                        {
+                            Login = login
+                        }
+                    });
+                    if (!updateRefreshTokenResult.Succeeded)
+                    {
+                        return Ok(Result<SysUser_PerformLogin_Response>.Fail(-999, "Update refresh token failed"));
+                    }
+
+                    user.ClearSecrets();
+                    result.Data.Token = token;
                 }
 
-                user.ClearSecrets();
-                result.Data.Token = token;
+                return Ok(result);
             }
-
-            return Ok(result);
+            catch (Exception ex)
+            {
+                return Ok(Result<SysUser_PerformLogin_Response>.Fail(-999, ex.Message));
+            }            
         }
 
         [HttpPost("renew-token")]
         public async Task<IActionResult> RenewToken(SysLogin_RenewToken_Request request)
-        {            
-            SysSecret secret = Auth_Get_AccessToken_Secret();
-            SysTokenContent content = TokenUtil.DecodeJwt(secret, request.AccessToken);
-            
-            if (content == null)
-            {
-                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Invalid token"));
-            }
-            
-            if (string.IsNullOrEmpty(content.LoginNameIdentifier) || string.IsNullOrEmpty(content.UserNameIdentifier))
+        {
+            if (string.IsNullOrEmpty(request.RefreshToken))
             {
                 return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Invalid token"));
             }
 
-            var getUserResult = await _mediator.Send(new SysUser_GetFirstByUserName_Query
+            var getLoginResult = await _mediator.Send(new SysLogin_GetFirstByRefreshToken_Query
             {
-                Request = new SysUser_GetFirstByUserName_Request
+                Request = new SysLogin_GetFirstByRefreshToken_Request
                 {
-                    PartitionKey = PartitionKeyOptions.SmartMatrix,
-                    UserName = content.UserNameIdentifier                    
+                    PartitionKey = request.PartitionKey,
+                    RefreshToken = request.RefreshToken
+                }
+            });
+
+            if (!getLoginResult.Succeeded || getLoginResult.Data == null)
+            {
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Invalid token"));
+            }
+            
+            var login = getLoginResult.Data;
+            if (string.IsNullOrEmpty(login.LoginName))
+            {
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Invalid token"));
+            }
+            if (login.RefreshTokenExpires < DateTime.UtcNow)
+            {
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Invalid token"));
+            }
+            if (login.Status == SysLogin.StatusOptions.Disabled)
+            {
+                return Ok(Result<SysUser_PerformLogin_Response>.Fail(-999, "Invalid token"));
+            }
+            if (login.Status == SysLogin.StatusOptions.Deleted)
+            {
+                return Ok(Result<SysUser_PerformLogin_Response>.Fail(-999, "Invalid token"));
+            } 
+
+            // Get user
+            var getUserResult = await _mediator.Send(new SysUser_GetById_Query
+            {
+                Request = new SysUser_GetById_Request
+                {
+                    PartitionKey = request.PartitionKey,
+                    Id = login.SysUserId
                 }
             });
 
             if (!getUserResult.Succeeded || getUserResult.Data == null)
             {
-                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "User not found"));
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Invalid user"));
             }
-            
             var user = getUserResult.Data;
-            var login = user.Logins.FirstOrDefault(x => x.LoginName == content.LoginNameIdentifier);            
-            
-            if (login == null)
+            if (user.Status == SysLogin.StatusOptions.Disabled)
             {
-                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Login not found"));
+                return Ok(Result<SysUser_PerformLogin_Response>.Fail(-999, "Invalid user"));
+            }
+            if (user.Status == SysLogin.StatusOptions.Deleted || user.IsDeleted)
+            {
+                return Ok(Result<SysUser_PerformLogin_Response>.Fail(-999, "Invalid user"));
             }
 
-            if (login.RefreshToken != request.RefreshToken)
-            {
-                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Invalid refresh token"));
-            }
-
-            if (login.RefreshTokenExpires < DateTime.UtcNow)
-            {
-                return Ok(Result<SysLogin_RenewToken_Response>.Fail(-999, "Invalid refresh token"));
-            }
-
-            var token = Auth_Standard_Generate_SysToken(LOGIN_PROVIDER_NAME, content.LoginNameIdentifier, user);
+            var token = Auth_Standard_Generate_SysToken(LOGIN_PROVIDER_NAME, login.LoginName, user);
 
             login.RefreshToken = token.RefreshToken;                
             login.RefreshTokenExpires = token.RefreshToken_Expires;

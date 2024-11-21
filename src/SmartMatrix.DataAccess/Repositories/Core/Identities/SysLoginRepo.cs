@@ -50,6 +50,15 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
             return logins;
         }
 
+        public async Task<SysLogin?> GetFirstByRefreshTokenAsync(string partitionKey, string refreshToken)
+        {
+            var login = await _readRepo.Entities
+                .Where(x => x.PartitionKey == partitionKey && x.RefreshToken == refreshToken)
+                .FirstOrDefaultAsync();
+            
+            return login;
+        }
+
         public async Task UpdateSecretAsync(SysLogin entity)
         {
             try

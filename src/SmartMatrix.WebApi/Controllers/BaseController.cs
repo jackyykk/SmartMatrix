@@ -68,7 +68,7 @@ namespace SmartMatrix.WebApi.Controllers
                 throw new System.Exception("Invalid secret");
             }
 
-            if (string.Equals(content.Secret.Format, "Jwt", System.StringComparison.InvariantCultureIgnoreCase))
+            if (!string.Equals(content.Secret.Format, "Jwt", System.StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new System.Exception("Invalid access token format");
             }
