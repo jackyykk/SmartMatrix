@@ -52,6 +52,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.ModifiedBy).HasColumnName("modified_by");                
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
+                b.Property(p => p.Category).HasColumnName("category");
                 b.Property(p => p.Title).HasColumnName("title");
                 b.Property(p => p.Body).HasColumnName("body");
                 b.Property(p => p.Owner).HasColumnName("owner");

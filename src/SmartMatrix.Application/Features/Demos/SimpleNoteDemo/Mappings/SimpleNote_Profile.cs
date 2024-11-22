@@ -9,6 +9,7 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Mappings
         public SimpleNote_Profile()
         {
             CreateMap<SimpleNote, SimpleNote_GetById_Response>().ReverseMap();
+            CreateMap<SimpleNote, SimpleNote_GetListByOwner_Response>().ReverseMap();
             CreateMap<SimpleNote, SimpleNote_Create_Response>().ReverseMap();
         }
     }

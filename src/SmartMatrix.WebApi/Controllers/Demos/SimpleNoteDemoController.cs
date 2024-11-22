@@ -27,6 +27,17 @@ namespace SmartMatrix.WebApi.Controllers.Demos
             return Ok(entity);
         }
 
+        [HttpGet("getlist-by_owner")]
+        public async Task<IActionResult> GetListByOwner([FromQuery] SimpleNote_GetListByOwner_Request request)
+        {
+            SimpleNote note = new SimpleNote();
+
+            var entity = await _mediator.Send(new SimpleNote_GetListByOwner_Query{
+                Request = request
+            });
+            return Ok(entity);
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] SimpleNote_Create_Request request)
         {
