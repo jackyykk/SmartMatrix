@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using SmartMatrix.Domain.Constants;
 using SmartMatrix.Domain.Demos.SimpleNoteDemo.DbEntities;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.Payloads;
 
 namespace SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages
 {
-    public class SimpleNote_GetListByOwner_Response : SimpleNote
+    public class SimpleNote_GetListByOwner_Response
     {
         public static class StatusCodes
         {
@@ -16,5 +18,7 @@ namespace SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages
         {
             public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;                     
         }
+        
+        public List<SimpleNotePayload> SimpleNotes { get; set; } = new List<SimpleNotePayload>();
     }
 }

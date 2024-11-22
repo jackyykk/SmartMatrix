@@ -1,9 +1,10 @@
 using SmartMatrix.Domain.Constants;
 using SmartMatrix.Domain.Core.Identities.DbEntities;
+using SmartMatrix.Domain.Core.Identities.Payloads;
 
 namespace SmartMatrix.Domain.Core.Identities.Messages
 {
-    public class SysLogin_GetFirstByRefreshToken_Response : SysLogin
+    public class SysLogin_GetFirstByRefreshToken_Response
     {
         public static class StatusCodes
         {
@@ -16,5 +17,7 @@ namespace SmartMatrix.Domain.Core.Identities.Messages
         {
             public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;                     
         }
+
+        public SysLoginPayload Login { get; set; }
     }
 }

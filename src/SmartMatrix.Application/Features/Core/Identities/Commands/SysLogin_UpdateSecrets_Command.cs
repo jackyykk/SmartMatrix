@@ -40,55 +40,63 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Invalid_Request, SysLogin_UpdateSecrets_Response.StatusTexts.Invalid_Request);
                 }
 
-                _unitOfWork.Open();
-                using (var transaction = _unitOfWork.BeginTransaction())
+                try
                 {
-                    try
+                    _unitOfWork.Open();
+                    using (var transaction = _unitOfWork.BeginTransaction())
                     {
-                        _sysLoginRepo.SetTransaction(transaction);
-
-                        string partitionKey = query.Request!.PartitionKey;                    
-
-                        var logins = await _sysLoginRepo.GetListAsync(partitionKey);
-                        if (logins != null && logins.Count > 0)
+                        try
                         {
-                            foreach (var login in logins)
-                            {                                
-                                if (!string.IsNullOrEmpty(login.PasswordHash) || !string.IsNullOrEmpty(login.PasswordSalt))
-                                {
-                                    continue;
+                            _sysLoginRepo.SetTransaction(transaction);
+
+                            string partitionKey = query.Request!.PartitionKey;                    
+
+                            var logins = await _sysLoginRepo.GetListAsync(partitionKey);
+                            if (logins != null && logins.Count > 0)
+                            {
+                                foreach (var login in logins)
+                                {                                
+                                    if (!string.IsNullOrEmpty(login.PasswordHash) || !string.IsNullOrEmpty(login.PasswordSalt))
+                                    {
+                                        continue;
+                                    }
+
+                                    if (string.IsNullOrEmpty(login.Password))
+                                    {
+                                        continue;
+                                    }
+
+                                    // Only compute the secrets for the logins that have password and no password hash and salt
+                                    string password = login.Password;
+
+                                    login.PasswordHash = MyHashTool.ComputePasswordHash(password, out string salt);
+                                    login.PasswordSalt = salt;
+                                    
+                                    await _sysLoginRepo.UpdateSecretAsync(login);
+                                    response.UpdatedIds.Add(login.Id);                                
                                 }
-
-                                if (string.IsNullOrEmpty(login.Password))
-                                {
-                                    continue;
-                                }
-
-                                // Only compute the secrets for the logins that have password and no password hash and salt
-                                string password = login.Password;
-
-                                login.PasswordHash = MyHashTool.ComputePasswordHash(password, out string salt);
-                                login.PasswordSalt = salt;
-                                
-                                await _sysLoginRepo.UpdateSecretAsync(login);
-                                response.UpdatedIds.Add(login.Id);                                
                             }
+                                                                                    
+                            await _unitOfWork.SaveChangesAsync(cancellationToken);
+                            transaction.Commit();                        
                         }
-                                                                                
-                        await _unitOfWork.SaveChangesAsync(cancellationToken);
-                        transaction.Commit();                        
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Unknown_Error, ex.Message);
+                        }                    
+                        finally
+                        {
+                            _unitOfWork.Close();
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Unknown_Error, ex.Message);
-                    }                    
-                    finally
-                    {
-                        _unitOfWork.Close();
-                    }
-                }
 
+                }
+                catch (Exception ex)
+                {
+                    return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Unknown_Error, ex.Message);
+                }
+                                
                 return Result<SysLogin_UpdateSecrets_Response>.Success(response, SysLogin_UpdateSecrets_Response.StatusCodes.Success);                        
             }
         }

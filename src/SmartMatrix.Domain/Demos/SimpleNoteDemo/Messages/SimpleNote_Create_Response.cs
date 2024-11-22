@@ -1,9 +1,10 @@
 using SmartMatrix.Domain.Constants;
 using SmartMatrix.Domain.Demos.SimpleNoteDemo.DbEntities;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.Payloads;
 
 namespace SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages
 {
-    public class SimpleNote_Create_Response : SimpleNote
+    public class SimpleNote_Create_Response
     {
         public static class StatusCodes
         {
@@ -14,7 +15,9 @@ namespace SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages
 
         public static class StatusTexts
         {
-            public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;                     
-        }        
+            public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;                       
+        }
+        
+        public SimpleNotePayload SimpleNote { get; set; }
     }
 }

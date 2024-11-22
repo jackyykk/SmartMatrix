@@ -7,6 +7,7 @@ using SmartMatrix.Core.BaseClasses.Web;
 using SmartMatrix.Domain.Core.Identities;
 using SmartMatrix.Domain.Core.Identities.DbEntities;
 using SmartMatrix.Domain.Core.Identities.Messages;
+using SmartMatrix.Domain.Core.Identities.Payloads;
 using SmartMatrix.WebApi.Utils;
 using static SmartMatrix.Domain.Core.Identities.DbEntities.SysUser;
 
@@ -26,22 +27,20 @@ namespace SmartMatrix.WebApi.Controllers.Auth
         [HttpPost("login")]
         public async Task<IActionResult> Login(SysUser_PerformLogin_Request request)
         {
+            if (request == null)
+            {
+                return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Invalid_Request, "Invalid request"));
+            }
+
+            if (string.IsNullOrEmpty(request!.PartitionKey)
+                || string.IsNullOrEmpty(request!.LoginName)
+                || string.IsNullOrEmpty(request!.Password))
+            {
+                return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Invalid_Request, "Invalid request"));
+            }
+
             try
             {
-                // Validation
-                if (request == null)
-                {
-                    return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Invalid_Request, "Invalid request"));
-                }
-
-                if (string.IsNullOrEmpty(request!.PartitionKey)
-                    || string.IsNullOrEmpty(request!.LoginName)
-                    || string.IsNullOrEmpty(request!.Password))
-                {
-                    return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Invalid_Request, "Invalid request"));
-                }
-
-                // Process
                 var result = await _mediator.Send(new SysUser_PerformLogin_Command
                 {
                     Request = request
@@ -73,9 +72,11 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     {
                         return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.RefreshToken_Update_Failed, "Login failed"));
                     }
-
+                    
                     user.ClearSecrets();
-                    result.Data.Token = token;
+
+                    var tokenPayload = _mapper.Map<SysTokenPayload>(token);
+                    result.Data.Token = tokenPayload;
                 }
 
                 return Ok(result);
@@ -89,20 +90,20 @@ namespace SmartMatrix.WebApi.Controllers.Auth
         [HttpPost("renew-token")]
         public async Task<IActionResult> RenewToken(SysLogin_RenewToken_Request request)
         {
-            try
+            SysLogin_RenewToken_Response response = new SysLogin_RenewToken_Response();
+
+            if (request == null)
             {
-                // Validation
-                if (request == null)
-                {
-                    return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Invalid_Request, SysLogin_RenewToken_Response.StatusTexts.Invalid_Request));
-                }
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Invalid_Request, SysLogin_RenewToken_Response.StatusTexts.Invalid_Request));
+            }
 
-                if (string.IsNullOrEmpty(request.RefreshToken))
-                {
-                    return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Invalid_Request, SysLogin_RenewToken_Response.StatusTexts.Invalid_Request));
-                }
+            if (string.IsNullOrEmpty(request.RefreshToken))
+            {
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Invalid_Request, SysLogin_RenewToken_Response.StatusTexts.Invalid_Request));
+            }
 
-                // Process
+            try
+            {             
                 var getLoginResult = await _mediator.Send(new SysLogin_GetFirstByRefreshToken_Query
                 {
                     Request = new SysLogin_GetFirstByRefreshToken_Request
@@ -112,12 +113,12 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     }
                 });
 
-                if (!getLoginResult.Succeeded || getLoginResult.Data == null)
+                if (!getLoginResult.Succeeded || getLoginResult.Data == null || getLoginResult.Data.Login == null)
                 {
                     return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Login_NotFound, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
                 }
                 
-                var login = getLoginResult.Data;
+                var login = getLoginResult.Data.Login;
                 if (string.IsNullOrEmpty(login.LoginName))
                 {
                     return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.LoginName_Empty, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
@@ -145,11 +146,11 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     }
                 });
 
-                if (!getUserResult.Succeeded || getUserResult.Data == null)
+                if (!getUserResult.Succeeded || getUserResult.Data == null || getUserResult.Data.User == null)
                 {
                     return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.User_NotFound, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
                 }
-                var user = getUserResult.Data;
+                var user = getUserResult.Data.User;
                 if (user.Status == SysLogin.StatusOptions.Disabled)
                 {
                     return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.User_Disabled, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
@@ -176,9 +177,10 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.RefreshToken_Update_Failed, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
                 }
 
-                var mappedToken = _mapper.Map<SysLogin_RenewToken_Response>(token);
 
-                return Ok(Result<SysLogin_RenewToken_Response>.Success(mappedToken));
+                var payload = _mapper.Map<SysTokenPayload>(token);
+                response.Token = payload;
+                return Ok(Result<SysLogin_RenewToken_Response>.Success(response));
             }
             catch (Exception ex)
             {

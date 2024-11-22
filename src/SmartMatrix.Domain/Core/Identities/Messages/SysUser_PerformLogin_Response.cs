@@ -1,5 +1,6 @@
 using SmartMatrix.Domain.Constants;
 using SmartMatrix.Domain.Core.Identities.DbEntities;
+using SmartMatrix.Domain.Core.Identities.Payloads;
 
 namespace SmartMatrix.Domain.Core.Identities.Messages
 {
@@ -26,7 +27,7 @@ namespace SmartMatrix.Domain.Core.Identities.Messages
             public const string Login_Failed = "Login failed";
         }
 
-        public SysUser User { get; set; }
-        public SysToken Token { get; set; }
+        public SysUserPayload User { get; set; }
+        public SysTokenPayload Token { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 using AutoMapper;
 using SmartMatrix.Domain.Demos.SimpleNoteDemo.DbEntities;
 using SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.Payloads;
 
 namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Mappings
 {
@@ -8,9 +9,7 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Mappings
     {
         public SimpleNote_Profile()
         {
-            CreateMap<SimpleNote, SimpleNote_GetById_Response>().ReverseMap();
-            CreateMap<SimpleNote, SimpleNote_GetListByOwner_Response>().ReverseMap();
-            CreateMap<SimpleNote, SimpleNote_Create_Response>().ReverseMap();
+            CreateMap<SimpleNote, SimpleNotePayload>().ReverseMap();            
         }
     }
 }

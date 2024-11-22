@@ -1,8 +1,9 @@
 using SmartMatrix.Domain.Constants;
+using SmartMatrix.Domain.Core.Identities.Payloads;
 
 namespace SmartMatrix.Domain.Core.Identities.Messages
 {
-    public class SysLogin_RenewToken_Response : SysToken
+    public class SysLogin_RenewToken_Response
     {
         public static class StatusCodes
         {
@@ -29,5 +30,7 @@ namespace SmartMatrix.Domain.Core.Identities.Messages
             public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;
             public const string Invalid_Token = "The token is invalid.";            
         }
+
+        public SysTokenPayload Token { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using MediatR;
 using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Core.Identities;
 using SmartMatrix.Core.BaseClasses.Web;
 using SmartMatrix.Domain.Core.Identities.Messages;
+using SmartMatrix.Domain.Core.Identities.Payloads;
 
 namespace SmartMatrix.Application.Features.Core.Identities.Queries
 {
@@ -22,28 +23,30 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
             }
 
             public async Task<Result<SysLogin_GetFirstByRefreshToken_Response>> Handle(SysLogin_GetFirstByRefreshToken_Query query, CancellationToken cancellationToken)
-            {                
-                try
+            {
+                SysLogin_GetFirstByRefreshToken_Response response = new SysLogin_GetFirstByRefreshToken_Response();
+
+                if (query.Request == null)
                 {
-                    if (query.Request == null)
-                    {
-                        return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_GetFirstByRefreshToken_Response.StatusTexts.Invalid_Request);
-                    }
+                    return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_GetFirstByRefreshToken_Response.StatusTexts.Invalid_Request);
+                }
 
-                    if (string.IsNullOrEmpty(query.Request!.PartitionKey))                        
-                    {
-                        return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_GetFirstByRefreshToken_Response.StatusTexts.Invalid_Request);
-                    }
+                if (string.IsNullOrEmpty(query.Request!.PartitionKey))                        
+                {
+                    return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_GetFirstByRefreshToken_Response.StatusTexts.Invalid_Request);
+                }
 
-                    if (string.IsNullOrEmpty(query.Request!.RefreshToken))                        
-                    {
-                        return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_GetFirstByRefreshToken_Response.StatusTexts.Invalid_Request);
-                    }
+                if (string.IsNullOrEmpty(query.Request!.RefreshToken))                        
+                {
+                    return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_GetFirstByRefreshToken_Response.StatusTexts.Invalid_Request);
+                }
 
+                try
+                {                    
                     var entity = await _sysLoginRepo.GetFirstByRefreshTokenAsync(query.Request!.PartitionKey, query.Request!.RefreshToken);
-                    var mappedEntity = _mapper.Map<SysLogin_GetFirstByRefreshToken_Response>(entity);
-                    
-                    return Result<SysLogin_GetFirstByRefreshToken_Response>.Success(mappedEntity, SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Success);
+                    var payload = _mapper.Map<SysLoginPayload>(entity);
+                    response.Login = payload;
+                    return Result<SysLogin_GetFirstByRefreshToken_Response>.Success(response, SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Success);
                 }
                 catch (Exception ex)
                 {

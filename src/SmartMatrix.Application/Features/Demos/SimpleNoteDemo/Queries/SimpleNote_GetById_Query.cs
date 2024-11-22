@@ -3,6 +3,7 @@ using MediatR;
 using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNoteDemo;
 using SmartMatrix.Core.BaseClasses.Web;
 using SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.Payloads;
 
 namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
 {
@@ -22,23 +23,25 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
             }
 
             public async Task<Result<SimpleNote_GetById_Response>> Handle(SimpleNote_GetById_Query query, CancellationToken cancellationToken)
-            {                
+            {
+                SimpleNote_GetById_Response response = new SimpleNote_GetById_Response();
+                
+                if (query.Request == null)
+                {
+                    return Result<SimpleNote_GetById_Response>.Fail(SimpleNote_GetById_Response.StatusCodes.Invalid_Request, SimpleNote_GetById_Response.StatusTexts.Invalid_Request);
+                }
+                
+                if (query.Request!.Id <= 0)                        
+                {
+                    return Result<SimpleNote_GetById_Response>.Fail(SimpleNote_GetById_Response.StatusCodes.Invalid_Request, SimpleNote_GetById_Response.StatusTexts.Invalid_Request);
+                }
+
                 try
                 {
-                    if (query.Request == null)
-                    {
-                        return Result<SimpleNote_GetById_Response>.Fail(SimpleNote_GetById_Response.StatusCodes.Invalid_Request, SimpleNote_GetById_Response.StatusTexts.Invalid_Request);
-                    }
-                    
-                    if (query.Request!.Id <= 0)                        
-                    {
-                        return Result<SimpleNote_GetById_Response>.Fail(SimpleNote_GetById_Response.StatusCodes.Invalid_Request, SimpleNote_GetById_Response.StatusTexts.Invalid_Request);
-                    }
-
                     var entity = await _simpleNoteRepo.GetByIdAsync(query.Request!.Id);
-                    var mappedEntity = _mapper.Map<SimpleNote_GetById_Response>(entity);
-                    
-                    return Result<SimpleNote_GetById_Response>.Success(mappedEntity, SimpleNote_GetById_Response.StatusCodes.Success);
+                    var payload = _mapper.Map<SimpleNotePayload>(entity);
+                    response.SimpleNote = payload;
+                    return Result<SimpleNote_GetById_Response>.Success(response, SimpleNote_GetById_Response.StatusCodes.Success);
                 }
                 catch (Exception ex)
                 {

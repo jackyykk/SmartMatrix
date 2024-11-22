@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using SmartMatrix.Core.BaseClasses.Web;
 using SmartMatrix.Domain.Core.Identities;
 using SmartMatrix.Domain.Core.Identities.Messages;
+using SmartMatrix.Domain.Core.Identities.Payloads;
 using SmartMatrix.WebApi.Utils;
 
 namespace SmartMatrix.WebApi.Controllers.Auth
@@ -63,10 +64,12 @@ namespace SmartMatrix.WebApi.Controllers.Auth
 
             // Check if the user is already registered
 
+            var tokenPayload = _mapper.Map<SysTokenPayload>(token);
+
             var response = new SysUser_PerformLogin_Response
             {
-
-                Token = token
+                
+                Token = tokenPayload
             };  
             return Ok(Result<SysUser_PerformLogin_Response>.Success(response));
         }

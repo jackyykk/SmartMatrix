@@ -1,9 +1,10 @@
 using SmartMatrix.Domain.Constants;
 using SmartMatrix.Domain.Demos.SimpleNoteDemo.DbEntities;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.Payloads;
 
 namespace SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages
 {
-    public class SimpleNote_GetById_Response : SimpleNote
+    public class SimpleNote_GetById_Response
     {
         public static class StatusCodes
         {
@@ -16,5 +17,7 @@ namespace SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages
         {
             public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;                     
         }
+        
+        public SimpleNotePayload SimpleNote { get; set; }
     }
 }
