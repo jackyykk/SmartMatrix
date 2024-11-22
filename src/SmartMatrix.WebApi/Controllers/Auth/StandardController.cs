@@ -177,9 +177,8 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.RefreshToken_Update_Failed, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
                 }
 
-
-                var payload = _mapper.Map<SysTokenPayload>(token);
-                response.Token = payload;
+                var tokenPayload = _mapper.Map<SysTokenPayload>(token);
+                response.Token = tokenPayload;
                 return Ok(Result<SysLogin_RenewToken_Response>.Success(response));
             }
             catch (Exception ex)

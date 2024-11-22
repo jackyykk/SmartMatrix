@@ -19,11 +19,11 @@ namespace SmartMatrix.WebApi.Controllers.Core
         [HttpPost("update-secrets")]
         public async Task<IActionResult> UpdateSecrets(SysLogin_UpdateSecrets_Request request)
         {
-            var entity = await _mediator.Send(new SysLogin_UpdateSecrets_Command
+            var result = await _mediator.Send(new SysLogin_UpdateSecrets_Command
             {
                 Request = request
             });
-            return Ok(entity);
+            return Ok(result);
         }
     }
 }

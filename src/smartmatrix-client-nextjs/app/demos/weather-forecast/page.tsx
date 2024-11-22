@@ -18,12 +18,19 @@ export default function WeatherForecastPage() {
             setLoading(true);
             const url = process.env.NEXT_PUBLIC_APISERVER_BASE_URL + '/api/demos/weather_forecast_demo/getlist';
             const response = await fetch(url);
-            const data = await response.json();
-            // fill in the id field
-            data.forEach((item: WeatherForecast, index: number) => {
-                item.id = index + 1;
-            });
-            setWeatherData(data);
+            const result = await response.json();
+            if (result.succeeded && result.data) {
+                const data = result.data.weatherForecasts
+                // fill in the id field
+                data.forEach((item: WeatherForecast, index: number) => {
+                    item.id = index + 1;
+                });
+                setWeatherData(data);
+            }
+            else {
+                console.error('Error fetching weather data:', result.statusCode);
+                return;
+            }            
         } catch (error) {
             console.error('Error fetching weather data:', error);
         } finally {
@@ -60,7 +67,7 @@ export default function WeatherForecastPage() {
     }
 
     return (
-        <main className="min-h-screen p-4 bg-gray-100">            
+        <main className="min-h-screen p-4 bg-gray-100">
             <p className="text-sm text-gray-500 mb-4">Demo: Weather Forecast</p>
             <div className="flex gap-4 items-center flex-col sm:flex-row mb-6">
                 <Button
@@ -94,7 +101,7 @@ export default function WeatherForecastPage() {
                         />
                     </Paper>
                 )}
-            </div>            
+            </div>
             <footer className="mt-6 flex gap-6 flex-wrap text-gray-600 items-center justify-center">
                 &copy; 2024 SmartMatrix. All rights reserved.
             </footer>

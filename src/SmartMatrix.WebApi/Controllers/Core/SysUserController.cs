@@ -18,21 +18,21 @@ namespace SmartMatrix.WebApi.Controllers.Core
         [HttpGet("getfirst-by_username")]
         public async Task<IActionResult> GetFirstByUserName([FromQuery] SysUser_GetFirstByUserName_Request request)
         {
-            var entity = await _mediator.Send(new SysUser_GetFirstByUserName_Query
+            var result = await _mediator.Send(new SysUser_GetFirstByUserName_Query
             {
                 Request = request
             });
-            return Ok(entity);
+            return Ok(result);
         }
 
         [HttpGet("getfirst-by_login_name")]
         public async Task<IActionResult> GetFirstByLoginName([FromQuery] SysUser_GetFirstByLoginName_Request request)
         {
-            var entity = await _mediator.Send(new SysUser_GetFirstByLoginName_Query
+            var result = await _mediator.Send(new SysUser_GetFirstByLoginName_Query
             {
                 Request = request
             });
-            return Ok(entity);
+            return Ok(result);
         }
     }
 }
