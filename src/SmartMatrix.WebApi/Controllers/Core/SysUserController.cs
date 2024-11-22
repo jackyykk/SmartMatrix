@@ -16,6 +16,17 @@ namespace SmartMatrix.WebApi.Controllers.Core
         {
         }
 
+        [HttpGet("getfirst-by_type")]
+        public async Task<IActionResult> GetFirstByType([FromQuery] SysUser_GetFirstByType_Request request)
+        {
+            var result = await _mediator.Send(new SysUser_GetFirstByType_Query
+            {
+                Request = request
+            });
+
+            return Ok(result);
+        }
+
         [HttpGet("getfirst-by_username")]
         public async Task<IActionResult> GetFirstByUserName([FromQuery] SysUser_GetFirstByUserName_Request request)
         {

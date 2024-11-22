@@ -101,7 +101,21 @@ namespace SmartMatrix.WebApi.Controllers.Auth
 
             if (getUserResult.Data.User == null)
             {
-                // Register the user                
+                var getUserProfileResult = await _mediator.Send(new SysUser_GetFirstByType_Query
+                {
+                    Request = new SysUser_GetFirstByType_Request
+                    {
+                        PartitionKey = SysUser.PartitionKeyOptions.SmartMatrix,
+                        Type = SysUser.TypeOptions.BuiltIn_Normal_User_Profile
+                    }
+                });
+                
+                if (!getUserProfileResult.Succeeded || getUserProfileResult.Data == null)
+                    return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Unknown_Error, SysUser_PerformLogin_Response.StatusTexts.Unknown_Error));
+
+                var userProfile = getUserProfileResult.Data.User;
+
+                // Get normal user profile and Register the user as normal user
                 var newUser = new SysUser
                 {
                     PartitionKey = SysUser.PartitionKeyOptions.SmartMatrix,
@@ -126,6 +140,12 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 };
 
                 newUser.Logins.Add(newLogin);
+
+                // Copy the roles of user profile to the new user
+                foreach(var role in userProfile.Roles)
+                {
+                    newUser.Roles.Add(SysRole.Copy(role));
+                }
 
                 var insertUserResult = await _mediator.Send(new SysUser_InsertUser_Command
                 {

@@ -55,6 +55,21 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
             return user;
         }
 
+        public async Task<SysUser?> GetFirstByTypeAsync(string partitionKey, string type)
+        {
+            // Get SysUser Copy To Avoid Cyclic References
+            // Get Latest Un-Deleted User and Un-Deleted Logins
+            var user = await _readRepo.Entities
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.PartitionKey == partitionKey)
+                .Where(x => x.Type == type)
+                .OrderByDescending(x => x.Id)
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.Roles.Where(r => !r.IsDeleted).ToList()))
+                .FirstOrDefaultAsync();
+
+            return user;
+        }
+
         public async Task<SysUser?> GetFirstByUserNameAsync(string partitionKey, string userName)
         {
             // Get SysUser Copy To Avoid Cyclic References

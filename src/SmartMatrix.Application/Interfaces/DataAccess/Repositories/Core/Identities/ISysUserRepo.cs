@@ -8,9 +8,10 @@ namespace SmartMatrix.Application.Interfaces.DataAccess.Repositories.Core.Identi
 
         // Get
         Task<SysUser?> GetByIdAsync(string partitionKey, int id);
-        Task<SysUser?> GetFirstByUserNameAsync(string partitionKey, string userName);
+        Task<SysUser?> GetFirstByTypeAsync(string partitionKey, string type);
+        Task<SysUser?> GetFirstByUserNameAsync(string partitionKey, string userName);        
         Task<SysUser?> GetFirstByLoginNameAsync(string partitionKey, string LoginName);
-        
+                
         // Insert
         Task<SysUser> InsertAsync(SysUser entity);
     }

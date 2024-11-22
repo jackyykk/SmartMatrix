@@ -37,7 +37,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 
         public class TypeOptions
         {
-            public const string BuiltIn_NormalUserProfile = "built_in_normal_user_profile";
+            public const string BuiltIn_Normal_User_Profile = "built_in_normal_user_profile";
             public const string BuiltIn_User = "built_in_user";
             public const string Normal_User = "normal_user";
         }
