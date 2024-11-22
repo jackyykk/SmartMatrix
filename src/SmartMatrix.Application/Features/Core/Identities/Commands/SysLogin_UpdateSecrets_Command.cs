@@ -89,7 +89,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     }
                 }
 
-                return Result<SysLogin_UpdateSecrets_Response>.Success(response);                        
+                return Result<SysLogin_UpdateSecrets_Response>.Success(response, SysLogin_UpdateSecrets_Response.StatusCodes.Success);                        
             }
         }
     }

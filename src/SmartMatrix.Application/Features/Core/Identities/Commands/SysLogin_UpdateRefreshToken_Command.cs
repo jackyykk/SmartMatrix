@@ -65,7 +65,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     }
                 }
 
-                return Result<SysLogin_UpdateRefreshToken_Response>.Success(response);                        
+                return Result<SysLogin_UpdateRefreshToken_Response>.Success(response, SysLogin_UpdateRefreshToken_Response.StatusCodes.Success);                        
             }
         }
     }

@@ -25,14 +25,29 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
             {                
                 try
                 {
+                    if (query.Request == null)
+                    {
+                        return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_GetFirstByRefreshToken_Response.StatusTexts.Invalid_Request);
+                    }
+
+                    if (string.IsNullOrEmpty(query.Request!.PartitionKey))                        
+                    {
+                        return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_GetFirstByRefreshToken_Response.StatusTexts.Invalid_Request);
+                    }
+
+                    if (string.IsNullOrEmpty(query.Request!.RefreshToken))                        
+                    {
+                        return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_GetFirstByRefreshToken_Response.StatusTexts.Invalid_Request);
+                    }
+
                     var entity = await _sysLoginRepo.GetFirstByRefreshTokenAsync(query.Request!.PartitionKey, query.Request!.RefreshToken);
                     var mappedEntity = _mapper.Map<SysLogin_GetFirstByRefreshToken_Response>(entity);
                     
-                    return Result<SysLogin_GetFirstByRefreshToken_Response>.Success(mappedEntity);
+                    return Result<SysLogin_GetFirstByRefreshToken_Response>.Success(mappedEntity, SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Success);
                 }
                 catch (Exception ex)
                 {
-                    return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(-1, ex.Message);
+                    return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Unknown_Error, ex.Message);
                 }                
             }
         }

@@ -74,7 +74,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         User = user,
                         Token = new SysToken()
                     };                            
-                    return Result<SysUser_PerformLogin_Response>.Success(response);
+                    return Result<SysUser_PerformLogin_Response>.Success(response, SysUser_PerformLogin_Response.StatusCodes.Success);
                 }
                 catch (Exception ex)
                 {

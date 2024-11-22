@@ -25,14 +25,24 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
             {                
                 try
                 {
+                    if (query.Request == null)
+                    {
+                        return Result<SimpleNote_GetById_Response>.Fail(SimpleNote_GetById_Response.StatusCodes.Invalid_Request, SimpleNote_GetById_Response.StatusTexts.Invalid_Request);
+                    }
+                    
+                    if (query.Request!.Id <= 0)                        
+                    {
+                        return Result<SimpleNote_GetById_Response>.Fail(SimpleNote_GetById_Response.StatusCodes.Invalid_Request, SimpleNote_GetById_Response.StatusTexts.Invalid_Request);
+                    }
+
                     var entity = await _simpleNoteRepo.GetByIdAsync(query.Request!.Id);
                     var mappedEntity = _mapper.Map<SimpleNote_GetById_Response>(entity);
                     
-                    return Result<SimpleNote_GetById_Response>.Success(mappedEntity);
+                    return Result<SimpleNote_GetById_Response>.Success(mappedEntity, SimpleNote_GetById_Response.StatusCodes.Success);
                 }
                 catch (Exception ex)
                 {
-                    return Result<SimpleNote_GetById_Response>.Fail(-1, ex.Message);
+                    return Result<SimpleNote_GetById_Response>.Fail(SimpleNote_GetById_Response.StatusCodes.Unknown_Error, ex.Message);
                 }                
             }
         }

@@ -25,14 +25,29 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
             {                
                 try
                 {
+                    if (query.Request == null)
+                    {
+                        return Result<SysUser_GetFirstByUserName_Response>.Fail(SysUser_GetFirstByUserName_Response.StatusCodes.Invalid_Request, SysUser_GetFirstByUserName_Response.StatusTexts.Invalid_Request);
+                    }
+
+                    if (string.IsNullOrEmpty(query.Request!.PartitionKey))                        
+                    {
+                        return Result<SysUser_GetFirstByUserName_Response>.Fail(SysUser_GetFirstByUserName_Response.StatusCodes.Invalid_Request, SysUser_GetFirstByUserName_Response.StatusTexts.Invalid_Request);
+                    }
+
+                    if (string.IsNullOrEmpty(query.Request!.UserName))                        
+                    {
+                        return Result<SysUser_GetFirstByUserName_Response>.Fail(SysUser_GetFirstByUserName_Response.StatusCodes.Invalid_Request, SysUser_GetFirstByUserName_Response.StatusTexts.Invalid_Request);
+                    }
+
                     var entity = await _sysUserRepo.GetFirstByUserNameAsync(query.Request!.PartitionKey, query.Request!.UserName);
                     var mappedEntity = _mapper.Map<SysUser_GetFirstByUserName_Response>(entity);
                     
-                    return Result<SysUser_GetFirstByUserName_Response>.Success(mappedEntity);
+                    return Result<SysUser_GetFirstByUserName_Response>.Success(mappedEntity, SysUser_GetFirstByUserName_Response.StatusCodes.Success);
                 }
                 catch (Exception ex)
                 {
-                    return Result<SysUser_GetFirstByUserName_Response>.Fail(-1, ex.Message);
+                    return Result<SysUser_GetFirstByUserName_Response>.Fail(SysUser_GetFirstByUserName_Response.StatusCodes.Unknown_Error, ex.Message);
                 }                
             }
         }

@@ -27,6 +27,15 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
 
             public async Task<Result<SimpleNote_Create_Response>> Handle(SimpleNote_Create_Command command, CancellationToken cancellationToken)
             {
+                if (command.Request == null)
+                {
+                    return Result<SimpleNote_Create_Response>.Fail(SimpleNote_Create_Response.StatusCodes.Invalid_Request, SimpleNote_Create_Response.StatusTexts.Invalid_Request);
+                }
+
+                if (command.Request!.SimpleNote == null)                        
+                {
+                    return Result<SimpleNote_Create_Response>.Fail(SimpleNote_Create_Response.StatusCodes.Invalid_Request, SimpleNote_Create_Response.StatusTexts.Invalid_Request);
+                }
                 
                 _unitOfWork.Open();
                 using (var transaction = _unitOfWork.BeginTransaction())
@@ -41,12 +50,12 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
                         transaction.Commit();
 
                         var mappedEntity = _mapper.Map<SimpleNote_Create_Response>(entity);
-                        return Result<SimpleNote_Create_Response>.Success(mappedEntity);
+                        return Result<SimpleNote_Create_Response>.Success(mappedEntity, SimpleNote_Create_Response.StatusCodes.Success);
                     }
                     catch (Exception ex)
                     {
                         transaction.Rollback();
-                        return Result<SimpleNote_Create_Response>.Fail(-1, ex.Message);
+                        return Result<SimpleNote_Create_Response>.Fail(SimpleNote_Create_Response.StatusCodes.Unknown_Error, ex.Message);
                     }                    
                     finally
                     {
