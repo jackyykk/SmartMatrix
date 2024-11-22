@@ -2,7 +2,6 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries;
-using SmartMatrix.Domain.Demos.SimpleNoteDemo.DbEntities;
 using SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages;
 
 namespace SmartMatrix.WebApi.Controllers.Demos
@@ -22,6 +21,7 @@ namespace SmartMatrix.WebApi.Controllers.Demos
             var result = await _mediator.Send(new SimpleNote_GetById_Query{
                 Request = request
             });
+
             return Ok(result);
         }
 
@@ -31,6 +31,7 @@ namespace SmartMatrix.WebApi.Controllers.Demos
             var result = await _mediator.Send(new SimpleNote_GetListByOwner_Query{
                 Request = request
             });
+
             return Ok(result);
         }
 
@@ -38,8 +39,9 @@ namespace SmartMatrix.WebApi.Controllers.Demos
         public async Task<IActionResult> Create([FromBody] SimpleNote_Create_Request request)
         {
             var result = await _mediator.Send(new SimpleNote_Create_Command{
-                Request = request
+                Request = request                
             });
+
             return Ok(result);
         }
     }

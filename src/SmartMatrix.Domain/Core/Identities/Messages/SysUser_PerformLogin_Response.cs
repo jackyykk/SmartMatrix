@@ -24,6 +24,7 @@ namespace SmartMatrix.Domain.Core.Identities.Messages
         public static class StatusTexts
         {
             public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;
+            public const string Unknown_Error = MessageConstants.StatusTexts.Unknown_Error;
             public const string Login_Failed = "Login failed";
         }
 

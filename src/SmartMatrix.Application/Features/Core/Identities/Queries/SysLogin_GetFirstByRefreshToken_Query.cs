@@ -11,7 +11,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
     {
         public SysLogin_GetFirstByRefreshToken_Request? Request { get; set; }
 
-        public class Handler : IRequestHandler<SysLogin_GetFirstByRefreshToken_Query, Result<SysLogin_GetFirstByRefreshToken_Response>>
+        public class Handler : BaseHandler, IRequestHandler<SysLogin_GetFirstByRefreshToken_Query, Result<SysLogin_GetFirstByRefreshToken_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISysLoginRepo _sysLoginRepo;
@@ -50,7 +50,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
                 }
                 catch (Exception ex)
                 {
-                    return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Unknown_Error, ex.Message);
+                    return Result<SysLogin_GetFirstByRefreshToken_Response>.Fail(SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                 }                
             }
         }

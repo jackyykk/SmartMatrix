@@ -13,7 +13,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
     {
         public SysLogin_UpdateRefreshToken_Request? Request { get; set; }
 
-        public class Handler : IRequestHandler<SysLogin_UpdateRefreshToken_Command, Result<SysLogin_UpdateRefreshToken_Response>>
+        public class Handler : BaseHandler, IRequestHandler<SysLogin_UpdateRefreshToken_Command, Result<SysLogin_UpdateRefreshToken_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISysLoginRepo _sysLoginRepo;
@@ -26,16 +26,16 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                 _unitOfWork = unitOfWork;
             }
 
-            public async Task<Result<SysLogin_UpdateRefreshToken_Response>> Handle(SysLogin_UpdateRefreshToken_Command query, CancellationToken cancellationToken)
+            public async Task<Result<SysLogin_UpdateRefreshToken_Response>> Handle(SysLogin_UpdateRefreshToken_Command command, CancellationToken cancellationToken)
             {
                 SysLogin_UpdateRefreshToken_Response response = new SysLogin_UpdateRefreshToken_Response();
 
-                if (query.Request == null)
+                if (command.Request == null)
                 {
                     return Result<SysLogin_UpdateRefreshToken_Response>.Fail(SysLogin_UpdateRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_UpdateRefreshToken_Response.StatusTexts.Invalid_Request);
                 }
 
-                if (query.Request!.Login == null)
+                if (command.Request!.Login == null)
                 {
                     return Result<SysLogin_UpdateRefreshToken_Response>.Fail(SysLogin_UpdateRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_UpdateRefreshToken_Response.StatusTexts.Invalid_Request);
                 }
@@ -49,7 +49,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         {
                             _sysLoginRepo.SetTransaction(transaction);
 
-                            var login = query.Request!.Login;
+                            var login = command.Request!.Login;
 
                             await _sysLoginRepo.UpdateRefreshTokenAsync(login);
 
@@ -58,8 +58,8 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         }
                         catch (Exception ex)
                         {
-                            transaction.Rollback();
-                            return Result<SysLogin_UpdateRefreshToken_Response>.Fail(SysLogin_UpdateRefreshToken_Response.StatusCodes.Unknown_Error, ex.Message);
+                            transaction.Rollback();                            
+                            return Result<SysLogin_UpdateRefreshToken_Response>.Fail(SysLogin_UpdateRefreshToken_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                         }
                         finally
                         {
@@ -68,8 +68,8 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     }
                 }
                 catch (Exception ex)
-                {
-                    return Result<SysLogin_UpdateRefreshToken_Response>.Fail(SysLogin_UpdateRefreshToken_Response.StatusCodes.Unknown_Error, ex.Message);
+                {                    
+                    return Result<SysLogin_UpdateRefreshToken_Response>.Fail(SysLogin_UpdateRefreshToken_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                 }
 
                 return Result<SysLogin_UpdateRefreshToken_Response>.Success(response, SysLogin_UpdateRefreshToken_Response.StatusCodes.Success);

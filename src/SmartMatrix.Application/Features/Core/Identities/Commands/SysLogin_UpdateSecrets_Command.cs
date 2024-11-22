@@ -13,7 +13,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
     {        
         public SysLogin_UpdateSecrets_Request? Request { get; set; }
 
-        public class Handler : IRequestHandler<SysLogin_UpdateSecrets_Command, Result<SysLogin_UpdateSecrets_Response>>
+        public class Handler : BaseHandler, IRequestHandler<SysLogin_UpdateSecrets_Command, Result<SysLogin_UpdateSecrets_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISysLoginRepo _sysLoginRepo;
@@ -26,16 +26,16 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                 _unitOfWork = unitOfWork;
             }
 
-            public async Task<Result<SysLogin_UpdateSecrets_Response>> Handle(SysLogin_UpdateSecrets_Command query, CancellationToken cancellationToken)
+            public async Task<Result<SysLogin_UpdateSecrets_Response>> Handle(SysLogin_UpdateSecrets_Command command, CancellationToken cancellationToken)
             {
                 SysLogin_UpdateSecrets_Response response = new SysLogin_UpdateSecrets_Response();
 
-                if (query.Request == null)
+                if (command.Request == null)
                 {
                     return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Invalid_Request, SysLogin_UpdateSecrets_Response.StatusTexts.Invalid_Request);
                 }
 
-                if (string.IsNullOrEmpty(query.Request!.PartitionKey))                        
+                if (string.IsNullOrEmpty(command.Request!.PartitionKey))                        
                 {
                     return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Invalid_Request, SysLogin_UpdateSecrets_Response.StatusTexts.Invalid_Request);
                 }
@@ -49,7 +49,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         {
                             _sysLoginRepo.SetTransaction(transaction);
 
-                            string partitionKey = query.Request!.PartitionKey;                    
+                            string partitionKey = command.Request!.PartitionKey;                    
 
                             var logins = await _sysLoginRepo.GetListAsync(partitionKey);
                             if (logins != null && logins.Count > 0)
@@ -83,7 +83,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         catch (Exception ex)
                         {
                             transaction.Rollback();
-                            return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Unknown_Error, ex.Message);
+                            return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                         }                    
                         finally
                         {
@@ -94,9 +94,9 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                 }
                 catch (Exception ex)
                 {
-                    return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Unknown_Error, ex.Message);
+                    return Result<SysLogin_UpdateSecrets_Response>.Fail(SysLogin_UpdateSecrets_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                 }
-                                
+
                 return Result<SysLogin_UpdateSecrets_Response>.Success(response, SysLogin_UpdateSecrets_Response.StatusCodes.Success);                        
             }
         }

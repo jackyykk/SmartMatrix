@@ -11,7 +11,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
     {
         public SysUser_GetById_Request? Request { get; set; }
 
-        public class Handler : IRequestHandler<SysUser_GetById_Query, Result<SysUser_GetById_Response>>
+        public class Handler : BaseHandler, IRequestHandler<SysUser_GetById_Query, Result<SysUser_GetById_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISysUserRepo _sysUserRepo;
@@ -50,7 +50,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
                 }
                 catch (Exception ex)
                 {
-                    return Result<SysUser_GetById_Response>.Fail(SysUser_GetById_Response.StatusCodes.Unknown_Error, ex.Message);
+                    return Result<SysUser_GetById_Response>.Fail(SysUser_GetById_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                 }                
             }
         }

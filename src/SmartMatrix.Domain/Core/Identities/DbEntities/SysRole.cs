@@ -52,6 +52,11 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             public const string Deleted = CommonConstants.DbEntityStatus.Deleted;
         }
 
+        public class OwnerOptions
+        {
+            public const string System = CommonConstants.DbEntityOwner.System;            
+        }
+
         public static SysRole Copy(SysRole x)
         {
             return new SysRole
@@ -65,6 +70,20 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 ModifiedBy = x.ModifiedBy,
                 DeletedAt = x.DeletedAt,
                 DeletedBy = x.DeletedBy,
+                PartitionKey = x.PartitionKey,
+                Type = x.Type,
+                Category = x.Category,
+                RoleCode = x.RoleCode,
+                RoleName = x.RoleName,                
+                Description = x.Description
+            };
+        }
+
+        public static SysRole CopyAsNew(SysRole x)
+        {
+            return new SysRole
+            {
+                CreatedBy = OwnerOptions.System,
                 PartitionKey = x.PartitionKey,
                 Type = x.Type,
                 Category = x.Category,

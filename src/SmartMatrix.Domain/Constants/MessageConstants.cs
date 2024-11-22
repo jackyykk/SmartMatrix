@@ -44,6 +44,7 @@ namespace SmartMatrix.Domain.Constants
         public static class StatusTexts
         {            
             public const string Invalid_Request = "The request is invalid.";
+            public const string Unknown_Error = "An unknown error has occurred.";
         }        
     }
 }

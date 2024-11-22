@@ -38,6 +38,11 @@ namespace SmartMatrix.Domain.Constants
             public const string Inactive = "inactive";  // In case the process has failed, the entity status will become inactive
         }
 
+        public static class DbEntityOwner
+        {
+            public const string System = "system";  // This is the default owner of the entity                        
+        }
+
         public static class DbProcessStatus
         {
             public const string Pending = "pending";  // This is the default status of the process

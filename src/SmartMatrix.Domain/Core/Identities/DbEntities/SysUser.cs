@@ -9,7 +9,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
     {
         // User Information
         public string PartitionKey { get; set; } = PartitionKeyOptions.SmartMatrix;
-        public string Type { get; set; } = TypeOptions.NormalUser;
+        public string Type { get; set; } = TypeOptions.Normal_User;
         public string UserName { get; set; }
         public string DisplayName { get; set; }
         public string GivenName { get; set; }
@@ -37,9 +37,9 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 
         public class TypeOptions
         {
-            public const string BuiltInUserProfile = "built-in-user-profile";
-            public const string BuiltInUser = "built-in-user";
-            public const string NormalUser = "normal-user";
+            public const string BuiltIn_NormalUserProfile = "built_in_normal_user_profile";
+            public const string BuiltIn_User = "built_in_user";
+            public const string Normal_User = "normal_user";
         }
 
         public class StatusOptions
@@ -49,34 +49,39 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             public const string Deleted = CommonConstants.DbEntityStatus.Deleted;
         }
 
-        public static SysUser Copy(SysUser u)
+        public class OwnerOptions
+        {
+            public const string System = CommonConstants.DbEntityOwner.System;            
+        }
+
+        public static SysUser Copy(SysUser x)
         {
             var user = new SysUser
             {
-                Id = u.Id,
-                Status = u.Status,
-                IsDeleted = u.IsDeleted,
-                CreatedAt = u.CreatedAt,
-                CreatedBy = u.CreatedBy,
-                ModifiedAt = u.ModifiedAt,
-                ModifiedBy = u.ModifiedBy,
-                DeletedAt = u.DeletedAt,
-                DeletedBy = u.DeletedBy,
-                PartitionKey = u.PartitionKey,
-                Type = u.Type,
-                UserName = u.UserName,
-                DisplayName = u.DisplayName,
-                GivenName = u.GivenName,
-                Surname = u.Surname,
-                Email = u.Email
+                Id = x.Id,
+                Status = x.Status,
+                IsDeleted = x.IsDeleted,
+                CreatedAt = x.CreatedAt,
+                CreatedBy = x.CreatedBy,
+                ModifiedAt = x.ModifiedAt,
+                ModifiedBy = x.ModifiedBy,
+                DeletedAt = x.DeletedAt,
+                DeletedBy = x.DeletedBy,
+                PartitionKey = x.PartitionKey,
+                Type = x.Type,
+                UserName = x.UserName,
+                DisplayName = x.DisplayName,
+                GivenName = x.GivenName,
+                Surname = x.Surname,
+                Email = x.Email
             };
             
-            foreach (var login in u.Logins)
+            foreach (var login in x.Logins)
             {
                 user.Logins.Add(SysLogin.Copy(login));
             }
 
-            foreach (var role in u.Roles)
+            foreach (var role in x.Roles)
             {
                 user.Roles.Add(SysRole.Copy(role));
             }
@@ -84,26 +89,26 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             return user;
         }
 
-        public static SysUser Copy(SysUser u, List<SysLogin> logins, List<SysRole> roles)
+        public static SysUser Copy(SysUser x, List<SysLogin> logins, List<SysRole> roles)
         {
             var user = new SysUser  
             {
-                Id = u.Id,
-                Status = u.Status,
-                IsDeleted = u.IsDeleted,
-                CreatedAt = u.CreatedAt,
-                CreatedBy = u.CreatedBy,
-                ModifiedAt = u.ModifiedAt,
-                ModifiedBy = u.ModifiedBy,
-                DeletedAt = u.DeletedAt,
-                DeletedBy = u.DeletedBy,
-                PartitionKey = u.PartitionKey,
-                Type = u.Type,
-                UserName = u.UserName,
-                DisplayName = u.DisplayName,
-                GivenName = u.GivenName,
-                Surname = u.Surname,
-                Email = u.Email
+                Id = x.Id,
+                Status = x.Status,
+                IsDeleted = x.IsDeleted,
+                CreatedAt = x.CreatedAt,
+                CreatedBy = x.CreatedBy,
+                ModifiedAt = x.ModifiedAt,
+                ModifiedBy = x.ModifiedBy,
+                DeletedAt = x.DeletedAt,
+                DeletedBy = x.DeletedBy,
+                PartitionKey = x.PartitionKey,
+                Type = x.Type,
+                UserName = x.UserName,
+                DisplayName = x.DisplayName,
+                GivenName = x.GivenName,
+                Surname = x.Surname,
+                Email = x.Email
             };
 
             foreach (var login in logins)
@@ -114,6 +119,33 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             foreach (var role in roles)
             {
                 user.Roles.Add(SysRole.Copy(role));
+            }
+
+            return user;
+        }
+
+        public static SysUser CopyAsNew(SysUser x)
+        {
+            var user = new SysUser
+            {
+                CreatedBy = OwnerOptions.System,
+                PartitionKey = x.PartitionKey,
+                Type = x.Type,
+                UserName = x.UserName,
+                DisplayName = x.DisplayName,
+                GivenName = x.GivenName,
+                Surname = x.Surname,
+                Email = x.Email
+            };
+            
+            foreach (var login in x.Logins)
+            {
+                user.Logins.Add(SysLogin.CopyAsNew(login));
+            }
+
+            foreach (var role in x.Roles)
+            {
+                user.Roles.Add(SysRole.CopyAsNew(role));
             }
 
             return user;

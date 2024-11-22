@@ -2,7 +2,6 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SmartMatrix.Application.Features.Core.Identities.Commands;
-using SmartMatrix.Application.Features.Core.Identities.Queries;
 using SmartMatrix.Domain.Core.Identities.Messages;
 
 namespace SmartMatrix.WebApi.Controllers.Core
@@ -23,7 +22,19 @@ namespace SmartMatrix.WebApi.Controllers.Core
             {
                 Request = request
             });
+
             return Ok(result);
         }
+
+        [HttpPost("insert-login")]
+        public async Task<IActionResult> InsertLogin(SysLogin_InsertLogin_Request request)
+        {
+            var result = await _mediator.Send(new SysLogin_InsertLogin_Command
+            {
+                Request = request
+            });
+
+            return Ok(result);
+        }       
     }
 }

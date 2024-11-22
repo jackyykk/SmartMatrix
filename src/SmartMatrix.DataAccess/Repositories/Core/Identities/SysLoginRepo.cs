@@ -7,7 +7,7 @@ using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Core.Identities
 using SmartMatrix.Domain.Core.Identities.DbEntities;
 
 namespace SmartMatrix.DataAccess.Repositories.Core.Identities
-{    
+{
     public class SysLoginRepo : ISysLoginRepo
     {
         private IDbTransaction? _transaction;
@@ -16,7 +16,7 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
         private readonly ICoreWriteDbConnection _writeDbConnection;
         private readonly ICoreReadRepo<SysLogin, int> _readRepo;
         private readonly ICoreWriteRepo<SysLogin, int> _writeRepo;
-        
+
         public void SetConnection(string connectionString)
         {
             _readRepo.SetConnection(connectionString);
@@ -32,7 +32,7 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
 
         public SysLoginRepo(IDistributedCache cache, ICoreReadDbConnection readDbConnection, ICoreWriteDbConnection writeDbConnection, ICoreReadRepo<SysLogin, int> readRepo, ICoreWriteRepo<SysLogin, int> writeRepo)
         {
-            _cache = cache;            
+            _cache = cache;
             _readDbConnection = readDbConnection;
             _writeDbConnection = writeDbConnection;
             _readRepo = readRepo;
@@ -46,7 +46,7 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
             var logins = await _readRepo.Entities
                 .Where(x => x.PartitionKey == partitionKey)
                 .ToListAsync();
-            
+
             return logins;
         }
 
@@ -55,47 +55,40 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
             var login = await _readRepo.Entities
                 .Where(x => x.PartitionKey == partitionKey && x.RefreshToken == refreshToken)
                 .FirstOrDefaultAsync();
-            
+
             return login;
         }
 
         public async Task UpdateSecretAsync(SysLogin entity)
         {
-            try
+            var entityToUpdate = await _writeRepo.GetByIdAsync(entity.Id);
+            if (entityToUpdate == null)
             {
-                var entityToUpdate = await _writeRepo.GetByIdAsync(entity.Id);
-                if (entityToUpdate == null)
-                {
-                    throw new Exception("Login not found");
-                }
-                
-                entityToUpdate.Password = entity.Password;
-                entityToUpdate.PasswordHash = entity.PasswordHash;
-                entityToUpdate.PasswordSalt = entity.PasswordSalt;                
+                throw new Exception("Login not found");
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            entityToUpdate.Password = entity.Password;
+            entityToUpdate.PasswordHash = entity.PasswordHash;
+            entityToUpdate.PasswordSalt = entity.PasswordSalt;
         }
 
         public async Task UpdateRefreshTokenAsync(SysLogin entity)
         {
-            try
+            var entityToUpdate = await _writeRepo.GetByIdAsync(entity.Id);
+            if (entityToUpdate == null)
             {
-                var entityToUpdate = await _writeRepo.GetByIdAsync(entity.Id);
-                if (entityToUpdate == null)
-                {
-                    throw new Exception("Login not found");
-                }
-                
-                entityToUpdate.RefreshToken = entity.RefreshToken;
-                entityToUpdate.RefreshTokenExpires = entity.RefreshTokenExpires;                
+                throw new Exception("Login not found");
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            entityToUpdate.RefreshToken = entity.RefreshToken;
+            entityToUpdate.RefreshTokenExpires = entity.RefreshTokenExpires;
         }
-    }    
+
+        public async Task<SysLogin> InsertAsync(SysLogin entity)
+        {
+            var entityToInsert = SysLogin.CopyAsNew(entity);
+            var insertedEntity = await _writeRepo.InsertAsync(entityToInsert);
+            return insertedEntity;
+        }
+    }
 }

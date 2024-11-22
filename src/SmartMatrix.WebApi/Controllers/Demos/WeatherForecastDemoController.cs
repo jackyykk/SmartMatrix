@@ -27,7 +27,8 @@ namespace SmartMatrix.WebApi.Controllers.Demos
         {
             WeatherForecast_GetList_Response response = new WeatherForecast_GetList_Response();
 
-            await Task.Delay(500);
+            // Simulate delay
+            await Task.Delay(100);
 
             var weatherForecasts = Enumerable.Range(1, 100).Select(index => new WeatherForecast
             {
@@ -38,7 +39,8 @@ namespace SmartMatrix.WebApi.Controllers.Demos
             .ToArray();
 
             var payloads = _mapper.Map<List<WeatherForecastPayload>>(weatherForecasts);
-                response.WeatherForecasts = payloads;
+            response.WeatherForecasts = payloads;
+
             return Ok(Result<WeatherForecast_GetList_Response>.Success(response));
         }
     }    

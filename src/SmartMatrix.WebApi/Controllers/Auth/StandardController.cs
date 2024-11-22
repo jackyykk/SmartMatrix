@@ -4,12 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using SmartMatrix.Application.Features.Core.Identities.Commands;
 using SmartMatrix.Application.Features.Core.Identities.Queries;
 using SmartMatrix.Core.BaseClasses.Web;
-using SmartMatrix.Domain.Core.Identities;
 using SmartMatrix.Domain.Core.Identities.DbEntities;
 using SmartMatrix.Domain.Core.Identities.Messages;
 using SmartMatrix.Domain.Core.Identities.Payloads;
-using SmartMatrix.WebApi.Utils;
-using static SmartMatrix.Domain.Core.Identities.DbEntities.SysUser;
 
 namespace SmartMatrix.WebApi.Controllers.Auth
 {
@@ -17,7 +14,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
     [Route("api/auth/standard")]
     public class StandardController : BaseController<StandardController>
     {
-        const string LOGIN_PROVIDER_NAME = "Standard";
+        const string LOGIN_PROVIDER_NAME = SysLogin.LoginProviderOptions.Standard;
 
         public StandardController(ILogger<StandardController> logger, IConfiguration configuration, IMediator mediator, IMapper mapper)
             : base(logger, configuration, mediator, mapper)
@@ -83,7 +80,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
             }
             catch (Exception ex)
             {
-                return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Unknown_Error, ex.Message));
+                return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex)));
             }            
         }
 
@@ -179,11 +176,12 @@ namespace SmartMatrix.WebApi.Controllers.Auth
 
                 var tokenPayload = _mapper.Map<SysTokenPayload>(token);
                 response.Token = tokenPayload;
+
                 return Ok(Result<SysLogin_RenewToken_Response>.Success(response));
             }
             catch (Exception ex)
             {
-                return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Unknown_Error, ex.Message));
+                return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex)));
             }            
         }            
     }

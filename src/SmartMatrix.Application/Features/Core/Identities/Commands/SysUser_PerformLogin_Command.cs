@@ -14,7 +14,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
     {
         public SysUser_PerformLogin_Request? Request { get; set; }
 
-        public class Handler : IRequestHandler<SysUser_PerformLogin_Command, Result<SysUser_PerformLogin_Response>>
+        public class Handler : BaseHandler, IRequestHandler<SysUser_PerformLogin_Command, Result<SysUser_PerformLogin_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISysUserRepo _sysUserRepo;
@@ -79,7 +79,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                 }
                 catch (Exception ex)
                 {
-                    return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Unknown_Error, ex.Message);
+                    return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                 }
             }
         }

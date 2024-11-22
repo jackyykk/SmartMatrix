@@ -11,7 +11,7 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
     {
         public SimpleNote_GetListByOwner_Request? Request { get; set; }
 
-        public class Handler : IRequestHandler<SimpleNote_GetListByOwner_Query, Result<SimpleNote_GetListByOwner_Response>>
+        public class Handler : BaseHandler, IRequestHandler<SimpleNote_GetListByOwner_Query, Result<SimpleNote_GetListByOwner_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISimpleNoteRepo _simpleNoteRepo;
@@ -45,7 +45,7 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
                 }
                 catch (Exception ex)
                 {
-                    return Result<SimpleNote_GetListByOwner_Response>.Fail(SimpleNote_GetById_Response.StatusCodes.Unknown_Error, ex.Message);
+                    return Result<SimpleNote_GetListByOwner_Response>.Fail(SimpleNote_GetById_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                 }                
             }
         }

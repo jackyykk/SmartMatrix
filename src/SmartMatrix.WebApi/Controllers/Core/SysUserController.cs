@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SmartMatrix.Application.Features.Core.Identities.Commands;
 using SmartMatrix.Application.Features.Core.Identities.Queries;
 using SmartMatrix.Domain.Core.Identities.Messages;
 
@@ -22,6 +23,7 @@ namespace SmartMatrix.WebApi.Controllers.Core
             {
                 Request = request
             });
+
             return Ok(result);
         }
 
@@ -32,6 +34,18 @@ namespace SmartMatrix.WebApi.Controllers.Core
             {
                 Request = request
             });
+
+            return Ok(result);
+        }
+
+        [HttpPost("insert-user")]
+        public async Task<IActionResult> InsertUser(SysUser_InsertUser_Request request)
+        {
+            var result = await _mediator.Send(new SysUser_InsertUser_Command
+            {
+                Request = request
+            });
+
             return Ok(result);
         }
     }

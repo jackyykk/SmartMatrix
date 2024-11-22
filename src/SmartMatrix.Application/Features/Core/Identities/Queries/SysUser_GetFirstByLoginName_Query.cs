@@ -11,7 +11,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
     {
         public SysUser_GetFirstByLoginName_Request? Request { get; set; }
 
-        public class Handler : IRequestHandler<SysUser_GetFirstByLoginName_Query, Result<SysUser_GetFirstByLoginName_Response>>
+        public class Handler : BaseHandler, IRequestHandler<SysUser_GetFirstByLoginName_Query, Result<SysUser_GetFirstByLoginName_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISysUserRepo _sysUserRepo;
@@ -50,7 +50,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
                 }
                 catch (Exception ex)
                 {
-                    return Result<SysUser_GetFirstByLoginName_Response>.Fail(SysUser_GetFirstByLoginName_Response.StatusCodes.Unknown_Error, ex.Message);
+                    return Result<SysUser_GetFirstByLoginName_Response>.Fail(SysUser_GetFirstByLoginName_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                 }                
             }
         }

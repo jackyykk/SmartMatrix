@@ -19,7 +19,7 @@ namespace SmartMatrix.WebApi.Controllers
     //
     // {action}-{conditions}[optional]-{entity}[optional]
     //
-    // {action}: e.g. create, update, delete, get, getfirst, getlist, login, logout, etc.
+    // {action}: e.g. insert, update, delete, get, getfirst, getlist, login, logout, etc.
     // {conditions}: e.g. by_id, by_name, by_email, by_xxx, etc.
     // {entity}: e.g. main_config
     //
@@ -40,6 +40,12 @@ namespace SmartMatrix.WebApi.Controllers
             _configuration = configuration;            
             _mediator = mediator;
             _mapper = mapper;
+        }
+
+        protected string GetErrorMessage(Exception ex)
+        {
+            string message = ex.Message + (ex.InnerException != null ? " || " + ex.InnerException.Message : "");
+            return message;
         }
 
         protected SysSecret Auth_Get_AccessToken_Secret()

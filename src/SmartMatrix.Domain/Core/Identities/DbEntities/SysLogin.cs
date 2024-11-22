@@ -48,6 +48,11 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             public const string Deleted = CommonConstants.DbEntityStatus.Deleted;
         }
 
+        public class OwnerOptions
+        {
+            public const string System = CommonConstants.DbEntityOwner.System;            
+        }
+
         public void ClearSecrets()
         {
             Password = string.Empty;
@@ -71,6 +76,26 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 ModifiedBy = x.ModifiedBy,
                 DeletedAt = x.DeletedAt,
                 DeletedBy = x.DeletedBy,
+                PartitionKey = x.PartitionKey,
+                SysUserId = x.SysUserId,
+                LoginProvider = x.LoginProvider,
+                LoginType = x.LoginType,
+                LoginName = x.LoginName,
+                Password = x.Password,
+                PasswordHash = x.PasswordHash,
+                PasswordSalt = x.PasswordSalt,
+                RefreshToken = x.RefreshToken,
+                RefreshTokenExpires = x.RefreshTokenExpires,
+                Description = x.Description,
+                Remark = x.Remark
+            };
+        }
+
+        public static SysLogin CopyAsNew(SysLogin x)
+        {
+            return new SysLogin
+            {
+                CreatedBy = OwnerOptions.System,
                 PartitionKey = x.PartitionKey,
                 SysUserId = x.SysUserId,
                 LoginProvider = x.LoginProvider,
