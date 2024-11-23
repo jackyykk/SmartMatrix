@@ -18,11 +18,11 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
         private readonly ICoreWriteRepo<SysUser, int> _writeRepo;
 
         public void SetConnection(string connectionString)
-        {
-            _readRepo.SetConnection(connectionString);
-            _writeRepo.SetConnection(connectionString);
+        {            
             _readDbConnection.SetConnection(connectionString);
             _writeDbConnection.SetConnection(connectionString);
+            _readRepo.SetConnection(connectionString);
+            _writeRepo.SetConnection(connectionString);
         }
 
         public void SetTransaction(IDbTransaction transaction)
@@ -45,11 +45,14 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
         {
             // Get SysUser Copy To Avoid Cyclic References
             // Get Latest Un-Deleted User and Un-Deleted Logins
-            var user = await _readRepo.Entities
+            var user = await _readRepo.Entities                
                 .Where(x => !x.IsDeleted)
                 .Where(x => x.PartitionKey == partitionKey)
                 .Where(x => x.Id == id)
-                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.Roles.Where(r => !r.IsDeleted).ToList()))
+                .Include(x => x.Logins)
+                .Include(x => x.UserRoles)
+                    .ThenInclude(x => x.Role)
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.ToList()))
                 .FirstOrDefaultAsync();
 
             return user;
@@ -63,8 +66,11 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
                 .Where(x => !x.IsDeleted)
                 .Where(x => x.PartitionKey == partitionKey)
                 .Where(x => x.Type == type)
+                .Include(x => x.Logins)
+                .Include(x => x.UserRoles)
+                    .ThenInclude(x => x.Role)
                 .OrderByDescending(x => x.Id)
-                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.Roles.Where(r => !r.IsDeleted).ToList()))
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.ToList()))
                 .FirstOrDefaultAsync();
 
             return user;
@@ -78,8 +84,11 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
                 .Where(x => !x.IsDeleted)
                 .Where(x => x.PartitionKey == partitionKey)
                 .Where(x => x.UserName == userName)
+                .Include(x => x.Logins)
+                .Include(x => x.UserRoles)
+                    .ThenInclude(x => x.Role)
                 .OrderByDescending(x => x.Id)
-                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.Roles.Where(r => !r.IsDeleted).ToList()))
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.ToList()))
                 .FirstOrDefaultAsync();
 
             return user;
@@ -101,8 +110,12 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
 
             // Get SysUser Copy To Avoid Cyclic References
             var user = await _readRepo.Entities
-                .Where(x => !x.IsDeleted && x.Id == login.SysUserId)
-                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.Roles.Where(r => !r.IsDeleted).ToList()))
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.Id == login.SysUserId)
+                .Include(x => x.Logins)
+                .Include(x => x.UserRoles)
+                    .ThenInclude(x => x.Role)
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.ToList()))
                 .FirstOrDefaultAsync();
 
             return user;
@@ -111,7 +124,9 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
         public async Task<SysUser> InsertAsync(SysUser entity)
         {
             var entityToInsert = SysUser.CopyAsNew(entity);
+            
             var insertedEntity = await _writeRepo.InsertAsync(entityToInsert);
+
             return insertedEntity;
         }
     }

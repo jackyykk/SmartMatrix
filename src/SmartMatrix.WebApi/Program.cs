@@ -16,123 +16,130 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
-
-        // Configure Kestrel to listen on a specific port
-        // builder.WebHost.UseUrls("http://localhost:9001;https://localhost:9000");
-
-        // Add services to the container.
-        builder.Services.AddControllers();
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(); // Add Swagger services
-
-        // Add CORS services and configure the policy to allow any origin
-        builder.Services.AddCors(options =>
+        try
         {
-            options.AddPolicy("AllowAllOrigins",
-                builder =>
-                {
-                    builder.AllowAnyOrigin()
-                           .AllowAnyHeader()
-                           .AllowAnyMethod();
-                });
-        });
+            var builder = WebApplication.CreateBuilder(args);
 
-        // Add configuration to read from appsettings.json, then override with environment variables
-        var env = builder.Environment;
-        builder.Configuration
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)            
-            .AddEnvironmentVariables();
+            // Configure Kestrel to listen on a specific port
+            // builder.WebHost.UseUrls("http://localhost:9001;https://localhost:9000");
 
-        // Register services from other projects
-        builder.Services.AddApplicationServices(builder.Configuration);
-        builder.Services.AddInfrastructureServices(builder.Configuration);
-        builder.Services.AddDataAccessServices(builder.Configuration);
-        builder.Services.AddWebApiServices(builder.Configuration);
+            // Add services to the container.
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(); // Add Swagger services
 
-        // Configure Google Authentication
-        builder.Services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddCookie()
-        .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-        {
-            options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
-            options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
-            options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            options.SaveTokens = true;
-            options.Scope.Add("email"); // Include the email scope
-            options.Scope.Add("profile"); // Optionally include profile scope for more user information
-            options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
-
-            // Optionally handle events
-            options.Events = new OAuthEvents
+            // Add CORS services and configure the policy to allow any origin
+            builder.Services.AddCors(options =>
             {
-                OnCreatingTicket = context =>
-                {
-                    // Handle the event when creating the authentication ticket
-                    return Task.CompletedTask;
-                },
-                OnRemoteFailure = context =>
-                {
-                    // Log the error details
-                    var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(context.Failure, "Remote authentication failure");
+                options.AddPolicy("AllowAllOrigins",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
+                    });
+            });
 
-                    // Optionally, you can return detailed error information to the client
-                    context.Response.Redirect($"/Home/Error?message={context.Failure?.Message}");
-                    context.HandleResponse();
-                    return Task.CompletedTask;
-                }
-            };            
-        })        
-        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
+            // Add configuration to read from appsettings.json, then override with environment variables
+            var env = builder.Environment;
+            builder.Configuration
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables();
+
+            // Register services from other projects
+            builder.Services.AddApplicationServices(builder.Configuration);
+            builder.Services.AddInfrastructureServices(builder.Configuration);
+            builder.Services.AddDataAccessServices(builder.Configuration);
+            builder.Services.AddWebApiServices(builder.Configuration);
+
+            // Configure Google Authentication
+            builder.Services.AddAuthentication(options =>
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = builder.Configuration["Authentication:Jwt:Issuer"],
-                ValidAudience = builder.Configuration["Authentication:Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:Jwt:Key"] ?? string.Empty))
-            };
-        });
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddCookie()
+            .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+            {
+                options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? string.Empty;
+                options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? string.Empty;
+                options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.SaveTokens = true;
+                options.Scope.Add("email"); // Include the email scope
+                options.Scope.Add("profile"); // Optionally include profile scope for more user information
+                options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
 
-        var app = builder.Build();
+                // Optionally handle events
+                options.Events = new OAuthEvents
+                {
+                    OnCreatingTicket = context =>
+                    {
+                        // Handle the event when creating the authentication ticket
+                        return Task.CompletedTask;
+                    },
+                    OnRemoteFailure = context =>
+                    {
+                        // Log the error details
+                        var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+                        logger.LogError(context.Failure, "Remote authentication failure");
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-            app.UseSwagger(); // Enable middleware to serve generated Swagger as a JSON endpoint.
-            app.UseSwaggerUI(); // Enable middleware to serve Swagger UI.
+                        // Optionally, you can return detailed error information to the client
+                        context.Response.Redirect($"/Home/Error?message={context.Failure?.Message}");
+                        context.HandleResponse();
+                        return Task.CompletedTask;
+                    }
+                };
+            })
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Authentication:Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Authentication:Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:Jwt:Key"] ?? string.Empty))
+                };
+            });
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger(); // Enable middleware to serve generated Swagger as a JSON endpoint.
+                app.UseSwaggerUI(); // Enable middleware to serve Swagger UI.
+            }
+
+            // Enable AutoMapper Diagnostics        
+            var mapper = app.Services.GetRequiredService<IMapper>();
+            mapper.ConfigurationProvider.AssertConfigurationIsValid();
+
+            app.UseHttpsRedirection();
+
+            // Use the CORS policy
+            app.UseCors("AllowAllOrigins");
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            // Serve static files and default files (index.html)
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+            app.MapControllers();
+
+            app.Run();
         }
-
-        // Enable AutoMapper Diagnostics        
-        var mapper = app.Services.GetRequiredService<IMapper>();
-        mapper.ConfigurationProvider.AssertConfigurationIsValid();
-
-        app.UseHttpsRedirection();
-
-        // Use the CORS policy
-        app.UseCors("AllowAllOrigins");
-
-        app.UseAuthentication();
-        app.UseAuthorization();
-
-        // Serve static files and default files (index.html)
-        app.UseDefaultFiles();
-        app.UseStaticFiles(); 
-
-        app.UseRouting();
-        app.MapControllers();
-                    
-        app.Run();
+        catch (Exception ex)
+        {
+            Console.WriteLine("An error occurred: " + ex.Message);
+        }
     }
 }

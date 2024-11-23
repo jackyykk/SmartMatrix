@@ -18,11 +18,11 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
         private readonly ICoreWriteRepo<SysLogin, int> _writeRepo;
 
         public void SetConnection(string connectionString)
-        {
-            _readRepo.SetConnection(connectionString);
-            _writeRepo.SetConnection(connectionString);
+        {            
             _readDbConnection.SetConnection(connectionString);
             _writeDbConnection.SetConnection(connectionString);
+            _readRepo.SetConnection(connectionString);
+            _writeRepo.SetConnection(connectionString);
         }
 
         public void SetTransaction(IDbTransaction transaction)

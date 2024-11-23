@@ -6,6 +6,9 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 {
     public class SysLogin : AuditableEntity<int>
     {
+
+        #region Properties
+
         public string PartitionKey { get; set; } = PartitionKeyOptions.SmartMatrix;
         public int SysUserId { get; set; }
         public string LoginProvider { get; set; } = LoginProviderOptions.Standard;
@@ -23,7 +26,10 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 
         public SysUser User { get; set; }
 
-        // Options
+        #endregion
+
+        #region Options
+
         public class PartitionKeyOptions
         {
             public const string SmartMatrix = CommonConstants.PartitionKeys.Sys_SmartMatrix;
@@ -52,6 +58,10 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         {
             public const string System = CommonConstants.DbEntityOwner.System;            
         }
+
+        #endregion
+
+        #region Methods
 
         public void ClearSecrets()
         {
@@ -110,5 +120,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 Remark = x.Remark
             };
         }
+
+        #endregion
+    
     }
 }

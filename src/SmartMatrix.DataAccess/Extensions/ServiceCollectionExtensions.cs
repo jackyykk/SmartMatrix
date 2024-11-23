@@ -34,7 +34,7 @@ namespace SmartMatrix.DataAccess.Extensions
             // Register Repositories
             services.AddScoped(typeof(ICoreReadRepo<,>), typeof(CoreReadRepo<,>));
             services.AddScoped(typeof(ICoreWriteRepo<,>), typeof(CoreWriteRepo<,>));
-            services.AddScoped<ISysUserRepo, SysUserRepo>();
+            services.AddScoped<ISysUserRepo, SysUserRepo>();            
             services.AddScoped<ISysLoginRepo, SysLoginRepo>();
 
             services.AddScoped(typeof(IDemoReadRepo<,>), typeof(DemoReadRepo<,>));

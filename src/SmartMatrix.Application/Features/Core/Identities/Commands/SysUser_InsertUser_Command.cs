@@ -16,13 +16,13 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
         public class Handler : BaseHandler, IRequestHandler<SysUser_InsertUser_Command, Result<SysUser_InsertUser_Response>>
         {
             private readonly IMapper _mapper;
-            private readonly ISysUserRepo _sysUserRepo;
+            private readonly ISysUserRepo _sysUserRepo;            
             private readonly ICoreUnitOfWork _unitOfWork;
 
             public Handler(IMapper mapper, ISysUserRepo sysUserRepo, ICoreUnitOfWork unitOfWork)
             {
                 _mapper = mapper;
-                _sysUserRepo = sysUserRepo;
+                _sysUserRepo = sysUserRepo;                
                 _unitOfWork = unitOfWork;
             }
 
@@ -55,10 +55,12 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         {
                             _sysUserRepo.SetTransaction(transaction);
 
-                            user = command.Request!.User;
+                            var userPayload = command.Request!.User;
+
+                            user = _mapper.Map<SysUser>(userPayload);
 
                             user = await _sysUserRepo.InsertAsync(user);
-
+                            
                             await _unitOfWork.SaveChangesAsync(cancellationToken);
                             transaction.Commit();
                         }

@@ -49,7 +49,8 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         {
                             _sysLoginRepo.SetTransaction(transaction);
 
-                            var login = command.Request!.Login;
+                            var loginPayload = command.Request!.Login;
+                            var login = _mapper.Map<SysLogin>(loginPayload);
 
                             await _sysLoginRepo.UpdateRefreshTokenAsync(login);
 

@@ -7,7 +7,9 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 {
     public class SysUser : AuditableEntity<int>
     {
-        // User Information
+
+        #region Properties
+
         public string PartitionKey { get; set; } = PartitionKeyOptions.SmartMatrix;
         public string Type { get; set; } = TypeOptions.Normal_User;
         public string UserName { get; set; }
@@ -18,18 +20,13 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         
         public new string Status { get; set; } = StatusOptions.Active;
 
-        public List<SysLogin> Logins { get; set; } = new List<SysLogin>();
-        public List<SysRole> Roles { get; set; } = new List<SysRole>();
+        public ICollection<SysLogin> Logins { get; set; } = new List<SysLogin>();
+        public ICollection<SysUserRole> UserRoles { get; set; } = new List<SysUserRole>();
+        
+        #endregion
 
-        public void ClearSecrets()
-        {
-            foreach (var login in Logins)
-            {
-                login.ClearSecrets();
-            }
-        }
+        #region Options
 
-        // Options
         public class PartitionKeyOptions
         {
             public const string SmartMatrix = CommonConstants.PartitionKeys.Sys_SmartMatrix;
@@ -52,6 +49,18 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         public class OwnerOptions
         {
             public const string System = CommonConstants.DbEntityOwner.System;            
+        }
+
+        #endregion        
+
+        #region Methods
+
+        public void ClearSecrets()
+        {
+            foreach (var login in Logins)
+            {
+                login.ClearSecrets();
+            }
         }
 
         public static SysUser Copy(SysUser x)
@@ -79,17 +88,17 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             foreach (var login in x.Logins)
             {
                 user.Logins.Add(SysLogin.Copy(login));
-            }
+            }            
 
-            foreach (var role in x.Roles)
+            foreach (var userRole in x.UserRoles)
             {
-                user.Roles.Add(SysRole.Copy(role));
+                user.UserRoles.Add(SysUserRole.Copy(userRole));
             }
-
+            
             return user;
         }
 
-        public static SysUser Copy(SysUser x, List<SysLogin> logins, List<SysRole> roles)
+        public static SysUser Copy(SysUser x, List<SysLogin> logins, List<SysUserRole> userRoles)
         {
             var user = new SysUser  
             {
@@ -111,16 +120,9 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 Email = x.Email
             };
 
-            foreach (var login in logins)
-            {
-                user.Logins.Add(SysLogin.Copy(login));
-            }
-            
-            foreach (var role in roles)
-            {
-                user.Roles.Add(SysRole.Copy(role));
-            }
-
+            user.Logins = logins;
+            user.UserRoles = userRoles;
+                        
             return user;
         }
 
@@ -143,12 +145,15 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 user.Logins.Add(SysLogin.CopyAsNew(login));
             }
 
-            foreach (var role in x.Roles)
+            foreach (var userRole in x.UserRoles)
             {
-                user.Roles.Add(SysRole.CopyAsNew(role));
+                user.UserRoles.Add(SysUserRole.CopyAsNew(userRole));
             }
-
+            
             return user;
         }
+
+        #endregion
+
     }
 }

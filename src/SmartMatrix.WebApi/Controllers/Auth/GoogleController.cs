@@ -91,7 +91,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
             {
                 Request = new SysUser_GetFirstByLoginName_Request
                 {
-                    PartitionKey = SysLogin.PartitionKeyOptions.SmartMatrix,    // Use SmartMatrix as the partition key
+                    PartitionKey = SysUserPayload.PartitionKeyOptions.SmartMatrix,    // Use SmartMatrix as the partition key
                     LoginName = googleUserProfile.Email
                 }
             });
@@ -105,8 +105,8 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 {
                     Request = new SysUser_GetFirstByType_Request
                     {
-                        PartitionKey = SysUser.PartitionKeyOptions.SmartMatrix,
-                        Type = SysUser.TypeOptions.BuiltIn_Normal_User_Profile
+                        PartitionKey = SysUserPayload.PartitionKeyOptions.SmartMatrix,
+                        Type = SysUserPayload.TypeOptions.BuiltIn_Normal_User_Profile
                     }
                 });
                 
@@ -116,27 +116,27 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 var userProfile = getUserProfileResult.Data.User;
 
                 // Get normal user profile and Register the user as normal user
-                var newUser = new SysUser
+                var newUser = new SysUserPayload
                 {
-                    PartitionKey = SysUser.PartitionKeyOptions.SmartMatrix,
-                    Type = SysUser.TypeOptions.Normal_User,
+                    PartitionKey = SysUserPayload.PartitionKeyOptions.SmartMatrix,
+                    Type = SysUserPayload.TypeOptions.Normal_User,
                     UserName = googleUserProfile.Email,
                     DisplayName = googleUserProfile.UserName,
                     GivenName = googleUserProfile.GivenName,
                     Surname = googleUserProfile.Surname,
                     Email = googleUserProfile.Email,
-                    Status = SysUser.StatusOptions.Active,                    
+                    Status = SysUserPayload.StatusOptions.Active,                    
                 };
 
-                var newLogin = new SysLogin
+                var newLogin = new SysLoginPayload
                 {
-                    PartitionKey = SysLogin.PartitionKeyOptions.SmartMatrix,
+                    PartitionKey = SysLoginPayload.PartitionKeyOptions.SmartMatrix,
                     LoginProvider = LOGIN_PROVIDER_NAME,
-                    LoginType = SysLogin.LoginTypeOptions.Web,
+                    LoginType = SysLoginPayload.LoginTypeOptions.Web,
                     LoginName = googleUserProfile.Email,
                     RefreshToken = token.RefreshToken,
                     RefreshTokenExpires = token.RefreshToken_Expires,
-                    Status = SysLogin.StatusOptions.Active,                    
+                    Status = SysLoginPayload.StatusOptions.Active,                    
                 };
 
                 newUser.Logins.Add(newLogin);
@@ -144,7 +144,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 // Copy the roles of user profile to the new user
                 foreach(var role in userProfile.Roles)
                 {
-                    newUser.Roles.Add(SysRole.Copy(role));
+                    newUser.Roles.Add(role);
                 }
 
                 var insertUserResult = await _mediator.Send(new SysUser_InsertUser_Command

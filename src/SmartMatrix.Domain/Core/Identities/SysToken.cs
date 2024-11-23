@@ -9,6 +9,6 @@ namespace SmartMatrix.Domain.Core.Identities
         public DateTime? AccessToken_Expires { get; set; }        
         public string RefreshToken { get; set; }
         public double RefreshToken_LifeInMinutes { get; set; }
-        public DateTime? RefreshToken_Expires { get; set; }        
+        public DateTime? RefreshToken_Expires { get; set; }
     }
 }

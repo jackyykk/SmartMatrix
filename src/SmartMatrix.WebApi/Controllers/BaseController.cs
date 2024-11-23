@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using SmartMatrix.Domain.Configurations;
 using SmartMatrix.Domain.Core.Identities;
 using SmartMatrix.Domain.Core.Identities.DbEntities;
+using SmartMatrix.Domain.Core.Identities.Payloads;
 using SmartMatrix.WebApi.Utils;
 
 namespace SmartMatrix.WebApi.Controllers
@@ -153,7 +154,7 @@ namespace SmartMatrix.WebApi.Controllers
             return Auth_Generate_SysToken(content);
         }
 
-        protected SysToken Auth_Standard_Generate_SysToken(string provider, string loginName, SysUser user)
+        protected SysToken Auth_Standard_Generate_SysToken(string provider, string loginName, SysUserPayload user)
         {            
             SysSecret secret = Auth_Get_AccessToken_Secret();
 

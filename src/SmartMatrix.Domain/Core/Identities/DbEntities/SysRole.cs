@@ -6,6 +6,9 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 {
     public class SysRole : AuditableEntity<int>
     {
+
+        #region Properties
+
         public string PartitionKey { get; set; } = PartitionKeyOptions.SmartMatrix;
         public string Type { get; set; } = TypeOptions.NormalRole;
         public string Category { get; set; } = CategoryOptions.Normal;
@@ -15,9 +18,12 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 
         public new string Status { get; set; } = StatusOptions.Active;
 
-        public List<SysUser> Users { get; set; } = new List<SysUser>();
+        public ICollection<SysUserRole> UserRoles { get; set; } = new List<SysUserRole>();
 
-        // Options
+        #endregion
+
+        #region Options
+
         public class PartitionKeyOptions
         {
             public const string SmartMatrix = CommonConstants.PartitionKeys.Sys_SmartMatrix;
@@ -57,6 +63,10 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             public const string System = CommonConstants.DbEntityOwner.System;            
         }
 
+        #endregion
+
+        #region Methods
+
         public static SysRole Copy(SysRole x)
         {
             return new SysRole
@@ -92,5 +102,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 Description = x.Description
             };
         }
+
+        #endregion
+    
     }
 }
