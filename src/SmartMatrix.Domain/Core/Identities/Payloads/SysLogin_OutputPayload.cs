@@ -5,7 +5,7 @@ using SmartMatrix.Domain.Core.Identities.DbEntities;
 
 namespace SmartMatrix.Domain.Core.Identities.Payloads
 {
-    public class SysLoginPayload : AuditablePayload<int>
+    public class SysLogin_OutputPayload : AuditablePayload<int>
     {
 
         #region Properties
@@ -15,9 +15,6 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         public string LoginProvider { get; set; }
         public string LoginType { get; set; }
         public string LoginName { get; set; }
-        public string Password { get; set; }
-        public string PasswordHash { get; set; }
-        public string PasswordSalt { get; set; }
         public string RefreshToken { get; set; }
         public DateTime? RefreshTokenExpires { get; set; }
         public string Description { get; set; }
@@ -60,15 +57,8 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         #endregion
 
         #region Methods
-
-        public void ClearSecrets()
-        {
-            Password = string.Empty;
-            PasswordHash = string.Empty;
-            PasswordSalt = string.Empty;
-            RefreshToken = string.Empty;
-            RefreshTokenExpires = null;
-        }
+        
+                
 
         #endregion
     

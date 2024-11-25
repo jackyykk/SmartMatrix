@@ -44,7 +44,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
                 try
                 {                    
                     var entity = await _sysUserRepo.GetFirstByUserNameAsync(query.Request!.PartitionKey, query.Request!.UserName);
-                    var payload = _mapper.Map<SysUserPayload>(entity);
+                    var payload = _mapper.Map<SysUser_OutputPayload>(entity);
                     response.User = payload;
                     return Result<SysUser_GetFirstByUserName_Response>.Success(response, SysUser_GetFirstByUserName_Response.StatusCodes.Success);
                 }

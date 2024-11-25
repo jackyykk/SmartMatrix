@@ -72,7 +72,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                                     login.PasswordHash = MyHashTool.ComputePasswordHash(password, out string salt);
                                     login.PasswordSalt = salt;
                                     
-                                    await _sysLoginRepo.UpdateSecretAsync(login);
+                                    await _sysLoginRepo.UpdateSecretAsync(login.Id, login.Password, login.PasswordHash, login.PasswordSalt);
                                     response.UpdatedIds.Add(login.Id);                                
                                 }
                             }

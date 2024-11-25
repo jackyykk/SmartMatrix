@@ -72,9 +72,9 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Password_NotMatch, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }
 
-                    var userPayload = _mapper.Map<SysUserPayload>(user);
+                    var userPayload = _mapper.Map<SysUser_OutputPayload>(user);
                     response.User = userPayload;
-                    response.Token = new SysTokenPayload();
+                    response.Token = new SysToken_OutputPayload();
                     return Result<SysUser_PerformLogin_Response>.Success(response, SysUser_PerformLogin_Response.StatusCodes.Success);
                 }
                 catch (Exception ex)

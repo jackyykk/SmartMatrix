@@ -4,7 +4,7 @@ using SmartMatrix.Domain.Constants;
 
 namespace SmartMatrix.Domain.Core.Identities.Payloads
 {
-    public class SysUserPayload : AuditablePayload<int>
+    public class SysUser_OutputPayload : AuditablePayload<int>
     {
 
         #region Properties
@@ -19,8 +19,8 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
 
         public new string Status { get; set; }
 
-        public ICollection<SysLoginPayload> Logins { get; set; } = new List<SysLoginPayload>();
-        public ICollection<SysRolePayload> Roles { get; set; } = new List<SysRolePayload>();
+        public ICollection<SysLogin_OutputPayload> Logins { get; set; } = new List<SysLogin_OutputPayload>();
+        public ICollection<SysRole_OutputPayload> Roles { get; set; } = new List<SysRole_OutputPayload>();
 
         #endregion
 
@@ -47,22 +47,16 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
 
         public class OwnerOptions
         {
-            public const string System = CommonConstants.DbEntityOwner.System;            
-        }
-
-        #endregion        
-
-        #region Methods
-
-        public void ClearSecrets()
-        {
-            foreach (var login in Logins)
-            {
-                login.ClearSecrets();
-            }
+            public const string System = CommonConstants.DbEntityOwner.System;
         }
 
         #endregion
+
+        #region Methods
+
         
+
+        #endregion
+
     }
 }

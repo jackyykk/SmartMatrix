@@ -4,7 +4,7 @@ using SmartMatrix.Domain.Constants;
 
 namespace SmartMatrix.Domain.Core.Identities.Payloads
 {
-    public class SysRolePayload : AuditablePayload<int>
+    public class SysRole_InputPayload : AuditablePayload<int>
     {
 
         #region Properties

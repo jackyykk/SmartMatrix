@@ -55,9 +55,9 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         {
                             _sysUserRepo.SetTransaction(transaction);
 
-                            var userPayload = command.Request!.User;
+                            var userInputPayload = command.Request!.User;
 
-                            user = _mapper.Map<SysUser>(userPayload);
+                            user = _mapper.Map<SysUser>(userInputPayload);
 
                             user = await _sysUserRepo.InsertAsync(user);
                             
@@ -82,7 +82,10 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
 
                 if (user != null)
                 {
-                    response.User = _mapper.Map<SysUserPayload>(user);
+                    var entity = await _sysUserRepo.GetByIdAsync(user.PartitionKey, user.Id);
+                    var userOutputPayload = _mapper.Map<SysUser_OutputPayload>(entity);
+
+                    response.User = userOutputPayload;
                 }
                                 
                 return Result<SysUser_InsertUser_Response>.Success(response, SysUser_InsertUser_Response.StatusCodes.Success);

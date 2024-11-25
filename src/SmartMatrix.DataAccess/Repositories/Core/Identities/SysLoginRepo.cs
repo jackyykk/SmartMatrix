@@ -59,29 +59,29 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
             return login;
         }
 
-        public async Task UpdateSecretAsync(SysLogin entity)
+        public async Task UpdateSecretAsync(int id, string password, string passwordHash, string passwordSalt)
         {
-            var entityToUpdate = await _writeRepo.GetByIdAsync(entity.Id);
+            var entityToUpdate = await _writeRepo.GetByIdAsync(id);
             if (entityToUpdate == null)
             {
                 throw new Exception("Login not found");
             }
 
-            entityToUpdate.Password = entity.Password;
-            entityToUpdate.PasswordHash = entity.PasswordHash;
-            entityToUpdate.PasswordSalt = entity.PasswordSalt;
+            entityToUpdate.Password = password;
+            entityToUpdate.PasswordHash = passwordHash;
+            entityToUpdate.PasswordSalt = passwordSalt;
         }
 
-        public async Task UpdateRefreshTokenAsync(SysLogin entity)
+        public async Task UpdateRefreshTokenAsync(int id, string refreshToken, DateTime? refreshTokenExpires)                    
         {
-            var entityToUpdate = await _writeRepo.GetByIdAsync(entity.Id);
+            var entityToUpdate = await _writeRepo.GetByIdAsync(id);
             if (entityToUpdate == null)
             {
                 throw new Exception("Login not found");
             }
 
-            entityToUpdate.RefreshToken = entity.RefreshToken;
-            entityToUpdate.RefreshTokenExpires = entity.RefreshTokenExpires;
+            entityToUpdate.RefreshToken = refreshToken;
+            entityToUpdate.RefreshTokenExpires = refreshTokenExpires;
         }
 
         public async Task<SysLogin> InsertAsync(SysLogin entity)

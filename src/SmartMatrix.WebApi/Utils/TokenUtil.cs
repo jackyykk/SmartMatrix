@@ -15,8 +15,7 @@ namespace SmartMatrix.WebApi.Utils
             var claims = new List<Claim>
             {
                 new Claim(SysClaimTypes.LoginProviderName, content.LoginProviderName),
-                new Claim(SysClaimTypes.LoginNameIdentifier, content.LoginNameIdentifier),
-                new Claim(ClaimTypes.Sid, content.Sid),
+                new Claim(SysClaimTypes.LoginNameIdentifier, content.LoginNameIdentifier),                
                 new Claim(ClaimTypes.NameIdentifier, content.UserNameIdentifier),
                 new Claim(ClaimTypes.Email, content.Email),
                 new Claim(ClaimTypes.Name, content.Name),
@@ -71,8 +70,7 @@ namespace SmartMatrix.WebApi.Utils
             }
 
             content.LoginProviderName = principal.FindFirst(SysClaimTypes.LoginProviderName)?.Value;
-            content.LoginNameIdentifier = principal.FindFirst(SysClaimTypes.LoginNameIdentifier)?.Value;
-            content.Sid = principal.FindFirst(ClaimTypes.Sid)?.Value;
+            content.LoginNameIdentifier = principal.FindFirst(SysClaimTypes.LoginNameIdentifier)?.Value;            
             content.UserNameIdentifier = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             content.Email = principal.FindFirst(ClaimTypes.Email)?.Value;
             content.Name = principal.FindFirst(ClaimTypes.Name)?.Value;

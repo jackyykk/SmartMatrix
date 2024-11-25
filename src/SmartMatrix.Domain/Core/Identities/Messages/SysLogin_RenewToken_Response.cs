@@ -31,6 +31,6 @@ namespace SmartMatrix.Domain.Core.Identities.Messages
             public const string Invalid_Token = "The token is invalid.";            
         }
 
-        public SysTokenPayload Token { get; set; }
+        public SysToken_OutputPayload Token { get; set; }
     }
 }

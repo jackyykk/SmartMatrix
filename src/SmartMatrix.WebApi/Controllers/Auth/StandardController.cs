@@ -38,6 +38,9 @@ namespace SmartMatrix.WebApi.Controllers.Auth
 
             try
             {
+                // The whole process can't be done in feature/command because it involves generating token
+
+                // Step 1: Perform login
                 var result = await _mediator.Send(new SysUser_PerformLogin_Command
                 {
                     Request = request
@@ -46,33 +49,43 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 if (result.Succeeded && result.Data != null && result.Data.User != null)
                 {
                     var user = result.Data.User;
-                    // Suppose login is valid
-                    var login = user.Logins.FirstOrDefault(x => x.LoginName == request.LoginName);
-                    if (login == null)
+
+                    var loginPayload = user.Logins.FirstOrDefault(x => x.LoginName == request.LoginName);
+                    // Suppose user should have the login
+                    if (loginPayload == null)
                     {
                         return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Login_NotFound, "Login failed"));
                     }                 
 
-                    var token = Auth_Standard_Generate_SysToken(LOGIN_PROVIDER_NAME, request.LoginName, user);
-                    
-                    login.RefreshToken = token.RefreshToken;                
-                    login.RefreshTokenExpires = token.RefreshToken_Expires;
+                    // Step 2: Generate token
+                    var sysUser = _mapper.Map<SysUser>(user);
+                    var token = Auth_Generate_SysToken(LOGIN_PROVIDER_NAME, request.LoginName, sysUser);
 
+                    if (token == null)
+                    {
+                        return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Token_Generation_Failed, SysUser_PerformLogin_Response.StatusTexts.Unknown_Error));
+                    }
+
+                    loginPayload.RefreshToken = token.RefreshToken;
+                    loginPayload.RefreshTokenExpires = token.RefreshToken_Expires;
+
+                    // Step 3: Update refresh token
                     var updateRefreshTokenResult = await _mediator.Send(new SysLogin_UpdateRefreshToken_Command
                     {
                         Request = new SysLogin_UpdateRefreshToken_Request
                         {
-                            Login = login
+                            LoginId = loginPayload.Id,
+                            RefreshToken = token.RefreshToken,
+                            RefreshTokenExpires = token.RefreshToken_Expires
                         }
                     });
+
                     if (!updateRefreshTokenResult.Succeeded)
                     {
                         return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.RefreshToken_Update_Failed, "Login failed"));
                     }
-                    
-                    user.ClearSecrets();
 
-                    var tokenPayload = _mapper.Map<SysTokenPayload>(token);
+                    var tokenPayload = _mapper.Map<SysToken_OutputPayload>(token);
                     result.Data.Token = tokenPayload;
                 }
 
@@ -100,7 +113,10 @@ namespace SmartMatrix.WebApi.Controllers.Auth
             }
 
             try
-            {             
+            {
+                // The whole process can't be done in feature/command because it involves generating token
+
+                // Step 1: Get login by refresh token
                 var getLoginResult = await _mediator.Send(new SysLogin_GetFirstByRefreshToken_Query
                 {
                     Request = new SysLogin_GetFirstByRefreshToken_Request
@@ -116,6 +132,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 }
                 
                 var login = getLoginResult.Data.Login;
+
                 if (string.IsNullOrEmpty(login.LoginName))
                 {
                     return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.LoginName_Empty, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
@@ -133,7 +150,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Login_Deleted, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
                 } 
 
-                // Get user
+                // Step 2: Get user by login
                 var getUserResult = await _mediator.Send(new SysUser_GetById_Query
                 {
                     Request = new SysUser_GetById_Request
@@ -147,7 +164,9 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 {
                     return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.User_NotFound, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
                 }
+
                 var user = getUserResult.Data.User;
+                
                 if (user.Status == SysLogin.StatusOptions.Disabled)
                 {
                     return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.User_Disabled, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
@@ -157,24 +176,28 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.User_Deleted, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
                 }
 
-                var token = Auth_Standard_Generate_SysToken(LOGIN_PROVIDER_NAME, login.LoginName, user);
-
-                login.RefreshToken = token.RefreshToken;                
-                login.RefreshTokenExpires = token.RefreshToken_Expires;
-
+                // Step 3: Generate token
+                var sysUser = _mapper.Map<SysUser>(user);
+                var token = Auth_Generate_SysToken(LOGIN_PROVIDER_NAME, login.LoginName, sysUser);
+                
+                // Step 4: Update refresh token
                 var updateRefreshTokenResult = await _mediator.Send(new SysLogin_UpdateRefreshToken_Command
                 {
                     Request = new SysLogin_UpdateRefreshToken_Request
                     {
-                        Login = login
+                        LoginId = login.Id,
+                        RefreshToken = token.RefreshToken,
+                        RefreshTokenExpires = token.RefreshToken_Expires
                     }
                 });
+
                 if (!updateRefreshTokenResult.Succeeded)
                 {
                     return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.RefreshToken_Update_Failed, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
                 }
 
-                var tokenPayload = _mapper.Map<SysTokenPayload>(token);
+                var tokenPayload = _mapper.Map<SysToken_OutputPayload>(token);
+
                 response.Token = tokenPayload;
 
                 return Ok(Result<SysLogin_RenewToken_Response>.Success(response));

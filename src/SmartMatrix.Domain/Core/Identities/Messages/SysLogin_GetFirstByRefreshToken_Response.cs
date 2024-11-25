@@ -18,6 +18,6 @@ namespace SmartMatrix.Domain.Core.Identities.Messages
             public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;                     
         }
 
-        public SysLoginPayload Login { get; set; }
+        public SysLogin_OutputPayload Login { get; set; }
     }
 }

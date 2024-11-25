@@ -35,7 +35,9 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     return Result<SysLogin_UpdateRefreshToken_Response>.Fail(SysLogin_UpdateRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_UpdateRefreshToken_Response.StatusTexts.Invalid_Request);
                 }
 
-                if (command.Request!.Login == null)
+                if (command.Request!.LoginId <= 0
+                    || string.IsNullOrEmpty(command.Request!.RefreshToken)
+                    || command.Request!.RefreshTokenExpires == null)
                 {
                     return Result<SysLogin_UpdateRefreshToken_Response>.Fail(SysLogin_UpdateRefreshToken_Response.StatusCodes.Invalid_Request, SysLogin_UpdateRefreshToken_Response.StatusTexts.Invalid_Request);
                 }
@@ -49,10 +51,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         {
                             _sysLoginRepo.SetTransaction(transaction);
 
-                            var loginPayload = command.Request!.Login;
-                            var login = _mapper.Map<SysLogin>(loginPayload);
-
-                            await _sysLoginRepo.UpdateRefreshTokenAsync(login);
+                            await _sysLoginRepo.UpdateRefreshTokenAsync(command.Request!.LoginId, command.Request!.RefreshToken, command.Request!.RefreshTokenExpires.Value);
 
                             await _unitOfWork.SaveChangesAsync(cancellationToken);
                             transaction.Commit();

@@ -81,7 +81,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
 
                 if (login != null)
                 {
-                    response.Login = _mapper.Map<SysLoginPayload>(login);
+                    response.Login = _mapper.Map<SysLogin_OutputPayload>(login);
                 }
 
                 return Result<SysLogin_InsertLogin_Response>.Success(response, SysLogin_InsertLogin_Response.StatusCodes.Success);

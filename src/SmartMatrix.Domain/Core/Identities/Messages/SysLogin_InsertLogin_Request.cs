@@ -5,6 +5,6 @@ namespace SmartMatrix.Domain.Core.Identities.Messages
 {
     public class SysLogin_InsertLogin_Request
     {
-        public SysLoginPayload Login { get; set; }        
+        public SysLogin_InputPayload Login { get; set; }        
     }
 }

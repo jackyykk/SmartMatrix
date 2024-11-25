@@ -21,6 +21,9 @@ namespace SmartMatrix.Domain.Constants
                 // Field Errors
                 public const int UserName_Empty = -111;
                 public const int UserName_Already_Existed = -112;
+
+                // Action Errors
+                public const int User_Insert_Failed = -151;
             }
 
             public static class SysLogin_Codes
@@ -38,7 +41,13 @@ namespace SmartMatrix.Domain.Constants
                 public const int Password_NotMatch = -251;
                 public const int RefreshToken_Expired = -252;
                 public const int RefreshToken_Update_Failed = -253;
-            }                        
+            }
+
+            public static class SysToken_Codes
+            {
+                // Status
+                public const int Token_Generation_Failed = -301;                
+            }
         }
 
         public static class StatusTexts

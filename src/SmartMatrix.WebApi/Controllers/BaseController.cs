@@ -132,29 +132,8 @@ namespace SmartMatrix.WebApi.Controllers
 
             return userProfile;
         }
-
-        protected SysToken Auth_Google_Generate_SysToken(string provider, GoogleUserProfile userProfile)
-        {
-            // Create JWT token
-            SysSecret secret = Auth_Get_AccessToken_Secret();
-
-            SysTokenContent content = new SysTokenContent
-            {
-                Secret = secret,
-                LoginProviderName = provider ?? string.Empty,
-                LoginNameIdentifier = userProfile?.Email ?? string.Empty,
-                Sid = userProfile?.UserId ?? string.Empty,
-                UserNameIdentifier = userProfile?.Email ?? string.Empty,
-                Email = userProfile?.Email ?? string.Empty,
-                Name = userProfile?.UserName ?? string.Empty,
-                GivenName = userProfile?.GivenName ?? string.Empty,
-                Surname = userProfile?.Surname ?? string.Empty
-            };
-            
-            return Auth_Generate_SysToken(content);
-        }
-
-        protected SysToken Auth_Standard_Generate_SysToken(string provider, string loginName, SysUserPayload user)
+        
+        protected SysToken Auth_Generate_SysToken(string provider, string loginName, SysUser user)
         {            
             SysSecret secret = Auth_Get_AccessToken_Secret();
 
@@ -162,8 +141,7 @@ namespace SmartMatrix.WebApi.Controllers
             {
                 Secret = secret,
                 LoginProviderName = provider ?? string.Empty,
-                LoginNameIdentifier = loginName ?? string.Empty,
-                Sid = user?.Id.ToString() ?? string.Empty,
+                LoginNameIdentifier = loginName ?? string.Empty,                
                 UserNameIdentifier = user?.UserName ?? string.Empty,
                 Email = user?.Email ?? string.Empty,
                 Name = user?.UserName ?? string.Empty,

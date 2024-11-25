@@ -2,7 +2,7 @@ using System;
 
 namespace SmartMatrix.Domain.Core.Identities.Payloads
 {
-    public class SysTokenPayload
+    public class SysToken_OutputPayload
     {        
         public string AccessToken { get; set; }
         public double AccessToken_LifeInMinutes { get; set; }

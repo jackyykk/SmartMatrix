@@ -44,7 +44,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
                 try
                 {                    
                     var entity = await _sysLoginRepo.GetFirstByRefreshTokenAsync(query.Request!.PartitionKey, query.Request!.RefreshToken);
-                    var payload = _mapper.Map<SysLoginPayload>(entity);
+                    var payload = _mapper.Map<SysLogin_OutputPayload>(entity);
                     response.Login = payload;
                     return Result<SysLogin_GetFirstByRefreshToken_Response>.Success(response, SysLogin_GetFirstByRefreshToken_Response.StatusCodes.Success);
                 }
