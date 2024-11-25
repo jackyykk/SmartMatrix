@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.Domain.Constants;
+using SmartMatrix.Domain.Core.Identities.DbEntities;
 
 namespace SmartMatrix.Domain.Core.Identities.Payloads
 {
@@ -54,7 +56,18 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
 
         #region Methods
 
-        
+        public void Update_Roles_AuditInfo(SysUser x)
+        {
+            // Update User Role Relationships Audit Info
+            foreach (var role in Roles)
+            {
+                var userRole = x.UserRoles.FirstOrDefault(y => y.SysRoleId == role.Id);
+                if (userRole != null)
+                {
+                    role.Update_AuditInfo(userRole);
+                }                
+            }
+        }
 
         #endregion
 

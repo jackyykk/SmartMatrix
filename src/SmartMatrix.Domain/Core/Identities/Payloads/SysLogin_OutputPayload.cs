@@ -15,7 +15,11 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         public string LoginProvider { get; set; }
         public string LoginType { get; set; }
         public string LoginName { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public string RefreshToken { get; set; }
+        
+        [System.Text.Json.Serialization.JsonIgnore]
         public DateTime? RefreshTokenExpires { get; set; }
         public string Description { get; set; }
 

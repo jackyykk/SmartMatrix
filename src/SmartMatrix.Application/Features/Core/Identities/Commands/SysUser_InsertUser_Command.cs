@@ -83,7 +83,12 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                 if (newUser != null)
                 {
                     var existingUser = await _sysUserRepo.GetByIdAsync(newUser.PartitionKey, newUser.Id);
+                    
                     var outputUser = _mapper.Map<SysUser_OutputPayload>(existingUser);
+                    if (existingUser != null && outputUser != null)
+                    {
+                        outputUser.Update_Roles_AuditInfo(existingUser);
+                    }
 
                     response.User = outputUser;
                 }

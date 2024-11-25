@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.Domain.Constants;
+using SmartMatrix.Domain.Core.Identities.DbEntities;
 
 namespace SmartMatrix.Domain.Core.Identities.Payloads
 {
@@ -59,6 +60,18 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         public class OwnerOptions
         {
             public const string System = CommonConstants.DbEntityOwner.System;
+        }
+
+        public void Update_AuditInfo(SysUserRole userRole)
+        {
+            Status = userRole.Status;
+            IsDeleted = userRole.IsDeleted;
+            CreatedAt = userRole.CreatedAt;
+            CreatedBy = userRole.CreatedBy;
+            ModifiedAt = userRole.ModifiedAt;
+            ModifiedBy = userRole.ModifiedBy;
+            DeletedAt = userRole.DeletedAt;
+            DeletedBy = userRole.DeletedBy;
         }
 
         #endregion

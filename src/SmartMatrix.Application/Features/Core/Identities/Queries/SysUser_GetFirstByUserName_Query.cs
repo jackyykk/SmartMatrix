@@ -44,8 +44,15 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
                 try
                 {                    
                     var existingUser = await _sysUserRepo.GetFirstByUserNameAsync(query.Request!.PartitionKey, query.Request!.UserName);
+                    
                     var outputUser = _mapper.Map<SysUser_OutputPayload>(existingUser);
+                    if (existingUser != null && outputUser != null)
+                    {
+                        outputUser.Update_Roles_AuditInfo(existingUser);
+                    }
+                    
                     response.User = outputUser;
+
                     return Result<SysUser_GetFirstByUserName_Response>.Success(response, SysUser_GetFirstByUserName_Response.StatusCodes.Success);
                 }
                 catch (Exception ex)

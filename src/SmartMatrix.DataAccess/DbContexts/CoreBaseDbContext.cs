@@ -75,6 +75,15 @@ namespace SmartMatrix.DataAccess.DbContexts
             {                
                 b.ToTable("sm_core_sysuser_roles");
                 b.HasKey(p => p.Id);
+                b.Property(p => p.Id).HasColumnName("id");                
+                b.Property(p => p.Status).HasColumnName("status");
+                b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
+                b.Property(p => p.CreatedAt).HasColumnName("created_at");
+                b.Property(p => p.CreatedBy).HasColumnName("created_by");                                
+                b.Property(p => p.ModifiedAt).HasColumnName("modified_at");
+                b.Property(p => p.ModifiedBy).HasColumnName("modified_by");                
+                b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
+                b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
                 b.Property(p => p.SysUserId).HasColumnName("sysuser_id");
                 b.Property(p => p.SysRoleId).HasColumnName("sysrole_id");
             });

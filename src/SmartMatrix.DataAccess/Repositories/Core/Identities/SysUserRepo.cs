@@ -52,7 +52,7 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
                 .Include(x => x.Logins)
                 .Include(x => x.UserRoles)
                     .ThenInclude(x => x.Role)
-                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.ToList()))
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.Where(ur => !ur.IsDeleted).ToList()))
                 .FirstOrDefaultAsync();
 
             return user;
@@ -70,7 +70,7 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
                 .Include(x => x.UserRoles)
                     .ThenInclude(x => x.Role)
                 .OrderByDescending(x => x.Id)
-                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.ToList()))
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.Where(ur => !ur.IsDeleted).ToList()))
                 .FirstOrDefaultAsync();
 
             return user;
@@ -88,7 +88,7 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
                 .Include(x => x.UserRoles)
                     .ThenInclude(x => x.Role)
                 .OrderByDescending(x => x.Id)
-                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.ToList()))
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.Where(ur => !ur.IsDeleted).ToList()))
                 .FirstOrDefaultAsync();
 
             return user;
@@ -115,7 +115,7 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
                 .Include(x => x.Logins)
                 .Include(x => x.UserRoles)
                     .ThenInclude(x => x.Role)
-                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.ToList()))
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.Where(ur => !ur.IsDeleted).ToList()))
                 .FirstOrDefaultAsync();
 
             return user;

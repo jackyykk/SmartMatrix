@@ -1,8 +1,9 @@
 using SmartMatrix.Core.BaseClasses.Common;
+using SmartMatrix.Domain.Constants;
 
 namespace SmartMatrix.Domain.Core.Identities.DbEntities
 {
-    public class SysUserRole : BaseEntity<long>
+    public class SysUserRole : AuditableEntity<long>
     {
         #region Properties
 
@@ -10,6 +11,23 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         public int SysRoleId { get; set; }
         public SysUser User { get; set; }
         public SysRole Role { get; set; }
+
+        public new string Status { get; set; } = StatusOptions.Active;
+
+        #endregion
+
+        #region Options
+
+        public class StatusOptions
+        {
+            public const string Active = CommonConstants.DbEntityStatus.Active;        
+            public const string Deleted = CommonConstants.DbEntityStatus.Deleted;
+        }
+
+        public class OwnerOptions
+        {
+            public const string System = CommonConstants.DbEntityOwner.System;            
+        }
 
         #endregion
 
@@ -20,6 +38,14 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             return new SysUserRole
             {
                 Id = x.Id,
+                Status = x.Status,
+                IsDeleted = x.IsDeleted,
+                CreatedAt = x.CreatedAt,
+                CreatedBy = x.CreatedBy,
+                ModifiedAt = x.ModifiedAt,
+                ModifiedBy = x.ModifiedBy,
+                DeletedAt = x.DeletedAt,
+                DeletedBy = x.DeletedBy,
                 SysUserId = x.SysUserId,                
                 SysRoleId = x.SysRoleId,                
             };
@@ -28,7 +54,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         public static SysUserRole CopyAsNew(SysUserRole x)
         {
             return new SysUserRole
-            {                
+            {
+                CreatedBy = OwnerOptions.System,
                 SysUserId = x.SysUserId,                
                 SysRoleId = x.SysRoleId,                
             };

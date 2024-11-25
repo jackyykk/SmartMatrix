@@ -13,6 +13,8 @@ namespace SmartMatrix.Core.BaseClasses.Common
         public string? ModifiedBy { get; set; }        
         public DateTime? DeletedAt { get; set; }
         public string? DeletedBy { get; set; }
+
+        [System.Text.Json.Serialization.JsonIgnore]
         public bool SkipAudit { get; } = true;
     }
 }
