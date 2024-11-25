@@ -21,10 +21,14 @@ namespace SmartMatrix.DataAccess.Extensions
         public static IServiceCollection AddDataAccessServices(this IServiceCollection services, IConfiguration configuration)
         {
             // Register DbContext
-            services.AddDbContext<CoreReadDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("CoreReadConnection")));
-            services.AddDbContext<CoreWriteDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("CoreWriteConnection")));
-            services.AddDbContext<DemoReadDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DemoReadConnection")));
-            services.AddDbContext<DemoWriteDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DemoWriteConnection")));
+            services.AddDbContext<CoreReadDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("CoreReadConnection")
+                , options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+            services.AddDbContext<CoreWriteDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("CoreWriteConnection")
+                , options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+            services.AddDbContext<DemoReadDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DemoReadConnection")
+                , options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+            services.AddDbContext<DemoWriteDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DemoWriteConnection")
+                , options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
             
             services.AddScoped<ICoreReadDbContext>(provider => provider.GetService<CoreReadDbContext>()!);
             services.AddScoped<ICoreWriteDbContext>(provider => provider.GetService<CoreWriteDbContext>()!);

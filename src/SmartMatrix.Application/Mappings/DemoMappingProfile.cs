@@ -10,9 +10,10 @@ namespace SmartMatrix.Application.Mappings
     {
         public DemoMappingProfile()
         {
-            CreateMap<SimpleNote, SimpleNotePayload>().ReverseMap();
+            CreateMap<SimpleNote, SimpleNote_InputPayload>().ReverseMap();
+            CreateMap<SimpleNote, SimpleNote_OutputPayload>().ReverseMap();
 
-            CreateMap<WeatherForecast, WeatherForecastPayload>().ReverseMap();            
+            CreateMap<WeatherForecast, WeatherForecast_OutputPayload>().ReverseMap();            
         }
     }
 }

@@ -8,13 +8,19 @@ namespace SmartMatrix.Domain.Core.Identities.Messages
     {        
         public static class StatusCodes
         {
-            public const int Success = MessageConstants.StatusCodes.Success;            
+            public const int Success = MessageConstants.StatusCodes.Success;
             public const int Unknown_Error = MessageConstants.StatusCodes.Unknown_Error;
-            
+            public const int Configuration_Error = MessageConstants.StatusCodes.Configuration_Error;
+
             // Other errors
             public const int Invalid_Request = MessageConstants.StatusCodes.Invalid_Request;
             public const int User_NotFound = MessageConstants.StatusCodes.SysUser_Codes.User_NotFound;
             public const int User_Insert_Failed = MessageConstants.StatusCodes.SysUser_Codes.User_Insert_Failed;
+            
+            public const int UserProfile_NotFound = MessageConstants.StatusCodes.SysUser_Codes.UserProfile_NotFound;
+            public const int UserProfile_Disabled = MessageConstants.StatusCodes.SysUser_Codes.UserProfile_Disabled;
+            public const int UserProfile_Deleted = MessageConstants.StatusCodes.SysUser_Codes.UserProfile_Deleted;
+
             public const int Login_NotFound = MessageConstants.StatusCodes.SysLogin_Codes.Login_NotFound;
             public const int Login_Disabled = MessageConstants.StatusCodes.SysLogin_Codes.Login_Disabled;
             public const int Login_Deleted = MessageConstants.StatusCodes.SysLogin_Codes.Login_Deleted;
@@ -27,7 +33,8 @@ namespace SmartMatrix.Domain.Core.Identities.Messages
         {
             public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;
             public const string Unknown_Error = MessageConstants.StatusTexts.Unknown_Error;
-            public const string Login_Failed = "Login failed";            
+            public const string Configuration_Error = MessageConstants.StatusTexts.Configuration_Error;
+            public const string Login_Failed = "Login failed";
         }
 
         public SysUser_OutputPayload User { get; set; }

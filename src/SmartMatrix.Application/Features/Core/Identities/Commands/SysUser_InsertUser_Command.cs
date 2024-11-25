@@ -29,7 +29,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
             public async Task<Result<SysUser_InsertUser_Response>> Handle(SysUser_InsertUser_Command command, CancellationToken cancellationToken)
             {
                 SysUser_InsertUser_Response response = new SysUser_InsertUser_Response();
-                SysUser user;
+                SysUser newUser;
 
                 if (command.Request == null)
                 {
@@ -55,11 +55,11 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         {
                             _sysUserRepo.SetTransaction(transaction);
 
-                            var userInputPayload = command.Request!.User;
+                            var inputUser = command.Request!.User;
 
-                            user = _mapper.Map<SysUser>(userInputPayload);
+                            newUser = _mapper.Map<SysUser>(inputUser);
 
-                            user = await _sysUserRepo.InsertAsync(user);
+                            newUser = await _sysUserRepo.InsertAsync(newUser);
                             
                             await _unitOfWork.SaveChangesAsync(cancellationToken);
                             transaction.Commit();
@@ -80,12 +80,12 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     return Result<SysUser_InsertUser_Response>.Fail(SysUser_InsertUser_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                 }
 
-                if (user != null)
+                if (newUser != null)
                 {
-                    var entity = await _sysUserRepo.GetByIdAsync(user.PartitionKey, user.Id);
-                    var userOutputPayload = _mapper.Map<SysUser_OutputPayload>(entity);
+                    var existingUser = await _sysUserRepo.GetByIdAsync(newUser.PartitionKey, newUser.Id);
+                    var outputUser = _mapper.Map<SysUser_OutputPayload>(existingUser);
 
-                    response.User = userOutputPayload;
+                    response.User = outputUser;
                 }
                                 
                 return Result<SysUser_InsertUser_Response>.Success(response, SysUser_InsertUser_Response.StatusCodes.Success);

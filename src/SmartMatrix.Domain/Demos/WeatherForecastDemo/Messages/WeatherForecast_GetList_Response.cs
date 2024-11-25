@@ -18,6 +18,6 @@ namespace SmartMatrix.Domain.Demos.WeatherForecastDemo.Messages
             public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;                     
         }
         
-        public List<WeatherForecastPayload> WeatherForecasts { get; set; } = new List<WeatherForecastPayload>();
+        public List<WeatherForecast_OutputPayload> WeatherForecasts { get; set; } = new List<WeatherForecast_OutputPayload>();
     }
 }

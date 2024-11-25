@@ -55,8 +55,8 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         {
                             _sysLoginRepo.SetTransaction(transaction);
 
-                            var loginPayload = command.Request!.Login;
-                            login = _mapper.Map<SysLogin>(loginPayload);
+                            var inputLogin = command.Request!.Login;
+                            login = _mapper.Map<SysLogin>(inputLogin);
 
                             login = await _sysLoginRepo.InsertAsync(login);
 
@@ -81,7 +81,8 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
 
                 if (login != null)
                 {
-                    response.Login = _mapper.Map<SysLogin_OutputPayload>(login);
+                    var outputLogin = _mapper.Map<SysLogin_OutputPayload>(login); 
+                    response.Login = outputLogin;
                 }
 
                 return Result<SysLogin_InsertLogin_Response>.Success(response, SysLogin_InsertLogin_Response.StatusCodes.Success);

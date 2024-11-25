@@ -38,7 +38,7 @@ namespace SmartMatrix.WebApi.Controllers.Demos
             })
             .ToArray();
 
-            var payloads = _mapper.Map<List<WeatherForecastPayload>>(weatherForecasts);
+            var payloads = _mapper.Map<List<WeatherForecast_OutputPayload>>(weatherForecasts);
             response.WeatherForecasts = payloads;
 
             return Ok(Result<WeatherForecast_GetList_Response>.Success(response));

@@ -10,6 +10,7 @@ namespace SmartMatrix.Domain.Constants
             // All errors are negative numbers
             public const int Unknown_Error = -99999;
             public const int Invalid_Request = -1;
+            public const int Configuration_Error = -2;
             
             public static class SysUser_Codes
             {
@@ -18,12 +19,16 @@ namespace SmartMatrix.Domain.Constants
                 public const int User_Disabled = -102;
                 public const int User_Deleted = -103;
 
+                public const int UserProfile_NotFound = -106;
+                public const int UserProfile_Disabled = -107;
+                public const int UserProfile_Deleted = -108;
+
                 // Field Errors
                 public const int UserName_Empty = -111;
                 public const int UserName_Already_Existed = -112;
 
-                // Action Errors
-                public const int User_Insert_Failed = -151;
+                // Action Errors                
+                public const int User_Insert_Failed = -151;                
             }
 
             public static class SysLogin_Codes
@@ -54,6 +59,7 @@ namespace SmartMatrix.Domain.Constants
         {            
             public const string Invalid_Request = "The request is invalid.";
             public const string Unknown_Error = "An unknown error has occurred.";
+            public const string Configuration_Error = "Configuration error";
         }        
     }
 }

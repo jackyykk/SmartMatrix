@@ -47,34 +47,35 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     string loginName = command.Request!.LoginName;
                     string password = command.Request!.Password;
 
-                    var user = await _sysUserRepo.GetFirstByLoginNameAsync(partitionKey, loginName);
-                    if (user == null)
+                    var existingUser = await _sysUserRepo.GetFirstByLoginNameAsync(partitionKey, loginName);
+                    if (existingUser == null)
                     {
                         return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.User_NotFound, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }
 
-                    var login = user.Logins.FirstOrDefault(x => x.LoginName == loginName);
-                    if (login == null)
+                    var existingLogin = existingUser.Logins.FirstOrDefault(x => x.LoginName == loginName);
+                    if (existingLogin == null)
                     {
                         // Suppose user should have the login
                         return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Login_NotFound, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }
-                    if (login.Status == SysLogin.StatusOptions.Disabled)
+                    if (existingLogin.Status == SysLogin.StatusOptions.Disabled)
                     {
                         return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Login_Disabled, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }
-                    if (login.Status == SysLogin.StatusOptions.Deleted || login.IsDeleted)
+                    if (existingLogin.Status == SysLogin.StatusOptions.Deleted || existingLogin.IsDeleted)
                     {
                         return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Login_Deleted, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }
-                    if (!MyHashTool.VerifyPasswordHash(password, login.PasswordSalt, login.PasswordHash))
+                    if (!MyHashTool.VerifyPasswordHash(password, existingLogin.PasswordSalt, existingLogin.PasswordHash))
                     {
                         return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Password_NotMatch, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }
 
-                    var userPayload = _mapper.Map<SysUser_OutputPayload>(user);
-                    response.User = userPayload;
-                    response.Token = new SysToken_OutputPayload();
+                    var outputUser = _mapper.Map<SysUser_OutputPayload>(existingUser);
+                    var outputToken = new SysToken_OutputPayload();
+                    response.User = outputUser;
+                    response.Token = outputToken;
                     return Result<SysUser_PerformLogin_Response>.Success(response, SysUser_PerformLogin_Response.StatusCodes.Success);
                 }
                 catch (Exception ex)

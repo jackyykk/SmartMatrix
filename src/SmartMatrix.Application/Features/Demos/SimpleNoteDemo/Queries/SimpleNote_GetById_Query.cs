@@ -39,7 +39,7 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
                 try
                 {
                     var entity = await _simpleNoteRepo.GetByIdAsync(query.Request!.Id);
-                    var payload = _mapper.Map<SimpleNotePayload>(entity);
+                    var payload = _mapper.Map<SimpleNote_OutputPayload>(entity);
                     response.SimpleNote = payload;
                     return Result<SimpleNote_GetById_Response>.Success(response, SimpleNote_GetById_Response.StatusCodes.Success);
                 }

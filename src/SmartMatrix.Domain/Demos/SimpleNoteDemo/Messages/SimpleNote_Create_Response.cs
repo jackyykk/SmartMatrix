@@ -18,6 +18,6 @@ namespace SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages
             public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;                       
         }
         
-        public SimpleNotePayload SimpleNote { get; set; }
+        public SimpleNote_OutputPayload SimpleNote { get; set; }
     }
 }

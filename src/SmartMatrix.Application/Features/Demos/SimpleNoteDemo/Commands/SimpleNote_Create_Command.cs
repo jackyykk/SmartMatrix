@@ -4,6 +4,7 @@ using MediatR;
 using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNoteDemo;
 using SmartMatrix.Application.Interfaces.DataAccess.Transactions;
 using SmartMatrix.Core.BaseClasses.Web;
+using SmartMatrix.Domain.Demos.SimpleNoteDemo.DbEntities;
 using SmartMatrix.Domain.Demos.SimpleNoteDemo.Messages;
 using SmartMatrix.Domain.Demos.SimpleNoteDemo.Payloads;
 
@@ -29,6 +30,7 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
             public async Task<Result<SimpleNote_Create_Response>> Handle(SimpleNote_Create_Command command, CancellationToken cancellationToken)
             {
                 SimpleNote_Create_Response response = new SimpleNote_Create_Response();
+                SimpleNote simpleNote;
 
                 if (command.Request == null)
                 {
@@ -49,13 +51,16 @@ namespace SmartMatrix.Application.Features.Demos.SimpleNoteDemo.Queries
                         {
                             _simpleNoteRepo.SetTransaction(transaction);
 
-                            var entity = await _simpleNoteRepo.InsertAsync(command.Request!.SimpleNote);
+                            var simpleNoteInput = command.Request!.SimpleNote;
+                            simpleNote = _mapper.Map<SimpleNote>(simpleNoteInput);
+
+                            simpleNote = await _simpleNoteRepo.InsertAsync(simpleNote);
                             
                             await _unitOfWork.SaveChangesAsync(cancellationToken);
                             transaction.Commit();
 
-                            var payload = _mapper.Map<SimpleNotePayload>(entity);
-                            response.SimpleNote = payload;
+                            var simpleNoteOutput = _mapper.Map<SimpleNote_OutputPayload>(simpleNote);
+                            response.SimpleNote = simpleNoteOutput;
                             return Result<SimpleNote_Create_Response>.Success(response, SimpleNote_Create_Response.StatusCodes.Success);
                         }
                         catch (Exception ex)
