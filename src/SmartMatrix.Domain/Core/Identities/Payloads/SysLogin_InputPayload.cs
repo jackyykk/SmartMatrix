@@ -18,8 +18,7 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         public string RefreshToken { get; set; }
         public DateTime? RefreshTokenExpires { get; set; }
         public string Description { get; set; }
-
-        public new string Status { get; set; }        
+        public string PictureUrl { get; set; }        
 
         #endregion
 

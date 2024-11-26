@@ -72,6 +72,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             return new SysRole
             {
                 Id = x.Id,
+                Guid = x.Guid,
                 Status = x.Status,
                 IsDeleted = x.IsDeleted,
                 CreatedAt = x.CreatedAt,

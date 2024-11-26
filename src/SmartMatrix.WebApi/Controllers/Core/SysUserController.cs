@@ -27,6 +27,10 @@ namespace SmartMatrix.WebApi.Controllers.Core
             _userSvc = userSvc;
         }
 
+        /// <summary>
+        /// Extract My Info from Token
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("get-my-info")]
         public IActionResult GetTokenContent()
         {

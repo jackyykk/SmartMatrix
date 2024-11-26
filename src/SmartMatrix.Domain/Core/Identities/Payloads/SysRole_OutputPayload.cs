@@ -15,9 +15,7 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         public string Category { get; set; }
         public string RoleCode { get; set; }
         public string RoleName { get; set; }
-        public string Description { get; set; }
-
-        public new string Status { get; set; }        
+        public string Description { get; set; }        
 
         #endregion
 

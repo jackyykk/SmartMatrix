@@ -15,9 +15,7 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         public string DisplayName { get; set; }
         public string GivenName { get; set; }
         public string Surname { get; set; }
-        public string Email { get; set; }
-
-        public new string Status { get; set; }
+        public string Email { get; set; }        
 
         public ICollection<SysLogin_InputPayload> Logins { get; set; } = new List<SysLogin_InputPayload>();
         public ICollection<SysRole_InputPayload> Roles { get; set; } = new List<SysRole_InputPayload>();

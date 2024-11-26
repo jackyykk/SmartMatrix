@@ -118,7 +118,7 @@ namespace SmartMatrix.WebApi.Controllers
             var userName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
             var givenName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
             var surname = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
-            var profilePicture = claims?.FirstOrDefault(c => c.Type == "urn:google:picture")?.Value;
+            var pictureUrl = claims?.FirstOrDefault(c => c.Type == "urn:google:picture")?.Value;
 
             GoogleUserProfile userProfile = new GoogleUserProfile
             {
@@ -127,7 +127,7 @@ namespace SmartMatrix.WebApi.Controllers
                 UserName = userName,
                 GivenName = givenName,
                 Surname = surname,
-                ProfilePicture = profilePicture
+                PictureUrl = pictureUrl
             };
 
             return userProfile;

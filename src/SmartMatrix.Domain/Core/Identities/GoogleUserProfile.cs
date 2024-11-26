@@ -7,6 +7,6 @@ namespace SmartMatrix.Domain.Core.Identities
         public string UserName { get; set; }
         public string GivenName { get; set; }
         public string Surname { get; set; }
-        public string ProfilePicture { get; set; }
+        public string PictureUrl { get; set; }
     }
 }

@@ -60,6 +60,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             var user = new SysUser
             {
                 Id = x.Id,
+                Guid = x.Guid,
                 Status = x.Status,
                 IsDeleted = x.IsDeleted,
                 CreatedAt = x.CreatedAt,
@@ -96,6 +97,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             var user = new SysUser  
             {
                 Id = x.Id,
+                Guid = x.Guid,
                 Status = x.Status,
                 IsDeleted = x.IsDeleted,
                 CreatedAt = x.CreatedAt,

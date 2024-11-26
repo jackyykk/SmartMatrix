@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.Domain.Constants;
+using SmartMatrix.Domain.Core.Identities.DbEntities;
 
 namespace SmartMatrix.Domain.Core.Identities.Payloads
 {
@@ -14,9 +15,7 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         public string Category { get; set; }
         public string RoleCode { get; set; }
         public string RoleName { get; set; }
-        public string Description { get; set; }
-
-        public new string Status { get; set; }        
+        public string Description { get; set; }        
 
         #endregion
 
@@ -64,6 +63,29 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         #endregion
         
         #region Methods            
+
+        public SysRole ToSysRole()
+        {
+            return new SysRole
+            {
+                Id = Id,
+                Status = Status,
+                IsDeleted = IsDeleted,
+                CreatedAt = CreatedAt,
+                CreatedBy = CreatedBy,
+                ModifiedAt = ModifiedAt,
+                ModifiedBy = ModifiedBy,
+                DeletedAt = DeletedAt,
+                DeletedBy = DeletedBy,
+                InternalRemark = InternalRemark,
+                PartitionKey = PartitionKey,
+                Type = Type,
+                Category = Category,
+                RoleCode = RoleCode,
+                RoleName = RoleName,
+                Description = Description,
+            };
+        }
 
         #endregion
 

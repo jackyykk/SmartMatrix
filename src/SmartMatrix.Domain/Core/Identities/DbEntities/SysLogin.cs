@@ -20,6 +20,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         public string RefreshToken { get; set; }
         public DateTime? RefreshTokenExpires { get; set; }
         public string Description { get; set; }        
+        public string PictureUrl { get; set; }
 
         public new string Status { get; set; } = StatusOptions.Active;
 
@@ -67,6 +68,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             return new SysLogin
             {
                 Id = x.Id,
+                Guid = x.Guid,
                 Status = x.Status,
                 IsDeleted = x.IsDeleted,
                 CreatedAt = x.CreatedAt,
@@ -86,7 +88,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 PasswordSalt = x.PasswordSalt,
                 RefreshToken = x.RefreshToken,
                 RefreshTokenExpires = x.RefreshTokenExpires,
-                Description = x.Description                
+                Description = x.Description,
+                PictureUrl = x.PictureUrl,
             };
         }
 
@@ -105,7 +108,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 PasswordSalt = x.PasswordSalt,
                 RefreshToken = x.RefreshToken,
                 RefreshTokenExpires = x.RefreshTokenExpires,
-                Description = x.Description,                
+                Description = x.Description,
+                PictureUrl = x.PictureUrl,
             };
         }
 

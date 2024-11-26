@@ -15,9 +15,9 @@ namespace SmartMatrix.Application.Mappings
                 .ForMember(dest => dest.Logins, opt => opt.MapFrom(src => src.Logins));
             
             // Since SysUser_InputPayload is mainly used for insert SysUser to system,
-            // For generating SysUser, it will map SysUserId and SysRoleId only to SysUserRole
+            // For generating SysUserRole, it will try to map SysRole_InputPayload of Roles to SysRole
             CreateMap<SysUser_InputPayload, SysUser>()
-                .ForMember(dest => dest.UserRoles, opt => opt.MapFrom(src => src.Roles.Select(r => new SysUserRole { SysUserId = src.Id, SysRoleId = r.Id })))
+                .ForMember(dest => dest.UserRoles, opt => opt.MapFrom(src => src.Roles.Select(r => new SysUserRole { SysUserId = src.Id, SysRoleId = r.Id, Role = r.ToSysRole() })))
                 .ForMember(dest => dest.Logins, opt => opt.MapFrom(src => src.Logins));            
             
             // For generating SysRole_OutputPayload, it will try to update status of SysRole from SysUserRole before mapping

@@ -195,6 +195,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                         RefreshToken = token.RefreshToken,
                         RefreshTokenExpires = token.RefreshToken_Expires,
                         Status = SysLogin_OutputPayload.StatusOptions.Active,
+                        PictureUrl = googleUserProfile.PictureUrl
                     };
 
                     newUser.Logins.Add(newLogin);
