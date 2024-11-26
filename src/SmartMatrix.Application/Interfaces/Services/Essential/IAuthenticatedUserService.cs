@@ -2,8 +2,12 @@ namespace SmartMatrix.Application.Interfaces.Services.Essential
 {
     public interface IAuthenticatedUserService
     {
-        string UserAccountId { get; }
-        string UserAccountName { get; }
-        string FullName { get; }
+        string LoginProviderName { get; }
+        string LoginNameIdentifier { get; }
+        string UserNameIdentifier { get; }
+        string Email { get; }
+        string Name { get; }
+        string GivenName { get; }
+        string Surname { get; }
     }
 }

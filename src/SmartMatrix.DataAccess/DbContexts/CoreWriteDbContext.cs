@@ -39,24 +39,24 @@ namespace SmartMatrix.DataAccess.DbContexts
                     case EntityState.Added:
                         entry.Entity.CreatedAt = _dateTimeSvc.UtcNow;
                         // Set CreatedBy to be the current user if it's empty
-                        entry.Entity.CreatedBy = string.IsNullOrEmpty(entry.Entity.CreatedBy) ? _userSvc.UserAccountName : entry.Entity.CreatedBy;
+                        entry.Entity.CreatedBy = string.IsNullOrEmpty(entry.Entity.CreatedBy) ? _userSvc.LoginNameIdentifier : entry.Entity.CreatedBy;
                         break;
 
                     case EntityState.Modified:
                         entry.Entity.ModifiedAt = _dateTimeSvc.UtcNow;
                         // Set ModifiedBy to be the current user if it's empty
-                        entry.Entity.ModifiedBy = string.IsNullOrEmpty(entry.Entity.ModifiedBy) ? _userSvc.UserAccountName : entry.Entity.ModifiedBy;
+                        entry.Entity.ModifiedBy = string.IsNullOrEmpty(entry.Entity.ModifiedBy) ? _userSvc.LoginNameIdentifier : entry.Entity.ModifiedBy;
                         break;
                         
                     case EntityState.Deleted:
                         entry.Entity.DeletedAt = _dateTimeSvc.UtcNow;
                         // Set DeletedBy to be the current user if it's empty
-                        entry.Entity.DeletedBy = string.IsNullOrEmpty(entry.Entity.DeletedBy) ? _userSvc.UserAccountName : entry.Entity.DeletedBy;
+                        entry.Entity.DeletedBy = string.IsNullOrEmpty(entry.Entity.DeletedBy) ? _userSvc.LoginNameIdentifier : entry.Entity.DeletedBy;
                         break;
                 }
             }
 
-            if (string.IsNullOrEmpty(_userSvc.UserAccountName))
+            if (string.IsNullOrEmpty(_userSvc.LoginNameIdentifier))
             {
                 // Skip audit logs if user is not authenticated
                 return await base.SaveChangesAsync(cancellationToken);
@@ -65,7 +65,7 @@ namespace SmartMatrix.DataAccess.DbContexts
             {
                 // skip audit logging if any entity has SkipAudit flag set to true
                 bool skipAudit = skipAudits.Any(b => b == true);
-                return await base.SaveChangesAsync(skipAudit, _dateTimeSvc.UtcNow, _userSvc.UserAccountName);
+                return await base.SaveChangesAsync(skipAudit, _dateTimeSvc.UtcNow, _userSvc.LoginNameIdentifier);
             }
         }        
     }
