@@ -15,6 +15,9 @@ namespace SmartMatrix.Core.BaseClasses.Common
         public string? DeletedBy { get; set; }
 
         [System.Text.Json.Serialization.JsonIgnore]
+        public string? InternalRemark { get; set; }
+        
+        [System.Text.Json.Serialization.JsonIgnore]
         public bool SkipAudit { get; } = true;
     }
 }

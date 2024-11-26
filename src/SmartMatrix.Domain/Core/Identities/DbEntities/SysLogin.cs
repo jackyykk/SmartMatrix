@@ -19,8 +19,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         public string PasswordSalt { get; set; }
         public string RefreshToken { get; set; }
         public DateTime? RefreshTokenExpires { get; set; }
-        public string Description { get; set; }
-        public string Remark { get; set; }  // For Internal Use Only, Not Expose to Client
+        public string Description { get; set; }        
 
         public new string Status { get; set; } = StatusOptions.Active;
 
@@ -76,6 +75,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 ModifiedBy = x.ModifiedBy,
                 DeletedAt = x.DeletedAt,
                 DeletedBy = x.DeletedBy,
+                InternalRemark = x.InternalRemark,
                 PartitionKey = x.PartitionKey,
                 SysUserId = x.SysUserId,
                 LoginProvider = x.LoginProvider,
@@ -86,8 +86,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 PasswordSalt = x.PasswordSalt,
                 RefreshToken = x.RefreshToken,
                 RefreshTokenExpires = x.RefreshTokenExpires,
-                Description = x.Description,
-                Remark = x.Remark
+                Description = x.Description                
             };
         }
 
@@ -106,8 +105,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 PasswordSalt = x.PasswordSalt,
                 RefreshToken = x.RefreshToken,
                 RefreshTokenExpires = x.RefreshTokenExpires,
-                Description = x.Description,
-                Remark = x.Remark
+                Description = x.Description,                
             };
         }
 

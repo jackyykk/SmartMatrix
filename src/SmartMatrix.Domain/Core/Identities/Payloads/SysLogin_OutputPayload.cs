@@ -21,6 +21,7 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
 
         [System.Text.Json.Serialization.JsonIgnore]
         public DateTime? RefreshTokenExpires { get; set; }
+        
         public string Description { get; set; }
 
         public new string Status { get; set; }        

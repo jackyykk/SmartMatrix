@@ -53,6 +53,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.ModifiedBy).HasColumnName("modified_by");                
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
+                b.Property(p => p.InternalRemark).HasColumnName("internal_remark");
                 b.Property(p => p.PartitionKey).HasColumnName("partition_key");
                 b.Property(p => p.Type).HasColumnName("type");
                 b.Property(p => p.UserName).HasColumnName("username");
@@ -84,6 +85,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.ModifiedBy).HasColumnName("modified_by");                
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
+                b.Property(p => p.InternalRemark).HasColumnName("internal_remark");
                 b.Property(p => p.SysUserId).HasColumnName("sysuser_id");
                 b.Property(p => p.SysRoleId).HasColumnName("sysrole_id");
             });
@@ -101,6 +103,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.ModifiedBy).HasColumnName("modified_by");                
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
+                b.Property(p => p.InternalRemark).HasColumnName("internal_remark");
                 b.Property(p => p.PartitionKey).HasColumnName("partition_key");                
                 b.Property(p => p.SysUserId).HasColumnName("sysuser_id");
                 b.Property(p => p.LoginProvider).HasColumnName("login_provider");
@@ -111,8 +114,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.PasswordSalt).HasColumnName("password_salt");
                 b.Property(p => p.RefreshToken).HasColumnName("refresh_token");
                 b.Property(p => p.RefreshTokenExpires).HasColumnName("refresh_token_expires");
-                b.Property(p => p.Description).HasColumnName("description");
-                b.Property(p => p.Remark).HasColumnName("remark");
+                b.Property(p => p.Description).HasColumnName("description");                
                 b.Ignore(p => p.SkipAudit);
             });
 
@@ -129,6 +131,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.ModifiedBy).HasColumnName("modified_by");                
                 b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
                 b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
+                b.Property(p => p.InternalRemark).HasColumnName("internal_remark");
                 b.Property(p => p.PartitionKey).HasColumnName("partition_key");                
                 b.Property(p => p.Type).HasColumnName("type");
                 b.Property(p => p.Category).HasColumnName("category");

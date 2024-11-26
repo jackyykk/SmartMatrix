@@ -80,6 +80,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 ModifiedBy = x.ModifiedBy,
                 DeletedAt = x.DeletedAt,
                 DeletedBy = x.DeletedBy,
+                InternalRemark = x.InternalRemark,
                 PartitionKey = x.PartitionKey,
                 Type = x.Type,
                 Category = x.Category,
@@ -113,6 +114,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             ModifiedBy = x.ModifiedBy;
             DeletedAt = x.DeletedAt;
             DeletedBy = x.DeletedBy;
+            InternalRemark = x.InternalRemark;
+            
             return this;
         }
 

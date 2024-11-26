@@ -70,13 +70,7 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         {
             return new SysRole
             {
-                Id = Id,                
-                PartitionKey = PartitionKey,
-                Type = Type,
-                Category = Category,
-                RoleCode = RoleCode,
-                RoleName = RoleName,
-                Description = Description,
+                Id = Id,
                 Status = Status,
                 IsDeleted = IsDeleted,
                 CreatedAt = CreatedAt,
@@ -84,7 +78,14 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
                 ModifiedAt = ModifiedAt,
                 ModifiedBy = ModifiedBy,
                 DeletedAt = DeletedAt,
-                DeletedBy = DeletedBy
+                DeletedBy = DeletedBy,
+                InternalRemark = InternalRemark,
+                PartitionKey = PartitionKey,
+                Type = Type,
+                Category = Category,
+                RoleCode = RoleCode,
+                RoleName = RoleName,
+                Description = Description,
             };
         }
 

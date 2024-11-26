@@ -46,6 +46,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 ModifiedBy = x.ModifiedBy,
                 DeletedAt = x.DeletedAt,
                 DeletedBy = x.DeletedBy,
+                InternalRemark = x.InternalRemark,
                 SysUserId = x.SysUserId,                
                 SysRoleId = x.SysRoleId,                
             };

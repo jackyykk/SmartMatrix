@@ -15,7 +15,8 @@ namespace SmartMatrix.Core.BaseClasses.Common
         DateTime? ModifiedAt { get; set; }
         string? ModifiedBy { get; set; }                
         DateTime? DeletedAt { get; set; }
-        string? DeletedBy { get; set; }        
+        string? DeletedBy { get; set; }
+        string? InternalRemark { get; set; }
         bool SkipAudit { get; }
     }
 }
