@@ -20,7 +20,7 @@ namespace SmartMatrix.DataAccess.AuditLogging
         }
 
         private void OnBeforeSaveChanges(DateTime actionTime, string userName)
-        {            
+        {
             ChangeTracker.DetectChanges();
             var auditEntries = new List<AuditEntry>();
             foreach (var entry in ChangeTracker.Entries())
@@ -68,13 +68,39 @@ namespace SmartMatrix.DataAccess.AuditLogging
                             }
                             break;
                     }
-                }                
+                }
             }
-            
+
             foreach (var auditEntry in auditEntries)
             {
                 AuditLogs.Add(auditEntry.ToAudit());
             }
+        }
+
+        protected string Get_Guid_DefaultValue_Sql()
+        {
+            // Return the appropriate default value SQL based on the database provider
+            if (Database.IsSqlServer())
+            {
+                return "NEWSEQUENTIALID()";
+            }            
+            else
+            {
+                throw new NotSupportedException("Database provider not supported for GUID generation.");
+            }
+
+            /*
+
+            if (Database.IsNpgsql())
+            {
+                return "uuid_generate_v4()"; // For PostgreSQL with the uuid-ossp extension
+            }
+            if (Database.IsSqlite())
+            {
+                return "lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' || substr(lower(hex(randomblob(2))), 2) || '-' || substr('89ab', abs(random()) % 4 + 1, 1) || substr(lower(hex(randomblob(2))), 2) || '-' || lower(hex(randomblob(6)))"; // For SQLite
+            }
+            
+            */
         }
     }
 }

@@ -2,9 +2,8 @@ using SmartMatrix.Core.BaseClasses.Common;
 
 namespace SmartMatrix.DataAccess.AuditLogging
 {
-    public class Audit : IEntity<long>
-    {
-        public long Id { get; set; }
+    public class Audit : BaseEntity<long>
+    {        
         public string? UserName { get; set; }
         public string? Type { get; set; }
         public DateTime ActionTime { get; set; }

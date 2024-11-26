@@ -23,7 +23,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 
         public new string Status { get; set; } = StatusOptions.Active;
 
-        public SysUser User { get; set; }
+        public SysUser User { get; set; }        
 
         #endregion
 

@@ -30,6 +30,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.ToTable("sm_core_audit_logs");
                 b.HasKey(p => p.Id);
                 b.Property(p => p.Id).HasColumnName("id");
+                b.Property(p => p.Guid).HasColumnName("guid").HasDefaultValueSql(Get_Guid_DefaultValue_Sql());
                 b.Property(p => p.UserName).HasColumnName("username");                                
                 b.Property(p => p.Type).HasColumnName("type");                
                 b.Property(p => p.ActionTime).HasColumnName("action_time");
@@ -44,7 +45,8 @@ namespace SmartMatrix.DataAccess.DbContexts
             {
                 b.ToTable("sm_core_sysusers");                
                 b.HasKey(p => p.Id);
-                b.Property(p => p.Id).HasColumnName("id");                
+                b.Property(p => p.Id).HasColumnName("id");
+                b.Property(p => p.Guid).HasColumnName("guid").HasDefaultValueSql(Get_Guid_DefaultValue_Sql());
                 b.Property(p => p.Status).HasColumnName("status");
                 b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
                 b.Property(p => p.CreatedAt).HasColumnName("created_at");
@@ -76,7 +78,8 @@ namespace SmartMatrix.DataAccess.DbContexts
             {                
                 b.ToTable("sm_core_sysuser_roles");
                 b.HasKey(p => p.Id);
-                b.Property(p => p.Id).HasColumnName("id");                
+                b.Property(p => p.Id).HasColumnName("id");
+                b.Property(p => p.Guid).HasColumnName("guid").HasDefaultValueSql(Get_Guid_DefaultValue_Sql());
                 b.Property(p => p.Status).HasColumnName("status");
                 b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
                 b.Property(p => p.CreatedAt).HasColumnName("created_at");
@@ -95,6 +98,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.ToTable("sm_core_syslogins");
                 b.HasKey(p => p.Id);
                 b.Property(p => p.Id).HasColumnName("id");
+                b.Property(p => p.Guid).HasColumnName("guid").HasDefaultValueSql(Get_Guid_DefaultValue_Sql());
                 b.Property(p => p.Status).HasColumnName("status");
                 b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
                 b.Property(p => p.CreatedAt).HasColumnName("created_at");
@@ -123,6 +127,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.ToTable("sm_core_sysroles");
                 b.HasKey(p => p.Id);
                 b.Property(p => p.Id).HasColumnName("id");
+                b.Property(p => p.Guid).HasColumnName("guid").HasDefaultValueSql(Get_Guid_DefaultValue_Sql());
                 b.Property(p => p.Status).HasColumnName("status");
                 b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
                 b.Property(p => p.CreatedAt).HasColumnName("created_at");

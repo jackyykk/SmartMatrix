@@ -1,3 +1,5 @@
+using System;
+
 namespace SmartMatrix.Core.BaseClasses.Common
 {
     public interface IPayload
@@ -7,5 +9,6 @@ namespace SmartMatrix.Core.BaseClasses.Common
     public interface IPayload<TId> : IPayload
     {
         TId Id { get; set; }
+        Guid Guid { get; set; }  // Globally unique identifier
     }
 }

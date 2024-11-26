@@ -60,6 +60,10 @@ namespace SmartMatrix.DataAccess.DbContexts
             {
                 // Skip audit logs if user is not authenticated
                 return await base.SaveChangesAsync(cancellationToken);
+
+                // Test
+                //bool skipAudit = skipAudits.Any(b => b == true);
+                //return await base.SaveChangesAsync(false, _dateTimeSvc.UtcNow, "system");
             }
             else
             {
