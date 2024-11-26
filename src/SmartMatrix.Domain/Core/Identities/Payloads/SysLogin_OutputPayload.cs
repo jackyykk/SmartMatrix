@@ -18,7 +18,7 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
 
         [System.Text.Json.Serialization.JsonIgnore]
         public string RefreshToken { get; set; }
-        
+
         [System.Text.Json.Serialization.JsonIgnore]
         public DateTime? RefreshTokenExpires { get; set; }
         public string Description { get; set; }
@@ -61,9 +61,7 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         #endregion
 
         #region Methods
-        
-                
-
+                    
         #endregion
     
     }

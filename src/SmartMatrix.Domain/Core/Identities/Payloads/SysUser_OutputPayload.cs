@@ -55,20 +55,7 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         #endregion
 
         #region Methods
-
-        public void Update_Roles_AuditInfo(SysUser x)
-        {
-            // Update User Role Relationships Audit Info
-            foreach (var role in Roles)
-            {
-                var userRole = x.UserRoles.FirstOrDefault(y => y.SysRoleId == role.Id);
-                if (userRole != null)
-                {
-                    role.Update_AuditInfo(userRole);
-                }                
-            }
-        }
-
+                
         #endregion
 
     }

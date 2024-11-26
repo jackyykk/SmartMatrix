@@ -62,17 +62,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         #endregion
 
         #region Methods
-
-        public void ClearSecrets()
-        {
-            Password = string.Empty;
-            PasswordHash = string.Empty;
-            PasswordSalt = string.Empty;
-            RefreshToken = string.Empty;
-            RefreshTokenExpires = null;
-            Remark = string.Empty;
-        }
-
+        
         public static SysLogin Copy(SysLogin x)
         {
             return new SysLogin

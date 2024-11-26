@@ -50,12 +50,10 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
             public const string System = CommonConstants.DbEntityOwner.System;
         }
 
-        #region Methods
-
-        
-
         #endregion
 
-        #endregion        
+        #region Methods
+                
+        #endregion                
     }
 }

@@ -54,15 +54,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         #endregion        
 
         #region Methods
-
-        public void ClearSecrets()
-        {
-            foreach (var login in Logins)
-            {
-                login.ClearSecrets();
-            }
-        }
-
+        
         public static SysUser Copy(SysUser x)
         {
             var user = new SysUser

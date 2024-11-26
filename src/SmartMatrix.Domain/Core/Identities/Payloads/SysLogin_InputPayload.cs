@@ -58,8 +58,6 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
 
         #region Methods
         
-        
-
         #endregion
     
     }

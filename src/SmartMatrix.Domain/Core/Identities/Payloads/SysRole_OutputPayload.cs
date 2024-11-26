@@ -62,19 +62,33 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
             public const string System = CommonConstants.DbEntityOwner.System;
         }
 
-        public void Update_AuditInfo(SysUserRole userRole)
+        #endregion
+
+        #region Methods        
+
+        public SysRole ToSysRole()
         {
-            Status = userRole.Status;
-            IsDeleted = userRole.IsDeleted;
-            CreatedAt = userRole.CreatedAt;
-            CreatedBy = userRole.CreatedBy;
-            ModifiedAt = userRole.ModifiedAt;
-            ModifiedBy = userRole.ModifiedBy;
-            DeletedAt = userRole.DeletedAt;
-            DeletedBy = userRole.DeletedBy;
+            return new SysRole
+            {
+                Id = Id,                
+                PartitionKey = PartitionKey,
+                Type = Type,
+                Category = Category,
+                RoleCode = RoleCode,
+                RoleName = RoleName,
+                Description = Description,
+                Status = Status,
+                IsDeleted = IsDeleted,
+                CreatedAt = CreatedAt,
+                CreatedBy = CreatedBy,
+                ModifiedAt = ModifiedAt,
+                ModifiedBy = ModifiedBy,
+                DeletedAt = DeletedAt,
+                DeletedBy = DeletedBy
+            };
         }
 
         #endregion
-        
+                
     }
 }

@@ -73,11 +73,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     }
 
                     var outputUser = _mapper.Map<SysUser_OutputPayload>(existingUser);
-                    if (existingUser != null && outputUser != null)
-                    {
-                        outputUser.Update_Roles_AuditInfo(existingUser);
-                    }
-                    
+                                        
                     var outputToken = new SysToken_OutputPayload();
 
                     response.User = outputUser;

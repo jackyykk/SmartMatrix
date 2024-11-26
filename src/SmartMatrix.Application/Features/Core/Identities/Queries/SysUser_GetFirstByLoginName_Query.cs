@@ -46,11 +46,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
                     var existingUser = await _sysUserRepo.GetFirstByLoginNameAsync(query.Request!.PartitionKey, query.Request!.LoginName);
                     
                     var outputUser = _mapper.Map<SysUser_OutputPayload>(existingUser);
-                    if (existingUser != null && outputUser != null)
-                    {
-                        outputUser.Update_Roles_AuditInfo(existingUser);
-                    }
-                                        
+                    
                     response.User = outputUser;
 
                     return Result<SysUser_GetFirstByLoginName_Response>.Success(response, SysUser_GetFirstByLoginName_Response.StatusCodes.Success);

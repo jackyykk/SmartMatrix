@@ -46,11 +46,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Queries
                     var existingUser = await _sysUserRepo.GetByIdAsync(query.Request!.PartitionKey, query.Request!.Id);
                     
                     var outputUser = _mapper.Map<SysUser_OutputPayload>(existingUser);
-                    if (existingUser != null && outputUser != null)
-                    {
-                        outputUser.Update_Roles_AuditInfo(existingUser);
-                    }
-
+                    
                     response.User = outputUser;
 
                     return Result<SysUser_GetById_Response>.Success(response, SysUser_GetById_Response.StatusCodes.Success);

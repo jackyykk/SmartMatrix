@@ -1,14 +1,17 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartMatrix.Application.Features.Core.Identities.Commands;
 using SmartMatrix.Application.Features.Core.Identities.Queries;
+using SmartMatrix.Domain.Constants;
 using SmartMatrix.Domain.Core.Identities.Messages;
 
 namespace SmartMatrix.WebApi.Controllers.Core
 {
     [ApiController]
     [Route("api/core/sysuser")]
+    //[Authorize(Policy = WebConstants.Authorizations.Policies.Standard_Api_Policy)]
     public class SysUserController : BaseController<SysUserController>
     {
         public SysUserController(ILogger<SysUserController> logger, IConfiguration configuration, IMediator mediator, IMapper mapper)

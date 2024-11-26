@@ -43,13 +43,13 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
 
         public class RoleCodeOptions
         {
-            public const string sysAdmin = "sys-admin::role";
-            public const string sysPowerUser = "sys-power_user::role";
-            public const string sysSupport = "sys-support::role";
-            public const string sysUser = "sys-user::role";
-            public const string sysGuest = "sys-guest::role";
-            public const string sysApi = "sys-api::role";
-            public const string sysAdminApi = "sys-admin_api::role";
+            public const string sysAdmin = "sys-admin:role";
+            public const string sysPowerUser = "sys-power_user:role";
+            public const string sysSupport = "sys-support:role";
+            public const string sysUser = "sys-user:role";
+            public const string sysGuest = "sys-guest:role";
+            public const string sysStandardApi = "sys-standard_api:role";
+            public const string sysAdminApi = "sys-admin_api:role";
         }
 
         public class StatusOptions
@@ -101,6 +101,19 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 RoleName = x.RoleName,                
                 Description = x.Description
             };
+        }
+
+        public SysRole UpdateStatus_From(SysUserRole x)
+        {
+            Status = x.Status;
+            IsDeleted = x.IsDeleted;
+            CreatedAt = x.CreatedAt;
+            CreatedBy = x.CreatedBy;
+            ModifiedAt = x.ModifiedAt;
+            ModifiedBy = x.ModifiedBy;
+            DeletedAt = x.DeletedAt;
+            DeletedBy = x.DeletedBy;
+            return this;
         }
 
         #endregion

@@ -1,5 +1,4 @@
 using AutoMapper;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.Google;
 using SmartMatrix.Application.Extensions;
@@ -11,6 +10,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication;
+using SmartMatrix.Domain.Core.Identities.DbEntities;
+using SmartMatrix.Domain.Constants;
 
 public class Program
 {
@@ -106,6 +107,13 @@ public class Program
                 };
             });
 
+            // Define authorization policies
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(WebConstants.Authorizations.Policies.Admin_Api_Policy, policy => policy.RequireRole(SysRole.RoleCodeOptions.sysAdminApi));
+                options.AddPolicy(WebConstants.Authorizations.Policies.Standard_Api_Policy, policy => policy.RequireRole(SysRole.RoleCodeOptions.sysStandardApi));
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -121,6 +129,7 @@ public class Program
             mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
             app.UseHttpsRedirection();
+            app.UseRouting();
 
             // Use the CORS policy
             app.UseCors("AllowAllOrigins");
@@ -131,8 +140,7 @@ public class Program
             // Serve static files and default files (index.html)
             app.UseDefaultFiles();
             app.UseStaticFiles();
-
-            app.UseRouting();
+                        
             app.MapControllers();
 
             app.Run();

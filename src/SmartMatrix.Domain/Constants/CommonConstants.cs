@@ -14,12 +14,6 @@ namespace SmartMatrix.Domain.Constants
 
         public static class Identities
         {
-            public static class SysPolicies
-            {
-                public const string Admin = "Admin";
-                public const string User = "User";
-            }
-
             public static class SysClaimTypes
             {
                 public const string LoginProviderName = "login_provider_name";

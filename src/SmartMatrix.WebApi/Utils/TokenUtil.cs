@@ -23,6 +23,12 @@ namespace SmartMatrix.WebApi.Utils
                 new Claim(ClaimTypes.Surname, content.Surname),                                            
             };            
 
+            // Add roles as claims
+            foreach (var role in content.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(content.Secret.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);            
 

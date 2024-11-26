@@ -146,7 +146,8 @@ namespace SmartMatrix.WebApi.Controllers
                 Email = user?.Email ?? string.Empty,
                 Name = user?.UserName ?? string.Empty,
                 GivenName = user?.GivenName ?? string.Empty,
-                Surname = user?.Surname ?? string.Empty
+                Surname = user?.Surname ?? string.Empty,
+                Roles = user?.UserRoles?.Select(x => x.Role?.RoleCode).ToList()
             };
                     
             return Auth_Generate_SysToken(content);
