@@ -115,7 +115,6 @@ namespace SmartMatrix.WebApi.Controllers.Auth
             }            
         }
 
-
         /// <summary>
         /// Renew token including generating new access token and refresh token
         /// </summary>
@@ -202,7 +201,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
 
                 // Step 3: Generate token
                 var user = _mapper.Map<SysUser>(existingUser);
-                var token = Auth_Generate_SysToken(LOGIN_PROVIDER_NAME, existingLogin.LoginName, user);
+                var token = Auth_Generate_SysToken(existingLogin.LoginProvider, existingLogin.LoginName, user);
                 
                 // Step 4: Update refresh token
                 var updateRefreshTokenResult = await _mediator.Send(new SysLogin_UpdateRefreshToken_Command
@@ -230,6 +229,6 @@ namespace SmartMatrix.WebApi.Controllers.Auth
             {
                 return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex)));
             }            
-        }            
+        }                   
     }
 }

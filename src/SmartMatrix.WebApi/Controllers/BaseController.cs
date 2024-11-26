@@ -144,7 +144,7 @@ namespace SmartMatrix.WebApi.Controllers
                 LoginNameIdentifier = loginName ?? string.Empty,                
                 UserNameIdentifier = user?.UserName ?? string.Empty,
                 Email = user?.Email ?? string.Empty,
-                Name = user?.UserName ?? string.Empty,
+                Name = user?.DisplayName ?? string.Empty,
                 GivenName = user?.GivenName ?? string.Empty,
                 Surname = user?.Surname ?? string.Empty,
                 Roles = user?.UserRoles?.Select(x => x.Role?.RoleCode).ToList()

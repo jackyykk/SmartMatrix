@@ -9,5 +9,6 @@ namespace SmartMatrix.Application.Interfaces.Services.Essential
         string Name { get; }
         string GivenName { get; }
         string Surname { get; }
+        List<KeyValuePair<string, string>> Claims { get; set; }
     }
 }
