@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using System.Text.Json;
 using AutoMapper;
 using MediatR;
@@ -10,6 +11,7 @@ using SmartMatrix.Application.Interfaces.Services.Essential;
 using SmartMatrix.Core.BaseClasses.Web;
 using SmartMatrix.Domain.Core.Identities;
 using SmartMatrix.Domain.Core.Identities.DbEntities;
+using SmartMatrix.Domain.Core.Identities.Externals;
 using SmartMatrix.Domain.Core.Identities.Messages;
 using SmartMatrix.Domain.Core.Identities.Payloads;
 
@@ -55,6 +57,28 @@ namespace SmartMatrix.WebApi.Controllers.Auth
             {
                 return false;
             }
+        }
+
+        private GoogleUserProfile GetUserProfile(IEnumerable<Claim> claims)
+        {
+            var userId = claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            var userName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+            var givenName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+            var surname = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
+            var pictureUrl = claims?.FirstOrDefault(c => c.Type == "urn:google:picture")?.Value;
+
+            GoogleUserProfile userProfile = new GoogleUserProfile
+            {
+                UserId = userId,
+                Email = email,
+                UserName = userName,
+                GivenName = givenName,
+                Surname = surname,
+                PictureUrl = pictureUrl
+            };
+
+            return userProfile;
         }
 
         /// <summary>
@@ -110,7 +134,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 if (claims == null)
                     return Ok(Result<SysUser_PerformLogin_Response>.Fail("Invalid claims"));
 
-                var googleUserProfile = Auth_Google_Get_UserProfile(claims);                
+                var googleUserProfile = GetUserProfile(claims);                
 
                 // Check if the user is already registered
                 var getUserResult = await _mediator.Send(new SysUser_GetFirstByLoginName_Query

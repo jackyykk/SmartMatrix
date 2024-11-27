@@ -43,28 +43,6 @@ namespace SmartMatrix.WebApi.Controllers
         {
             string message = ex.Message + (ex.InnerException != null ? " || " + ex.InnerException.Message : "");
             return message;
-        }
-                
-        protected GoogleUserProfile Auth_Google_Get_UserProfile(IEnumerable<Claim> claims)
-        {
-            var userId = claims?.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            var email = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-            var userName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
-            var givenName = claims?.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
-            var surname = claims?.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
-            var pictureUrl = claims?.FirstOrDefault(c => c.Type == "urn:google:picture")?.Value;
-
-            GoogleUserProfile userProfile = new GoogleUserProfile
-            {
-                UserId = userId,
-                Email = email,
-                UserName = userName,
-                GivenName = givenName,
-                Surname = surname,
-                PictureUrl = pictureUrl
-            };
-
-            return userProfile;
-        }                
+        }                                        
     }
 }
