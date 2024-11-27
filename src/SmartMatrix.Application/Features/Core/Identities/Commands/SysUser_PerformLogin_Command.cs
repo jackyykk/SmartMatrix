@@ -67,7 +67,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     {
                         return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Login_Deleted, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }
-                    if (!MyHashTool.VerifyPasswordHash(password, existingLogin.PasswordSalt, existingLogin.PasswordHash))
+                    if (!StandardHashTool.VerifyPasswordHash(password, existingLogin.PasswordSalt, existingLogin.PasswordHash))
                     {
                         return Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Password_NotMatch, SysUser_PerformLogin_Response.StatusTexts.Login_Failed);
                     }

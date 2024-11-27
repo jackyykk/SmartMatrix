@@ -69,7 +69,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                                     // Only compute the secrets for the logins that have password and no password hash and salt
                                     string password = login.Password;
 
-                                    login.PasswordHash = MyHashTool.ComputePasswordHash(password, out string salt);
+                                    login.PasswordHash = StandardHashTool.ComputePasswordHash(password, out string salt);
                                     login.PasswordSalt = salt;
                                     
                                     await _sysLoginRepo.UpdateSecretAsync(login.Id, login.Password, login.PasswordHash, login.PasswordSalt);

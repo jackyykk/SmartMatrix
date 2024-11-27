@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using SmartMatrix.Application.Features.Core.Identities.Commands;
 using SmartMatrix.Application.Features.Core.Identities.Queries;
+using SmartMatrix.Application.Interfaces.Services.Essential;
 using SmartMatrix.Core.BaseClasses.Web;
 using SmartMatrix.Domain.Core.Identities;
 using SmartMatrix.Domain.Core.Identities.DbEntities;
@@ -17,13 +18,16 @@ namespace SmartMatrix.WebApi.Controllers.Auth
     [ApiController]
     [Route("api/auth/google")]
     public class GoogleController : BaseController<GoogleController>
-    {
+    {        
         const string LOGIN_PROVIDER_NAME = SysLogin.LoginProviderOptions.Google;
         public string Default_UserProfile = SysUser_OutputPayload.TypeOptions.BuiltIn_Normal_User_Profile;
 
-        public GoogleController(ILogger<GoogleController> logger, IConfiguration configuration, IMediator mediator, IMapper mapper)
+        protected readonly ITokenService _tokenService;
+
+        public GoogleController(ILogger<GoogleController> logger, IConfiguration configuration, IMediator mediator, IMapper mapper, ITokenService tokenService)
             : base(logger, configuration, mediator, mapper)
         {
+            _tokenService = tokenService;
         }
 
         private string GenerateState()
@@ -178,7 +182,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                         Console.WriteLine(userRole.SysRoleId);
                     }
 
-                    var token = Auth_Generate_SysToken(LOGIN_PROVIDER_NAME, googleUserProfile.Email, user);
+                    var token = _tokenService.GenerateToken(LOGIN_PROVIDER_NAME, googleUserProfile.Email, user);
 
                     if (token == null)
                     {
@@ -230,7 +234,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
 
                     // Step 2: Generate token
                     var user = _mapper.Map<SysUser>(existingUser);
-                    var token = Auth_Generate_SysToken(LOGIN_PROVIDER_NAME, loginName, user);
+                    var token = _tokenService.GenerateToken(LOGIN_PROVIDER_NAME, loginName, user);
 
                     if (token == null)
                     {

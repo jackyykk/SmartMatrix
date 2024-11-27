@@ -4,7 +4,7 @@ using static SmartMatrix.Domain.Constants.CommonConstants.Identities;
 
 namespace SmartMatrix.WebApi.Services
 {
-    public class CurrentUserService : IAuthenticatedUserService
+    public class StandardUserService : IAuthenticatedUserService
     {
         private readonly IHttpContextAccessor _accessor;
 
@@ -18,7 +18,7 @@ namespace SmartMatrix.WebApi.Services
 
         public List<KeyValuePair<string, string>> Claims { get; set; } = new List<KeyValuePair<string, string>>();
 
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+        public StandardUserService(IHttpContextAccessor httpContextAccessor)
         {
             _accessor = httpContextAccessor;
 

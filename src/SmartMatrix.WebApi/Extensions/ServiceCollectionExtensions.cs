@@ -15,7 +15,8 @@ namespace SmartMatrix.WebApi.Extensions
             services.TryAddTransient(typeof(IStringLocalizer<>), typeof(ServerLocalizer<>));
 
             services.AddHttpContextAccessor();
-            services.AddScoped<IAuthenticatedUserService, CurrentUserService>();
+            services.AddScoped<IAuthenticatedUserService, StandardUserService>();
+            services.AddScoped<ITokenService, JwtTokenService>();
             
             return services;
         }

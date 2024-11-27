@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace SmartMatrix.Core.DataSecurity
 {
-    public class MyHashTool
+    public class StandardHashTool
     {
         private const int SaltSize = 16; // 128 bit
         private const int KeySize = 32; // 256 bit
