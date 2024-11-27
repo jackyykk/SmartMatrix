@@ -42,8 +42,13 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Invalid_Request, SysUser_PerformLogin_Response.StatusTexts.Invalid_Request));
             }
 
-            if (string.IsNullOrEmpty(request!.PartitionKey)
-                || string.IsNullOrEmpty(request!.LoginName)
+            if (string.IsNullOrEmpty(request!.PartitionKey))
+            {
+                // Default partition key
+                request.PartitionKey = SysLogin.PartitionKeyOptions.SmartMatrix;
+            }
+
+            if (string.IsNullOrEmpty(request!.LoginName)
                 || string.IsNullOrEmpty(request!.Password))
             {
                 return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Invalid_Request, SysUser_PerformLogin_Response.StatusTexts.Invalid_Request));
@@ -119,24 +124,25 @@ namespace SmartMatrix.WebApi.Controllers.Auth
             }            
         }
 
-        /// <summary>
-        /// Renew token including generating new access token and refresh token
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>SysLogin_RenewToken_Response</returns>
-        [HttpPost("renew-token")]
-        public async Task<IActionResult> RenewToken(SysLogin_RenewToken_Request request)
+        [HttpGet("renew-token-by-ott")]
+        public async Task<IActionResult> GetTokenByOneTimeToken([FromQuery] SysLogin_RenewTokenByOneTimeToken_Request request)
         {
-            SysLogin_RenewToken_Response response = new SysLogin_RenewToken_Response();
+            SysLogin_RenewTokenByOneTimeToken_Response response = new SysLogin_RenewTokenByOneTimeToken_Response();
 
             if (request == null)
             {
-                return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Invalid_Request, SysLogin_RenewToken_Response.StatusTexts.Invalid_Request));
+                return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.Invalid_Request, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Request));
             }
 
-            if (string.IsNullOrEmpty(request.RefreshToken))
+            if (string.IsNullOrEmpty(request!.PartitionKey))
             {
-                return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Invalid_Request, SysLogin_RenewToken_Response.StatusTexts.Invalid_Request));
+                // Default partition key
+                request.PartitionKey = SysLogin.PartitionKeyOptions.SmartMatrix;
+            }
+
+            if (string.IsNullOrEmpty(request.OneTimeToken))
+            {
+                return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.Invalid_Request, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Request));
             }
 
             try
@@ -144,37 +150,37 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 // The whole process can't be done in feature/command because it involves generating token
 
                 // Step 1: Get login by refresh token
-                var getLoginResult = await _mediator.Send(new SysLogin_GetFirstByRefreshToken_Query
+                var getLoginResult = await _mediator.Send(new SysLogin_GetFirstByOneTimeToken_Query
                 {
-                    Request = new SysLogin_GetFirstByRefreshToken_Request
+                    Request = new SysLogin_GetFirstByOneTimeToken_Request
                     {
                         PartitionKey = request.PartitionKey,
-                        RefreshToken = request.RefreshToken
+                        OneTimeToken = request.OneTimeToken
                     }
                 });
 
                 if (!getLoginResult.Succeeded || getLoginResult.Data == null || getLoginResult.Data.Login == null)
                 {
-                    return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Login_NotFound, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
+                    return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.Login_NotFound, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Token));
                 }
                 
                 var existingLogin = getLoginResult.Data.Login;
 
                 if (string.IsNullOrEmpty(existingLogin.LoginName))
                 {
-                    return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.LoginName_Empty, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
+                    return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.LoginName_Empty, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Token));
                 }
-                if (existingLogin.RefreshTokenExpires < DateTime.UtcNow)
+                if (existingLogin.OneTimeTokenExpires < DateTime.UtcNow)
                 {
-                    return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.RefreshToken_Expired, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
+                    return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.OneTimeToken_Expired, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Token));
                 }
                 if (existingLogin.Status == SysLogin.StatusOptions.Disabled)
                 {
-                    return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Login_Disabled, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
+                    return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.Login_Disabled, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Token));
                 }
                 if (existingLogin.Status == SysLogin.StatusOptions.Deleted || existingLogin.IsDeleted)
                 {
-                    return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Login_Deleted, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
+                    return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.Login_Deleted, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Token));
                 } 
 
                 // Step 2: Get user by login
@@ -189,50 +195,50 @@ namespace SmartMatrix.WebApi.Controllers.Auth
 
                 if (!getUserResult.Succeeded || getUserResult.Data == null || getUserResult.Data.User == null)
                 {
-                    return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.User_NotFound, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
+                    return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.User_NotFound, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Token));
                 }
 
                 var existingUser = getUserResult.Data.User;
                 
                 if (existingUser.Status == SysLogin.StatusOptions.Disabled)
                 {
-                    return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.User_Disabled, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
+                    return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.User_Disabled, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Token));
                 }
                 if (existingUser.Status == SysLogin.StatusOptions.Deleted || existingUser.IsDeleted)
                 {
-                    return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.User_Deleted, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
+                    return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.User_Deleted, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Token));
                 }
 
                 // Step 3: Generate token
                 var user = _mapper.Map<SysUser>(existingUser);
                 var token = _tokenService.GenerateToken(existingLogin.LoginProvider, existingLogin.LoginName, user);
                 
-                // Step 4: Update refresh token
+                // Step 4: Update tokens
                 var updateRefreshTokenResult = await _mediator.Send(new SysLogin_UpdateRefreshToken_Command
                 {
                     Request = new SysLogin_UpdateRefreshToken_Request
                     {
                         LoginId = existingLogin.Id,
                         RefreshToken = token.RefreshToken,
-                        RefreshTokenExpires = token.RefreshToken_Expires
+                        RefreshTokenExpires = token.RefreshToken_Expires                        
                     }
                 });
 
                 if (!updateRefreshTokenResult.Succeeded)
                 {
-                    return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.RefreshToken_Update_Failed, SysLogin_RenewToken_Response.StatusTexts.Invalid_Token));
+                    return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.Tokens_Update_Failed, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Token));
                 }
 
                 var outputToken = _mapper.Map<SysToken_OutputPayload>(token);
 
                 response.Token = outputToken;
 
-                return Ok(Result<SysLogin_RenewToken_Response>.Success(response));
+                return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Success(response));
             }
             catch (Exception ex)
             {
-                return Ok(Result<SysLogin_RenewToken_Response>.Fail(SysLogin_RenewToken_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex)));
+                return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex)));
             }            
-        }                   
+        }                      
     }
 }

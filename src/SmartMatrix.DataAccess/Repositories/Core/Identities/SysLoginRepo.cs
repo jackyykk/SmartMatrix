@@ -59,6 +59,15 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
             return login;
         }
 
+        public async Task<SysLogin?> GetFirstByOneTimeTokenAsync(string partitionKey, string oneTimeToken)
+        {
+            var login = await _readRepo.Entities
+                .Where(x => x.PartitionKey == partitionKey && x.OneTimeToken == oneTimeToken)
+                .FirstOrDefaultAsync();
+
+            return login;
+        }
+
         public async Task UpdateSecretAsync(int id, string password, string passwordHash, string passwordSalt)
         {
             var entityToUpdate = await _writeRepo.GetByIdAsync(id);
@@ -82,6 +91,20 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
 
             entityToUpdate.RefreshToken = refreshToken;
             entityToUpdate.RefreshTokenExpires = refreshTokenExpires;
+        }
+
+        public async Task UpdateTokensAsync(int id, string refreshToken, DateTime? refreshTokenExpires, string oneTimeToken, DateTime? oneTimeTokenExpires)
+        {
+            var entityToUpdate = await _writeRepo.GetByIdAsync(id);
+            if (entityToUpdate == null)
+            {
+                throw new Exception("Login not found");
+            }
+
+            entityToUpdate.RefreshToken = refreshToken;
+            entityToUpdate.RefreshTokenExpires = refreshTokenExpires;
+            entityToUpdate.OneTimeToken = oneTimeToken;
+            entityToUpdate.OneTimeTokenExpires = oneTimeTokenExpires;
         }
 
         public async Task<SysLogin> InsertAsync(SysLogin entity)

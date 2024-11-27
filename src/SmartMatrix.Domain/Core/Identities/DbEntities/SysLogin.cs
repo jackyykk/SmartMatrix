@@ -19,6 +19,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         public string PasswordSalt { get; set; }
         public string RefreshToken { get; set; }
         public DateTime? RefreshTokenExpires { get; set; }
+        public string OneTimeToken { get; set; }
+        public DateTime? OneTimeTokenExpires { get; set; }
         public string Description { get; set; }        
         public string PictureUrl { get; set; }
 
@@ -88,6 +90,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 PasswordSalt = x.PasswordSalt,
                 RefreshToken = x.RefreshToken,
                 RefreshTokenExpires = x.RefreshTokenExpires,
+                OneTimeToken = x.OneTimeToken,
+                OneTimeTokenExpires = x.OneTimeTokenExpires,
                 Description = x.Description,
                 PictureUrl = x.PictureUrl,
             };
@@ -108,6 +112,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 PasswordSalt = x.PasswordSalt,
                 RefreshToken = x.RefreshToken,
                 RefreshTokenExpires = x.RefreshTokenExpires,
+                OneTimeToken = x.OneTimeToken,
+                OneTimeTokenExpires = x.OneTimeTokenExpires,
                 Description = x.Description,
                 PictureUrl = x.PictureUrl,
             };

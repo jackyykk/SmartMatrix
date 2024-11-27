@@ -43,6 +43,6 @@ namespace SmartMatrix.WebApi.Controllers
         {
             string message = ex.Message + (ex.InnerException != null ? " || " + ex.InnerException.Message : "");
             return message;
-        }                                        
+        }                                                
     }
 }

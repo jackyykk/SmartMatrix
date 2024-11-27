@@ -17,6 +17,8 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         public string LoginName { get; set; }
         public string RefreshToken { get; set; }
         public DateTime? RefreshTokenExpires { get; set; }
+        public string OneTimeToken { get; set; }
+        public DateTime? OneTimeTokenExpires { get; set; }
         public string Description { get; set; }
         public string PictureUrl { get; set; }        
 

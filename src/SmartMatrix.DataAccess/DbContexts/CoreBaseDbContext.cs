@@ -118,6 +118,8 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.PasswordSalt).HasColumnName("password_salt");
                 b.Property(p => p.RefreshToken).HasColumnName("refresh_token");
                 b.Property(p => p.RefreshTokenExpires).HasColumnName("refresh_token_expires");
+                b.Property(p => p.OneTimeToken).HasColumnName("one_time_token");
+                b.Property(p => p.OneTimeTokenExpires).HasColumnName("one_time_token_expires");
                 b.Property(p => p.Description).HasColumnName("description");
                 b.Property(p => p.PictureUrl).HasColumnName("picture_url");
                 b.Ignore(p => p.SkipAudit);

@@ -8,6 +8,7 @@ namespace SmartMatrix.WebApi.Controllers.Core
 {
     [ApiController]
     [Route("api/core/syslogin")]
+    //[Authorize(Policy = WebConstants.Authorizations.Policies.Standard_Api_Policy)]
     public class SysLoginController : BaseController<SysLoginController>
     {
         public SysLoginController(ILogger<SysLoginController> logger, IConfiguration configuration, IMediator mediator, IMapper mapper)

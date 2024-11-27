@@ -46,6 +46,9 @@ namespace SmartMatrix.Domain.Constants
                 public const int Password_NotMatch = -251;
                 public const int RefreshToken_Expired = -252;
                 public const int RefreshToken_Update_Failed = -253;
+                public const int OneTimeToken_Expired = -254;
+                public const int OneTimeToken_Update_Failed = -255;
+                public const int Tokens_Update_Failed = -256;
             }
 
             public static class SysToken_Codes

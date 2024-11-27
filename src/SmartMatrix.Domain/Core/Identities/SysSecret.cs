@@ -12,7 +12,10 @@ namespace SmartMatrix.Domain.Core.Identities
         public DateTime? AccessToken_Expires { get; set; }
         public string RefreshToken_Format { get; set; }
         public double RefreshToken_LifeInMinutes { get; set; }
-        public DateTime? RefreshToken_Expires { get; set; }        
+        public DateTime? RefreshToken_Expires { get; set; }
+        public string OneTimeToken_Format { get; set; }
+        public double OneTimeToken_LifeInMinutes { get; set; }
+        public DateTime? OneTimeToken_Expires { get; set; }
 
         public SysSecret Copy()
         {
@@ -26,7 +29,10 @@ namespace SmartMatrix.Domain.Core.Identities
                 AccessToken_Expires = AccessToken_Expires,
                 RefreshToken_Format = RefreshToken_Format,
                 RefreshToken_LifeInMinutes = RefreshToken_LifeInMinutes,
-                RefreshToken_Expires = RefreshToken_Expires
+                RefreshToken_Expires = RefreshToken_Expires,
+                OneTimeToken_Format = OneTimeToken_Format,
+                OneTimeToken_LifeInMinutes = OneTimeToken_LifeInMinutes,
+                OneTimeToken_Expires = OneTimeToken_Expires
             };
         }
     }

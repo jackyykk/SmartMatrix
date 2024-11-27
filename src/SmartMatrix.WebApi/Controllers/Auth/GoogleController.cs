@@ -32,31 +32,42 @@ namespace SmartMatrix.WebApi.Controllers.Auth
             _tokenService = tokenService;
         }
 
-        private string GenerateState()
+        public class LoginState
         {
-            var state = new
+            public string? Random { get; set; }
+            public string? ReturnUrl { get; set; }
+            public long Timestamp { get; set; }
+        }
+
+        private string GenerateLoginState(string returnUrl)
+        {
+            var state = new LoginState
             {
                 Random = new Random().Next(100000, 999999).ToString(),
+                ReturnUrl = returnUrl,
                 Timestamp = DateTime.UtcNow.Ticks
             };
 
             return JsonSerializer.Serialize(state);
         }
 
-        private bool ValidateState(string state)
+        private LoginState? RetrieveLoginState(string json)
         {
             // Implement your state validation logic here
             // For example, you can deserialize the state and check its contents
+            LoginState? state;
+
             try
             {
-                var stateObj = JsonSerializer.Deserialize<dynamic>(state);
-                // Add your validation logic here
-                return true;
+                var stateObj = JsonSerializer.Deserialize<LoginState>(json);                
+                state = stateObj;
             }
             catch
             {
-                return false;
+                state = null;
             }
+
+            return state;
         }
 
         private GoogleUserProfile GetUserProfile(IEnumerable<Claim> claims)
@@ -86,11 +97,11 @@ namespace SmartMatrix.WebApi.Controllers.Auth
         /// </summary>
         /// <returns>SysUser_PerformLogin_Response</returns>
         [HttpGet("login")]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl)
         {
             try
             {
-                var state = GenerateState();
+                var state = GenerateLoginState(returnUrl);
                 var redirectUrl = Url.Action(nameof(GoogleCallback), "Google", new { state }, Request.Scheme);
                 var properties = new AuthenticationProperties
                 {
@@ -126,9 +137,13 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     return Ok(Result<SysUser_PerformLogin_Response>.Fail("Unauthorized"));
 
                 // Validate the state parameter
-                if (!result.Properties.Items.TryGetValue("state", out var state) || state == null || !ValidateState(state))
+                if (!result.Properties.Items.TryGetValue("state", out var state) || state == null)
                     return Ok(Result<SysUser_PerformLogin_Response>.Fail("Invalid state parameter"));
 
+                var loginState = RetrieveLoginState(state);
+                if (loginState == null)
+                    return Ok(Result<SysUser_PerformLogin_Response>.Fail("Invalid state parameter"));
+                
                 // Extract user information
                 var claims = result.Principal?.Claims;
                 if (claims == null)
@@ -222,6 +237,8 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                         LoginName = googleUserProfile.Email,
                         RefreshToken = token.RefreshToken,
                         RefreshTokenExpires = token.RefreshToken_Expires,
+                        OneTimeToken = token.OneTimeToken,
+                        OneTimeTokenExpires = token.OneTimeToken_Expires,
                         Status = SysLogin_OutputPayload.StatusOptions.Active,
                         PictureUrl = googleUserProfile.PictureUrl
                     };
@@ -267,19 +284,23 @@ namespace SmartMatrix.WebApi.Controllers.Auth
 
                     existingLogin.RefreshToken = token.RefreshToken;
                     existingLogin.RefreshTokenExpires = token.RefreshToken_Expires;
+                    existingLogin.OneTimeToken = token.OneTimeToken;
+                    existingLogin.OneTimeTokenExpires = token.OneTimeToken_Expires;
 
                     // Step 3: Update refresh token
-                    var updateRefreshTokenResult = await _mediator.Send(new SysLogin_UpdateRefreshToken_Command
+                    var updateTokensResult = await _mediator.Send(new SysLogin_UpdateTokens_Command
                     {
-                        Request = new SysLogin_UpdateRefreshToken_Request
+                        Request = new SysLogin_UpdateTokens_Request
                         {
                             LoginId = existingLogin.Id,
                             RefreshToken = token.RefreshToken,
-                            RefreshTokenExpires = token.RefreshToken_Expires
+                            RefreshTokenExpires = token.RefreshToken_Expires,
+                            OneTimeToken = token.OneTimeToken,
+                            OneTimeTokenExpires = token.OneTimeToken_Expires
                         }
                     });
 
-                    if (!updateRefreshTokenResult.Succeeded)
+                    if (!updateTokensResult.Succeeded)
                     {
                         return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.RefreshToken_Update_Failed, SysUser_PerformLogin_Response.StatusTexts.Login_Failed));
                     }
@@ -295,7 +316,13 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     Token = outputToken
                 };
 
-                return Ok(Result<SysUser_PerformLogin_Response>.Success(response));
+                // Use redirect to return one time token instead of response
+                //return Ok(Result<SysUser_PerformLogin_Response>.Success(response));
+                                
+                string returnUrl = loginState?.ReturnUrl!;                                
+                
+                // Redirect to returnUrl
+                return Redirect($"{returnUrl}?ts=true&ott={response.Token.OneTimeToken}");                
             }
             catch (Exception ex)
             {

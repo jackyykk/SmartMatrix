@@ -13,6 +13,9 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         public string RefreshToken { get; set; }
         public double RefreshToken_LifeInMinutes { get; set; }
         public DateTime? RefreshToken_Expires { get; set; }
+        public string OneTimeToken { get; set; }
+        public double OneTimeToken_LifeInMinutes { get; set; }
+        public DateTime? OneTimeToken_Expires { get; set; }
 
         #endregion
 

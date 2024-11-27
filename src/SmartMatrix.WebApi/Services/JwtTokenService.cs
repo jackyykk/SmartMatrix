@@ -107,6 +107,14 @@ namespace SmartMatrix.WebApi.Services
             return Convert.ToBase64String(randomNumber);
         }
 
+        protected static string GenerateOneTimeToken()
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
         #endregion
 
         protected SysSecret GetTokenSecret()
@@ -116,9 +124,12 @@ namespace SmartMatrix.WebApi.Services
             double accessToken_LifeInMinutes = _configuration.GetValue<double>("Authentication:AccessToken:LifeInMinutes");            
             string refreshToken_Format = _configuration["Authentication:RefreshToken:Format"] ?? string.Empty;
             double refreshToken_LifeInMinutes = _configuration.GetValue<double>("Authentication:RefreshToken:LifeInMinutes");
+            string oneTimeToken_Format = _configuration["Authentication:OneTimeToken:Format"] ?? string.Empty;
+            double oneTimeToken_LifeInMinutes = _configuration.GetValue<double>("Authentication:OneTimeToken:LifeInMinutes");
 
             DateTime accessToken_Expires = DateTime.UtcNow.AddMinutes(accessToken_LifeInMinutes);
             DateTime refreshToken_Expires = DateTime.UtcNow.AddMinutes(refreshToken_LifeInMinutes);
+            DateTime oneTimeToken_Expires = DateTime.UtcNow.AddMinutes(oneTimeToken_LifeInMinutes);
 
             if (!string.Equals(accessToken_Format, "Jwt", System.StringComparison.InvariantCultureIgnoreCase))
             {
@@ -127,6 +138,10 @@ namespace SmartMatrix.WebApi.Services
             if (!string.Equals(refreshToken_Format, "Standard", System.StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new System.Exception("Invalid refresh token format");
+            }
+            if (!string.Equals(oneTimeToken_Format, "Standard", System.StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new System.Exception("Invalid one time token format");
             }
             
             string jwtKey = _configuration["Authentication:Jwt:Key"] ?? string.Empty;
@@ -144,7 +159,10 @@ namespace SmartMatrix.WebApi.Services
                 AccessToken_Expires = accessToken_Expires,
                 RefreshToken_Format = refreshToken_Format,
                 RefreshToken_LifeInMinutes = refreshToken_LifeInMinutes,
-                RefreshToken_Expires = refreshToken_Expires
+                RefreshToken_Expires = refreshToken_Expires,
+                OneTimeToken_Format = oneTimeToken_Format,
+                OneTimeToken_LifeInMinutes = oneTimeToken_LifeInMinutes,
+                OneTimeToken_Expires = oneTimeToken_Expires
             };
                                                         
             return secret;
@@ -169,11 +187,19 @@ namespace SmartMatrix.WebApi.Services
                 throw new System.Exception("Invalid refresh token format");
             }
 
+            if (!string.Equals(content.Secret.OneTimeToken_Format, "Standard", System.StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new System.Exception("Invalid one time token format");
+            }
+
             // Only support Jwt for now
             var accessToken = EncodeJwt(content);
 
             // Only support Standard for now
             var refreshToken = GenerateRefreshToken();
+
+            // Only support Standard for now
+            var oneTimeToken = GenerateOneTimeToken();
             
             token.AccessToken = accessToken;
             token.AccessToken_LifeInMinutes = content.Secret.AccessToken_LifeInMinutes;
@@ -181,6 +207,9 @@ namespace SmartMatrix.WebApi.Services
             token.RefreshToken = refreshToken;
             token.RefreshToken_LifeInMinutes = content.Secret.RefreshToken_LifeInMinutes;
             token.RefreshToken_Expires = content.Secret.RefreshToken_Expires;
+            token.OneTimeToken = oneTimeToken;
+            token.OneTimeToken_LifeInMinutes = content.Secret.OneTimeToken_LifeInMinutes;
+            token.OneTimeToken_Expires = content.Secret.OneTimeToken_Expires;
 
             return token;
         }
