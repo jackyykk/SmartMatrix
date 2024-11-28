@@ -314,6 +314,8 @@ namespace SmartMatrix.WebApi.Controllers.Auth
 
                 var response = new SysUser_PerformLogin_Response
                 {
+                    LoginName = googleUserProfile.Email,
+                    UserName = outputUser.UserName,
                     User = outputUser,
                     Token = outputToken
                 };

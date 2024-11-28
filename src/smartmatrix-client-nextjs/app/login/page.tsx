@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import * as Constants from '../constants/constants';
-import { saveTokens } from '../utils/authTokenUtils';
+import { saveSecrets, clearSecrets, checkSecrets } from '../utils/authSecretUtils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 const Login = () => {
@@ -15,9 +15,13 @@ const Login = () => {
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
 
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
+    const [userName, setUserName] = useState('');
+
     const [loginName, setLoginName] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false); // State for password visibility
+    const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me"
 
     useEffect(() => {
         setMessage('');
@@ -31,6 +35,16 @@ const Login = () => {
         console.log('onetimeToken: ', onetimeToken);
         console.log('returnUrl: ', returnUrl);
 
+        // Check if the user is already logged in
+        const secrets = checkSecrets();
+        if (secrets) {
+            setIsLoggedIn(true);
+            setUserName(secrets.userName);
+        }
+        else {
+            setIsLoggedIn(false);
+        }
+
         if (tokensSet) {
             if (onetimeToken && returnUrl) {
                 // Exchange the one-time token for tokens                
@@ -43,9 +57,9 @@ const Login = () => {
 
                         const succeeded = result.succeeded;
                         const data = result.data;
-                        if (succeeded && data && data.token && data.token.accessToken && data.token.refreshToken) {
+                        if (succeeded && data) {
                             // Save tokens
-                            saveTokens(data.token);
+                            saveSecrets(data, rememberMe);
 
                             // Redirect to return Url
                             router.push(returnUrl);
@@ -62,7 +76,7 @@ const Login = () => {
                 setError('Failed to login: Failed to get one-time token and return URL');
             }
         }
-    }, [router]);
+    }, [router, rememberMe]);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -84,9 +98,9 @@ const Login = () => {
 
             const succeeded = result.succeeded;
             const data = result.data;
-            if (succeeded && data && data.token && data.token.accessToken && data.token.refreshToken) {
+            if (succeeded && data) {
                 // Save tokens
-                saveTokens(data.token);
+                saveSecrets(data, rememberMe);
 
                 // Redirect to return Url
                 router.push(returnUrl);
@@ -112,66 +126,107 @@ const Login = () => {
         }
     };
 
+    const handleLogout = () => {
+        clearSecrets();
+        setIsLoggedIn(false);
+        setUserName('');
+        router.push('/login');
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <div className="w-full max-w-md p-8 space-y-8 bg-white rounded shadow-md">
                 <h2 className="text-2xl font-bold text-center">Login</h2>
-                <form className="space-y-6" onSubmit={handleStandardLogin}>
-                    <div>
-                        <label htmlFor="loginName" className="block text-sm font-medium text-gray-700">
-                            Username
-                        </label>
-                        <input
-                            id="loginName"
-                            name="loginName"
-                            type="text"
-                            required
-                            value={loginName}
-                            onChange={(e) => setLoginName(e.target.value)}
-                            className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200"
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                            Password
-                        </label>
-                        <div className="relative">
-                            <input
-                                id="password"
-                                name="password"
-                                type={showPassword ? 'text' : 'password'}
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200"
-                            />
+                {
+                    isLoggedIn ? (
+                        <div className="text-center">
+                            <p className="text-lg">Welcome, {userName}!</p>
                             <button
-                                type="button"
-                                onClick={togglePasswordVisibility}
-                                className="absolute inset-y-0 right-0 px-3 py-2 mt-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-r-md hover:bg-gray-300 focus:outline-none focus:ring focus:ring-indigo-200"
+                                onClick={handleLogout}
+                                className="w-full px-4 py-2 mt-4 font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-200 flex items-center justify-center"
                             >
-                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                                <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" />
+                                Logout
                             </button>
                         </div>
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200 flex items-center justify-center"
-                    >
-                        <FontAwesomeIcon icon={faSignInAlt} className="mr-2" />
-                        Login
-                    </button>
-                </form>
-                <div className="flex items-center justify-center mt-4">
-                    <span className="text-sm text-gray-600">or</span>
-                </div>
-                <button
-                    onClick={handleGoogleLogin}
-                    className="w-full px-4 py-2 font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-200 flex items-center justify-center"
-                >
-                    <FontAwesomeIcon icon={faGoogle} className="mr-2" />
-                    Login with Google
-                </button>
+                    ) : (
+                        <form className="space-y-6" onSubmit={handleStandardLogin}>
+                            <div>
+                                <label htmlFor="loginName" className="block text-sm font-medium text-gray-700">
+                                    Username
+                                </label>
+                                <input
+                                    id="loginName"
+                                    name="loginName"
+                                    type="text"
+                                    required
+                                    value={loginName}
+                                    onChange={(e) => setLoginName(e.target.value)}
+                                    className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200"
+                                />
+                            </div>
+                            <div>
+                                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                                    Password
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        id="password"
+                                        name="password"
+                                        type={showPassword ? 'text' : 'password'}
+                                        required
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={togglePasswordVisibility}
+                                        className="absolute inset-y-0 right-0 px-3 py-2 mt-1 text-sm font-medium text-gray-700 bg-gray-200 rounded-r-md hover:bg-gray-300 focus:outline-none focus:ring focus:ring-indigo-200"
+                                    >
+                                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="flex items-center">
+                                <input
+                                    id="rememberMe"
+                                    name="rememberMe"
+                                    type="checkbox"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                    className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                />
+                                <label htmlFor="rememberMe" className="ml-2 block text-sm text-gray-900">
+                                    Remember Me
+                                </label>
+                            </div>
+                            <button
+                                type="submit"
+                                className="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200 flex items-center justify-center"
+                            >
+                                <FontAwesomeIcon icon={faSignInAlt} className="mr-2" />
+                                Login
+                            </button>
+                        </form>
+                    )
+                }
+                {
+                    !isLoggedIn && (
+                        <>
+                            <div className="flex items-center justify-center mt-4">
+                                <span className="text-sm text-gray-600">or</span>
+                            </div>
+                            <button
+                                onClick={handleGoogleLogin}
+                                className="w-full px-4 py-2 font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-200 flex items-center justify-center"
+                            >
+                                <FontAwesomeIcon icon={faGoogle} className="mr-2" />
+                                Login with Google
+                            </button>
+                        </>
+                    )
+                }
                 {message && <p className="mt-4 text-green-600">{message}</p>}
                 {error && <p className="mt-4 text-red-600">{error}</p>}
             </div>

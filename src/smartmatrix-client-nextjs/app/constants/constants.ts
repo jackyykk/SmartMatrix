@@ -12,6 +12,8 @@ export const API_AUTH_STANDARD_RENEW_TOKEN_BY_OTT = '/auth/standard/renew-token-
 
 
 // Local Storage Keys
+export const LSK_AUTH_LOGIN_NAME = 'auth-login_name';
+export const LSK_AUTH_USER_NAME = 'auth-user_name';
 export const LSK_AUTH_ACCESS_TOKEN = 'auth-access_token';
 export const LSK_AUTH_ACCESS_TOKEN_LifeInMinutes = 'auth-access_token_lifeinminutes';
 export const LSK_AUTH_ACCESS_TOKEN_Expires = 'auth-access_token_expires';

@@ -37,6 +37,8 @@ namespace SmartMatrix.Domain.Core.Identities.Messages
             public const string Login_Failed = "Login failed";
         }
 
+        public string LoginName { get; set; }
+        public string UserName { get; set; }
         public SysUser_OutputPayload User { get; set; }
         public SysToken_OutputPayload Token { get; set; }
     }

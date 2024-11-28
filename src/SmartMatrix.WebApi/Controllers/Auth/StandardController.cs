@@ -109,6 +109,8 @@ namespace SmartMatrix.WebApi.Controllers.Auth
 
                     var response = new SysUser_PerformLogin_Response
                     {
+                        LoginName = existingLogin.LoginName,
+                        UserName = outputUser.UserName,
                         User = outputUser,
                         Token = outputToken
                     };
@@ -244,8 +246,12 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.Tokens_Update_Failed, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Token));
                 }
 
+                var outputUser = existingUser;
                 var outputToken = _mapper.Map<SysToken_OutputPayload>(token);
 
+                response.LoginName = existingLogin.LoginName;
+                response.UserName = outputUser.UserName;
+                response.User = outputUser;
                 response.Token = outputToken;
 
                 return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Success(response));
