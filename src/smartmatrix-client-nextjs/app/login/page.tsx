@@ -14,6 +14,7 @@ const Login = () => {
 
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true); // State for loading
 
     const [isLoggedIn, setIsLoggedIn] = useState(false); // State for login status
     const [userName, setUserName] = useState('');
@@ -22,19 +23,11 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false); // State for password visibility
     const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me"
+    const [isSubmitting, setIsSubmitting] = useState(false); // State for button disabled
 
     useEffect(() => {
         setMessage('');
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const tokensSet = urlParams.get('ts');
-        const onetimeToken = urlParams.get('ott');
-        const returnUrl = urlParams.get('returnUrl');
-
-        console.log('tokensSet: ', tokensSet);
-        console.log('onetimeToken: ', onetimeToken);
-        console.log('returnUrl: ', returnUrl);
-
+        
         // Check if the user is already logged in
         const secrets = checkSecrets();
         if (secrets) {
@@ -44,6 +37,12 @@ const Login = () => {
         else {
             setIsLoggedIn(false);
         }
+        
+        // get the query string parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const tokensSet = urlParams.get('ts');
+        const onetimeToken = urlParams.get('ott');
+        const returnUrl = urlParams.get('returnUrl');
 
         if (tokensSet) {
             if (onetimeToken && returnUrl) {
@@ -70,11 +69,16 @@ const Login = () => {
                     .catch(err => {
                         setError('Failed to login: An error occurred while exchanging code for tokens');
                         console.error(err);
-                    });
+                    })
+                    .finally(
+                        () => setLoading(false)
+                    );
             }
             else {
                 setError('Failed to login: Failed to get one-time token and return URL');
             }
+        } else {
+            setLoading(false);
         }
     }, [router, rememberMe]);
 
@@ -84,6 +88,7 @@ const Login = () => {
 
     const handleStandardLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
         try {
             // it will redirect to returnUrl if it is provided in the query string, redirect to /main otherwise
             const returnUrl = new URLSearchParams(window.location.search).get('returnUrl') || `${window.location.origin}/main`;
@@ -110,10 +115,13 @@ const Login = () => {
         } catch (err) {
             setError('Failed to login: An error occurred during standard login');
             console.error(err);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     const handleGoogleLogin = async () => {
+        setIsSubmitting(true);
         try {
             // it will redirect to returnUrl if it is provided in the query string, redirect to /main otherwise            
             const originUrl = `${window.location.origin}/login`;
@@ -123,6 +131,8 @@ const Login = () => {
         catch (err) {
             setError('An error occurred during Google login');
             console.error(err);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -132,6 +142,16 @@ const Login = () => {
         setUserName('');
         router.push('/login');
     };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gray-100">
+                <div className="w-full max-w-md p-8 space-y-8 bg-white rounded shadow-md">
+                    <h2 className="text-2xl font-bold text-center">Loading...</h2>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -204,6 +224,7 @@ const Login = () => {
                             <button
                                 type="submit"
                                 className="w-full px-4 py-2 font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200 flex items-center justify-center"
+                                disabled={isSubmitting}
                             >
                                 <FontAwesomeIcon icon={faSignInAlt} className="mr-2" />
                                 Login
@@ -220,6 +241,7 @@ const Login = () => {
                             <button
                                 onClick={handleGoogleLogin}
                                 className="w-full px-4 py-2 font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-200 flex items-center justify-center"
+                                disabled={isSubmitting}
                             >
                                 <FontAwesomeIcon icon={faGoogle} className="mr-2" />
                                 Login with Google
