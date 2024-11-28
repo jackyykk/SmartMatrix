@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { config } from '@fortawesome/fontawesome-svg-core';
 import "./globals.css";
+
+config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatically since it's already imported
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

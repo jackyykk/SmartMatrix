@@ -14,6 +14,12 @@
   }
 }
 
+/* Add this rule to set the default size for Font Awesome icons */
+svg[data-icon] {
+  width: 1em;
+  height: 1em;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
