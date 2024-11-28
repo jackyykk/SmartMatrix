@@ -32,12 +32,10 @@ const Login = () => {
                 fetch(`${Constants.API_BASE_URL}${Constants.API_AUTH_STANDARD_RENEW_TOKEN_BY_OTT}?oneTimeToken=${onetimeToken}`)
                     .then(response => response.json())
                     .then(result => {
+                        console.log('result: ', result);
+
                         const succeeded = result.succeeded;
-                        const data = result.data;
-
-                        console.log('succeeded: ', succeeded);
-                        console.log('data: ', data);
-
+                        const data = result.data;                        
                         if (succeeded && data && data.token && data.token.accessToken && data.token.refreshToken) {
                             // Save tokens
                             localStorage.setItem(Constants.LSK_AUTH_ACCESS_TOKEN, data.token.accessToken);
@@ -50,16 +48,16 @@ const Login = () => {
                             // Redirect to return Url
                             router.push(returnUrl);
                         } else {
-                            setError('Failed to exchange code for tokens');
+                            setError(`Failed to login [${result.statusCode}]: ${result.messages.join(', ')}`);
                         }
                     })
                     .catch(err => {
-                        setError('An error occurred while exchanging code for tokens');
+                        setError('Failed to login: An error occurred while exchanging code for tokens');
                         console.error(err);
                     });
             }
             else {
-                setError('Failed to get one-time token and return URL');
+                setError('Failed to login: Failed to get one-time token and return URL');
             }
         }
     }, [router]);
@@ -78,23 +76,31 @@ const Login = () => {
             });
 
             if (response.ok) {
-                const data = await response.json();
-                // Store tokens
-                localStorage.setItem('accessToken', data.accessToken);
-                localStorage.setItem('accessToken_LifeInMinutes', data.accessToken_LifeInMinutes);
-                localStorage.setItem('accessToken_Expires', data.accessToken_Expires);
-                localStorage.setItem('refreshToken', data.refreshToken);
-                localStorage.setItem('refreshToken_LifeInMinutes', data.refreshToken_LifeInMinutes);
-                localStorage.setItem('refreshToken_Expires', data.refreshToken_Expires);
+                const result = await response.json();
+                console.log('result: ', result);
 
-                // Redirect to return Url
-                router.push(returnUrl);
+                const succeeded = result.succeeded;
+                const data = result.data;                        
+                if (succeeded && data && data.token && data.token.accessToken && data.token.refreshToken) {
+                    // Save tokens
+                    localStorage.setItem(Constants.LSK_AUTH_ACCESS_TOKEN, data.token.accessToken);
+                    localStorage.setItem(Constants.LSK_AUTH_ACCESS_TOKEN_LifeInMinutes, data.token.accessToken_LifeInMinutes);
+                    localStorage.setItem(Constants.LSK_AUTH_ACCESS_TOKEN_Expires, data.token.accessToken_Expires);
+                    localStorage.setItem(Constants.LSK_AUTH_REFRESH_TOKEN, data.token.refreshToken);
+                    localStorage.setItem(Constants.LSK_AUTH_REFRESH_TOKEN_LifeInMinutes, data.token.refreshToken_LifeInMinutes);
+                    localStorage.setItem(Constants.LSK_AUTH_REFRESH_TOKEN_Expires, data.token.refreshToken_Expires);
+
+                    // Redirect to return Url
+                    router.push(returnUrl);
+                } else {
+                    setError(`Failed to login [${result.statusCode}]: ${result.messages.join(', ')}`);
+                }                
             } else {
                 const errorData = await response.json();
-                setError(errorData.message || 'An error occurred during standard login');
+                setError(errorData.message || 'Failed to login: An error occurred during standard login');
             }
         } catch (err) {
-            setError('An error occurred during standard login');
+            setError('Failed to login: An error occurred during standard login');
             console.error(err);
         }
     };

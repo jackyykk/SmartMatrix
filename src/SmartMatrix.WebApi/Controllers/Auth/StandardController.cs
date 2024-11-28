@@ -213,8 +213,23 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                 var user = _mapper.Map<SysUser>(existingUser);
                 var token = _tokenService.GenerateToken(existingLogin.LoginProvider, existingLogin.LoginName, user);
                 
-                // Step 4: Update tokens
-                var updateRefreshTokenResult = await _mediator.Send(new SysLogin_UpdateRefreshToken_Command
+                // Step 4: Update tokens, and removed one-time token
+                // In debug mode, the function will run twice, and the second time will fail because the one-time token is already removed
+                // So, it's better to keep the one-time token in the database
+                /*
+                var updateTokensResult = await _mediator.Send(new SysLogin_UpdateTokens_Command
+                {
+                    Request = new SysLogin_UpdateTokens_Request
+                    {
+                        LoginId = existingLogin.Id,
+                        RefreshToken = token.RefreshToken,
+                        RefreshTokenExpires = token.RefreshToken_Expires,
+                        OneTimeToken = string.Empty,
+                        OneTimeTokenExpires = null
+                    }
+                });
+                */
+                var updateTokensResult = await _mediator.Send(new SysLogin_UpdateRefreshToken_Command
                 {
                     Request = new SysLogin_UpdateRefreshToken_Request
                     {
@@ -224,7 +239,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     }
                 });
 
-                if (!updateRefreshTokenResult.Succeeded)
+                if (!updateTokensResult.Succeeded)
                 {
                     return Ok(Result<SysLogin_RenewTokenByOneTimeToken_Response>.Fail(SysLogin_RenewTokenByOneTimeToken_Response.StatusCodes.Tokens_Update_Failed, SysLogin_RenewTokenByOneTimeToken_Response.StatusTexts.Invalid_Token));
                 }

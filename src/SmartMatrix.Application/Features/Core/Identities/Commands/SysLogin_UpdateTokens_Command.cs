@@ -35,11 +35,10 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     return Result<SysLogin_UpdateTokens_Response>.Fail(SysLogin_UpdateTokens_Response.StatusCodes.Invalid_Request, SysLogin_UpdateTokens_Response.StatusTexts.Invalid_Request);
                 }
 
+                // one-time token is optional
                 if (command.Request!.LoginId <= 0
                     || string.IsNullOrEmpty(command.Request!.RefreshToken)
-                    || command.Request!.RefreshTokenExpires == null
-                    || string.IsNullOrEmpty(command.Request!.OneTimeToken)
-                    || command.Request!.OneTimeTokenExpires == null)
+                    || command.Request!.RefreshTokenExpires == null)
                 {
                     return Result<SysLogin_UpdateTokens_Response>.Fail(SysLogin_UpdateTokens_Response.StatusCodes.Invalid_Request, SysLogin_UpdateTokens_Response.StatusTexts.Invalid_Request);
                 }
@@ -56,8 +55,8 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                             int loginId = command.Request!.LoginId;
                             string refreshToken = command.Request!.RefreshToken;
                             DateTime refreshTokenExpires = command.Request!.RefreshTokenExpires.Value;
-                            string oneTimeToken = command.Request!.OneTimeToken;
-                            DateTime oneTimeTokenExpires = command.Request!.OneTimeTokenExpires.Value;
+                            string? oneTimeToken = command.Request!.OneTimeToken;
+                            DateTime? oneTimeTokenExpires = command.Request!.OneTimeTokenExpires.HasValue ? command.Request!.OneTimeTokenExpires.Value : null;
 
                             await _sysLoginRepo.UpdateTokensAsync(loginId, refreshToken, refreshTokenExpires, oneTimeToken, oneTimeTokenExpires);
 
