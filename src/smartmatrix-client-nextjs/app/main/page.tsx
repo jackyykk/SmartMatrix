@@ -24,12 +24,12 @@ export default function MainPage() {
         <main className="min-h-screen p-4 bg-gray-100">
             <p className="text-sm text-gray-500 mb-4">Main Page</p>
             <div className="flex gap-4 items-center flex-col sm:flex-row mb-6">
-                <Button
-                    variant="contained"
-                    onClick={backToHome}
-                >
+                <Button variant="contained" onClick={backToHome}>
                     Back To Home
                 </Button>
+            </div>
+            <div>
+                
             </div>
             <div>
                 {message && <p className="mt-4 text-green-600">{message}</p>}

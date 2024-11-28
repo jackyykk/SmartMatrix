@@ -35,15 +35,17 @@ namespace SmartMatrix.WebApi.Controllers.Auth
         public class LoginState
         {
             public string? Random { get; set; }
+            public string? OriginUrl { get; set; }
             public string? ReturnUrl { get; set; }
             public long Timestamp { get; set; }
         }
 
-        private string GenerateLoginState(string returnUrl)
+        private string GenerateLoginState(string originUrl, string returnUrl)
         {
             var state = new LoginState
             {
                 Random = new Random().Next(100000, 999999).ToString(),
+                OriginUrl = originUrl,
                 ReturnUrl = returnUrl,
                 Timestamp = DateTime.UtcNow.Ticks
             };
@@ -97,11 +99,11 @@ namespace SmartMatrix.WebApi.Controllers.Auth
         /// </summary>
         /// <returns>SysUser_PerformLogin_Response</returns>
         [HttpGet("login")]
-        public IActionResult Login(string returnUrl)
+        public IActionResult Login(string originUrl, string returnUrl)
         {
             try
             {
-                var state = GenerateLoginState(returnUrl);
+                var state = GenerateLoginState(originUrl, returnUrl);
                 var redirectUrl = Url.Action(nameof(GoogleCallback), "Google", new { state }, Request.Scheme);
                 var properties = new AuthenticationProperties
                 {
@@ -318,11 +320,15 @@ namespace SmartMatrix.WebApi.Controllers.Auth
 
                 // Use redirect to return one time token instead of response
                 //return Ok(Result<SysUser_PerformLogin_Response>.Success(response));
-                                
-                string returnUrl = loginState?.ReturnUrl!;                                
+
+                string originUrl = loginState?.OriginUrl!;                                
+                string returnUrl = loginState?.ReturnUrl!; 
+                // Encode returnUrl and OneTimeToken
+                string encodedReturnUrl = Uri.EscapeDataString(returnUrl);                
+                string encodedOneTimeToken = Uri.EscapeDataString(response.Token.OneTimeToken);
                 
                 // Redirect to returnUrl
-                return Redirect($"{returnUrl}?ts=true&ott={response.Token.OneTimeToken}");                
+                return Redirect($"{originUrl}?ts=true&ott={encodedOneTimeToken}&returnUrl={encodedReturnUrl}");
             }
             catch (Exception ex)
             {

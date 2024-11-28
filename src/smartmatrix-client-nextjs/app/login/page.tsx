@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import * as Constants from '../constants/constants';
 //import axios from 'axios';
 
 const Login = () => {
@@ -19,43 +20,56 @@ const Login = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const tokensSet = urlParams.get('ts');
         const onetimeToken = urlParams.get('ott');
+        const returnUrl = urlParams.get('returnUrl');
 
-        if (tokensSet && onetimeToken) {
-            // Exchange the code for tokens
-            fetch(`https://localhost:5001/api/auth/standard/renew-token-by-ott?oneTimeToken=${onetimeToken}`)
-                .then(response => response.json())
-                .then(data => {
+        console.log('tokensSet: ', tokensSet);
+        console.log('onetimeToken: ', onetimeToken);
+        console.log('returnUrl: ', returnUrl);
 
-                    console.log(data);
+        if (tokensSet) {
+            if (onetimeToken && returnUrl) {
+                // Exchange the one-time token for tokens
+                fetch(`${Constants.API_BASE_URL}${Constants.API_AUTH_STANDARD_RENEW_TOKEN_BY_OTT}?oneTimeToken=${onetimeToken}`)
+                    .then(response => response.json())
+                    .then(result => {
+                        const succeeded = result.succeeded;
+                        const data = result.data;
 
-                    if (data.accessToken && data.refreshToken) {                                                
-                        // Save tokens to localStorage
-                        localStorage.setItem('accessToken', data.accessToken);
-                        localStorage.setItem('accessToken_LifeInMinutes', data.accessToken_LifeInMinutes);
-                        localStorage.setItem('accessToken_Expires', data.accessToken_Expires);
-                        localStorage.setItem('refreshToken', data.refreshToken);
-                        localStorage.setItem('refreshToken_LifeInMinutes', data.refreshToken_LifeInMinutes);
-                        localStorage.setItem('refreshToken_Expires', data.refreshToken_Expires);                        
+                        console.log('succeeded: ', succeeded);
+                        console.log('data: ', data);
 
-                        // Redirect to main page
-                        router.push('/main');
-                    } else {
-                        setError('Failed to exchange code for tokens');
-                    }
-                })
-                .catch(err => {
-                    setError('An error occurred while exchanging code for tokens');
-                    console.error(err);
-                });
+                        if (succeeded && data && data.token && data.token.accessToken && data.token.refreshToken) {
+                            // Save tokens
+                            localStorage.setItem(Constants.LSK_AUTH_ACCESS_TOKEN, data.token.accessToken);
+                            localStorage.setItem(Constants.LSK_AUTH_ACCESS_TOKEN_LifeInMinutes, data.token.accessToken_LifeInMinutes);
+                            localStorage.setItem(Constants.LSK_AUTH_ACCESS_TOKEN_Expires, data.token.accessToken_Expires);
+                            localStorage.setItem(Constants.LSK_AUTH_REFRESH_TOKEN, data.token.refreshToken);
+                            localStorage.setItem(Constants.LSK_AUTH_REFRESH_TOKEN_LifeInMinutes, data.token.refreshToken_LifeInMinutes);
+                            localStorage.setItem(Constants.LSK_AUTH_REFRESH_TOKEN_Expires, data.token.refreshToken_Expires);
+
+                            // Redirect to return Url
+                            router.push(returnUrl);
+                        } else {
+                            setError('Failed to exchange code for tokens');
+                        }
+                    })
+                    .catch(err => {
+                        setError('An error occurred while exchanging code for tokens');
+                        console.error(err);
+                    });
+            }
+            else {
+                setError('Failed to get one-time token and return URL');
+            }
         }
-
     }, [router]);
 
     const handleStandardLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const returnUrl = new URLSearchParams(window.location.search).get('returnUrl') || `${window.location.origin}/login`;
-            const response = await fetch(`https://localhost:5001/api/auth/standard/login?returnUrl=${encodeURIComponent(returnUrl)}`, {
+            // it will redirect to returnUrl if it is provided in the query string, redirect to /main otherwise
+            const returnUrl = new URLSearchParams(window.location.search).get('returnUrl') || `${window.location.origin}/main`;
+            const response = await fetch(`${Constants.API_BASE_URL}${Constants.API_AUTH_STANDARD_LOGIN}?returnUrl=${encodeURIComponent(returnUrl)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -73,8 +87,8 @@ const Login = () => {
                 localStorage.setItem('refreshToken_LifeInMinutes', data.refreshToken_LifeInMinutes);
                 localStorage.setItem('refreshToken_Expires', data.refreshToken_Expires);
 
-                // Redirect to main page
-                router.push('/main');
+                // Redirect to return Url
+                router.push(returnUrl);
             } else {
                 const errorData = await response.json();
                 setError(errorData.message || 'An error occurred during standard login');
@@ -87,8 +101,10 @@ const Login = () => {
 
     const handleGoogleLogin = async () => {
         try {
-            const returnUrl = new URLSearchParams(window.location.search).get('returnUrl') || `${window.location.origin}/login`;
-            window.open(`https://localhost:5001/api/auth/google/login?returnUrl=${encodeURIComponent(returnUrl)}`, '_self');
+            // it will redirect to returnUrl if it is provided in the query string, redirect to /main otherwise            
+            const originUrl = `${window.location.origin}/login`;
+            const returnUrl = new URLSearchParams(window.location.search).get('returnUrl') || `${window.location.origin}/main`;
+            window.open(`${Constants.API_BASE_URL}${Constants.API_AUTH_GOOGLE_LOGIN}?originUrl=${encodeURIComponent(originUrl)}&returnUrl=${encodeURIComponent(returnUrl)}`, '_self');
         }
         catch (err) {
             setError('An error occurred during Google login');
