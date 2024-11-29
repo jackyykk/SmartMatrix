@@ -31,6 +31,7 @@ const Login = () => {
     const [isSubmitting, setIsSubmitting] = useState(false); // State for button disabled
 
     useEffect(() => {
+        setLoading(true);
         setIsClient(true);
         setMessage('');
         
