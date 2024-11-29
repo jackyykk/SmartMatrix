@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -12,6 +12,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 export default function Home() {
 
+  const [isClient, setIsClient] = useState(false);
   const [demo, setDemo] = useState('');
   const router = useRouter();
 
@@ -24,38 +25,44 @@ export default function Home() {
   };
 
   useEffect(() => {
+    setIsClient(true);
     setDemo('weather-forecast');
   }, []);
 
-  return (
-    <main className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
-      <h1 className="text-4xl text-gray-600 mb-4 text-center">Smart Matrix</h1>
-      <p className="text-lg text-gray-600 mb-8 text-center">Version: {packageJson.version}</p>
-      <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
-        <Box sx={{ minWidth: 200 }}>
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Demo</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={demo}
-              label="Demo"
-              onChange={handleDemoChange}
-            >
-              <MenuItem value={'weather-forecast'}>Weather Forecast</MenuItem>
-              <MenuItem value={'simple-notes'}>Simple Notes</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-        <Button variant="contained" color="primary" onClick={gotoPage}>
-          Go
-        </Button>
-      </div>
-      <footer className="mt-6 flex gap-6 flex-wrap text-gray-600 items-center justify-center">
-        &copy; 2024 SmartMatrix. All rights reserved.
-      </footer>
-    </main>
-  );
+  if (isClient) {
+    return (
+      <main className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100" suppressHydrationWarning={true}>
+        <h1 className="text-4xl text-gray-600 mb-4 text-center">Smart Matrix</h1>
+        <p className="text-lg text-gray-600 mb-8 text-center">Version: {packageJson.version}</p>
+        <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
+          <Box sx={{ minWidth: 200 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Demo</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={demo}
+                label="Demo"
+                onChange={handleDemoChange}
+              >
+                <MenuItem value={'weather-forecast'}>Weather Forecast</MenuItem>
+                <MenuItem value={'simple-notes'}>Simple Notes</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          <Button variant="contained" color="primary" onClick={gotoPage}>
+            Go
+          </Button>
+        </div>
+        <footer className="mt-6 flex gap-6 flex-wrap text-gray-600 items-center justify-center">
+          &copy; 2024 SmartMatrix. All rights reserved.
+        </footer>
+      </main>
+    );
+  }
+  else {
+    return <></>;
+  }
 }
 
 

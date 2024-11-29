@@ -10,4 +10,17 @@ const compat = new FlatCompat({
     recommendedConfig: js.configs.recommended,
     allConfig: js.configs.all
 });
-export default [...compat.extends("next/core-web-vitals", "next/typescript")];
+
+const eslintConfig = [
+    ...compat.extends("next/core-web-vitals", "next/typescript"),
+    {
+        files: ["**/*.ts", "**/*.tsx"],
+        parser: "@typescript-eslint/parser",
+        plugins: ["@typescript-eslint"],
+        rules: {
+            // Add your custom rules here
+        }
+    }
+];
+
+export default eslintConfig;
