@@ -1,20 +1,35 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppDispatch, RootState } from '../store'; // Ensure the import path is correct
-import { logoutThunk } from '../store/thunks/authThunks'; // Import the logoutThunk action
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
+
 import { useRouter } from 'next/navigation';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppDispatch, RootState } from '../store'; // Ensure the import path is correct
+import { login } from '../store/slices/authSlice'; // Import the login and logout actions
+import { logoutThunk } from '../store/thunks/authThunks'; // Import the logoutThunk action
+import { checkSecrets } from '../utils/authSecretUtils';
 
 const MyAppBar = () => {
-    const dispatch: AppDispatch = useDispatch();
     const router = useRouter();
+    const dispatch: AppDispatch = useDispatch();    
     const { isLoggedIn, userName } = useSelector((state: RootState) => state.auth);
 
+    const [isClient, setIsClient] = useState(false);
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    useEffect(() => {
+        setIsClient(true);
+        
+        // Check if the user is already logged in
+        const secrets = checkSecrets();
+        if (secrets) {
+            dispatch(login({ loginName: secrets.loginName, userName: secrets.userName }));
+        }
+    }, []);
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -38,7 +53,7 @@ const MyAppBar = () => {
     const handleLogin = () => {
         router.push('/login'); // Redirect to login page
     };
-
+    
     return (
         <AppBar position="static">
             <Toolbar>

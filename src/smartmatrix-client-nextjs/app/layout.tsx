@@ -2,7 +2,7 @@
 
 import localFont from "next/font/local";
 import { config } from '@fortawesome/fontawesome-svg-core';
-import "./globals.css";
+import "./styles/globals.css";
 import { Provider } from 'react-redux';
 import store from './store'; // Adjust the import path as necessary
 import MyAppBar from './components/MyAppBar'; // Import the App Bar component

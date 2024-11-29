@@ -4,18 +4,20 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import * as Constants from '../constants/constants';
-import { saveSecrets, clearSecrets, checkSecrets } from '../utils/authSecretUtils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { saveSecrets, clearSecrets, checkSecrets } from '../utils/authSecretUtils';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, logout } from '../store/slices/authSlice'; // Import the login and logout actions
-import { RootState } from '../store'; // Import RootState
+import { AppDispatch, RootState } from '../store'; // Ensure the import path is correct
+import { login } from '../store/slices/authSlice'; // Import the login and logout actions
+import { logoutThunk } from '../store/thunks/authThunks'; // Import the logoutThunk action
+
 
 const Login = () => {
     const router = useRouter();
-    const dispatch = useDispatch();
-    const { isLoggedIn, userName } = useSelector((state: RootState) => state.auth); // Use Redux state
+    const dispatch: AppDispatch = useDispatch();
+    const { isLoggedIn, userName } = useSelector((state: RootState) => state.auth);
 
     const [isClient, setIsClient] = useState(false);
     const [message, setMessage] = useState('');
@@ -31,13 +33,7 @@ const Login = () => {
     useEffect(() => {
         setIsClient(true);
         setMessage('');
-
-        // Check if the user is already logged in
-        const secrets = checkSecrets();
-        if (secrets) {
-            dispatch(login({ loginName: secrets.loginName, userName: secrets.userName }));
-        }        
-
+        
         // get the query string parameters
         const urlParams = new URLSearchParams(window.location.search);
         const tokensSet = urlParams.get('ts');
@@ -110,7 +106,7 @@ const Login = () => {
             if (succeeded && data) {
                 // Save tokens
                 saveSecrets(data, rememberMe);
-                
+
                 // Dispatch login action to update AuthState
                 dispatch(login({ loginName: data.loginName, userName: data.userName }));
 
@@ -145,9 +141,7 @@ const Login = () => {
     };
 
     const handleLogout = () => {
-        clearSecrets();
-        // Dispatch logout action to update AuthState
-        dispatch(logout());
+        dispatch(logoutThunk()); // Dispatch the logoutThunk action
         router.push('/login');
     };
 
