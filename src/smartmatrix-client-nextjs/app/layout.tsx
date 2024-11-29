@@ -1,7 +1,11 @@
-import type { Metadata } from "next";
+'use client';
+
 import localFont from "next/font/local";
 import { config } from '@fortawesome/fontawesome-svg-core';
 import "./globals.css";
+import { Provider } from 'react-redux';
+import store from './store'; // Adjust the import path as necessary
+import MyAppBar from './components/MyAppBar'; // Import the App Bar component
 
 config.autoAddCss = false; // Tell Font Awesome to skip adding the CSS automatically since it's already imported
 
@@ -16,24 +20,24 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-export const metadata: Metadata = {
-  title: "Smart Matrix",
-  description: "Your intelligent data management solution",
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (    
+  return (
     <html>
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <title>Smart Matrix</title>
+        <meta name="description" content='Your intelligent data management solution' />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+        <Provider store={store}>
+          <MyAppBar /> {/* Add the App Bar component */}
+          {children}
+        </Provider>
       </body>
     </html>
   );
