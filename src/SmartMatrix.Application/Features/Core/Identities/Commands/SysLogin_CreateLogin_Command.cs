@@ -9,11 +9,11 @@ using SmartMatrix.Domain.Core.Identities.Payloads;
 
 namespace SmartMatrix.Application.Features.Core.Identities.Commands
 {
-    public class SysLogin_InsertLogin_Command : IRequest<Result<SysLogin_InsertLogin_Response>>
+    public class SysLogin_CreateLogin_Command : IRequest<Result<SysLogin_CreateLogin_Response>>
     {
-        public SysLogin_InsertLogin_Request? Request { get; set; }
+        public SysLogin_CreateLogin_Request? Request { get; set; }
 
-        public class Handler : BaseHandler, IRequestHandler<SysLogin_InsertLogin_Command, Result<SysLogin_InsertLogin_Response>>
+        public class Handler : BaseHandler, IRequestHandler<SysLogin_CreateLogin_Command, Result<SysLogin_CreateLogin_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISysLoginRepo _sysLoginRepo;
@@ -26,24 +26,24 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                 _unitOfWork = unitOfWork;
             }
 
-            public async Task<Result<SysLogin_InsertLogin_Response>> Handle(SysLogin_InsertLogin_Command command, CancellationToken cancellationToken)
+            public async Task<Result<SysLogin_CreateLogin_Response>> Handle(SysLogin_CreateLogin_Command command, CancellationToken cancellationToken)
             {
-                SysLogin_InsertLogin_Response response = new SysLogin_InsertLogin_Response();
+                SysLogin_CreateLogin_Response response = new SysLogin_CreateLogin_Response();
                 SysLogin login;
 
                 if (command.Request == null)
                 {
-                    return Result<SysLogin_InsertLogin_Response>.Fail(SysLogin_InsertLogin_Response.StatusCodes.Invalid_Request, SysLogin_InsertLogin_Response.StatusTexts.Invalid_Request);
+                    return Result<SysLogin_CreateLogin_Response>.Fail(SysLogin_CreateLogin_Response.StatusCodes.Invalid_Request, SysLogin_CreateLogin_Response.StatusTexts.Invalid_Request);
                 }
 
                 if (command.Request!.Login == null)
                 {
-                    return Result<SysLogin_InsertLogin_Response>.Fail(SysLogin_InsertLogin_Response.StatusCodes.Invalid_Request, SysLogin_InsertLogin_Response.StatusTexts.Invalid_Request);
+                    return Result<SysLogin_CreateLogin_Response>.Fail(SysLogin_CreateLogin_Response.StatusCodes.Invalid_Request, SysLogin_CreateLogin_Response.StatusTexts.Invalid_Request);
                 }
 
                 if (command.Request!.Login.Id != 0)
                 {
-                    return Result<SysLogin_InsertLogin_Response>.Fail(SysLogin_InsertLogin_Response.StatusCodes.Invalid_Request, SysLogin_InsertLogin_Response.StatusTexts.Invalid_Request);
+                    return Result<SysLogin_CreateLogin_Response>.Fail(SysLogin_CreateLogin_Response.StatusCodes.Invalid_Request, SysLogin_CreateLogin_Response.StatusTexts.Invalid_Request);
                 }
 
                 try
@@ -66,7 +66,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         catch (Exception ex)
                         {
                             transaction.Rollback();                            
-                            return Result<SysLogin_InsertLogin_Response>.Fail(SysLogin_InsertLogin_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
+                            return Result<SysLogin_CreateLogin_Response>.Fail(SysLogin_CreateLogin_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                         }
                         finally
                         {
@@ -76,7 +76,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                 }
                 catch (Exception ex)
                 {                    
-                    return Result<SysLogin_InsertLogin_Response>.Fail(SysLogin_InsertLogin_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
+                    return Result<SysLogin_CreateLogin_Response>.Fail(SysLogin_CreateLogin_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                 }
 
                 if (login != null)
@@ -85,7 +85,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     response.Login = outputLogin;
                 }
 
-                return Result<SysLogin_InsertLogin_Response>.Success(response, SysLogin_InsertLogin_Response.StatusCodes.Success);
+                return Result<SysLogin_CreateLogin_Response>.Success(response, SysLogin_CreateLogin_Response.StatusCodes.Success);
             }
         }
     }

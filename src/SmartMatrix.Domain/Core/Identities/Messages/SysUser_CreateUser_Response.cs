@@ -3,7 +3,7 @@ using SmartMatrix.Domain.Core.Identities.Payloads;
 
 namespace SmartMatrix.Domain.Core.Identities.Messages
 {
-    public class SysLogin_InsertLogin_Response
+    public class SysUser_CreateUser_Response
     {
         public static class StatusCodes
         {
@@ -17,6 +17,6 @@ namespace SmartMatrix.Domain.Core.Identities.Messages
             public const string Invalid_Request = MessageConstants.StatusTexts.Invalid_Request;                     
         }
 
-        public SysLogin_OutputPayload Login { get; set; }
+        public SysUser_OutputPayload User { get; set; }
     }
 }

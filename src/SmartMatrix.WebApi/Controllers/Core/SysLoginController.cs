@@ -27,10 +27,10 @@ namespace SmartMatrix.WebApi.Controllers.Core
             return Ok(result);
         }
 
-        [HttpPost("insert-login")]
-        public async Task<IActionResult> InsertLogin(SysLogin_InsertLogin_Request request)
+        [HttpPost("create-login")]
+        public async Task<IActionResult> CreateLogin(SysLogin_CreateLogin_Request request)
         {
-            var result = await _mediator.Send(new SysLogin_InsertLogin_Command
+            var result = await _mediator.Send(new SysLogin_CreateLogin_Command
             {
                 Request = request
             });

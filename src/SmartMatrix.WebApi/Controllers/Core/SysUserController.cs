@@ -94,10 +94,10 @@ namespace SmartMatrix.WebApi.Controllers.Core
             return Ok(result);
         }
 
-        [HttpPost("insert-user")]
-        public async Task<IActionResult> InsertUser(SysUser_InsertUser_Request request)
+        [HttpPost("create-user")]
+        public async Task<IActionResult> CreateUser(SysUser_CreateUser_Request request)
         {
-            var result = await _mediator.Send(new SysUser_InsertUser_Command
+            var result = await _mediator.Send(new SysUser_CreateUser_Command
             {
                 Request = request
             });

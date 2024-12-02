@@ -9,11 +9,11 @@ using SmartMatrix.Domain.Core.Identities.Payloads;
 
 namespace SmartMatrix.Application.Features.Core.Identities.Commands
 {
-    public class SysUser_InsertUser_Command : IRequest<Result<SysUser_InsertUser_Response>>
+    public class SysUser_CreateUser_Command : IRequest<Result<SysUser_CreateUser_Response>>
     {
-        public SysUser_InsertUser_Request? Request { get; set; }
+        public SysUser_CreateUser_Request? Request { get; set; }
 
-        public class Handler : BaseHandler, IRequestHandler<SysUser_InsertUser_Command, Result<SysUser_InsertUser_Response>>
+        public class Handler : BaseHandler, IRequestHandler<SysUser_CreateUser_Command, Result<SysUser_CreateUser_Response>>
         {
             private readonly IMapper _mapper;
             private readonly ISysUserRepo _sysUserRepo;            
@@ -26,24 +26,24 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                 _unitOfWork = unitOfWork;
             }
 
-            public async Task<Result<SysUser_InsertUser_Response>> Handle(SysUser_InsertUser_Command command, CancellationToken cancellationToken)
+            public async Task<Result<SysUser_CreateUser_Response>> Handle(SysUser_CreateUser_Command command, CancellationToken cancellationToken)
             {
-                SysUser_InsertUser_Response response = new SysUser_InsertUser_Response();
+                SysUser_CreateUser_Response response = new SysUser_CreateUser_Response();
                 SysUser newUser;
 
                 if (command.Request == null)
                 {
-                    return Result<SysUser_InsertUser_Response>.Fail(SysUser_InsertUser_Response.StatusCodes.Invalid_Request, SysUser_InsertUser_Response.StatusTexts.Invalid_Request);
+                    return Result<SysUser_CreateUser_Response>.Fail(SysUser_CreateUser_Response.StatusCodes.Invalid_Request, SysUser_CreateUser_Response.StatusTexts.Invalid_Request);
                 }
 
                 if (command.Request!.User == null)
                 {
-                    return Result<SysUser_InsertUser_Response>.Fail(SysUser_InsertUser_Response.StatusCodes.Invalid_Request, SysUser_InsertUser_Response.StatusTexts.Invalid_Request);
+                    return Result<SysUser_CreateUser_Response>.Fail(SysUser_CreateUser_Response.StatusCodes.Invalid_Request, SysUser_CreateUser_Response.StatusTexts.Invalid_Request);
                 }
 
                 if (command.Request!.User.Id != 0)
                 {
-                    return Result<SysUser_InsertUser_Response>.Fail(SysUser_InsertUser_Response.StatusCodes.Invalid_Request, SysUser_InsertUser_Response.StatusTexts.Invalid_Request);
+                    return Result<SysUser_CreateUser_Response>.Fail(SysUser_CreateUser_Response.StatusCodes.Invalid_Request, SysUser_CreateUser_Response.StatusTexts.Invalid_Request);
                 }
 
                 try
@@ -67,7 +67,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                         catch (Exception ex)
                         {                            
                             transaction.Rollback();                            
-                            return Result<SysUser_InsertUser_Response>.Fail(SysUser_InsertUser_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
+                            return Result<SysUser_CreateUser_Response>.Fail(SysUser_CreateUser_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                         }
                         finally
                         {
@@ -77,7 +77,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                 }
                 catch (Exception ex)
                 {                    
-                    return Result<SysUser_InsertUser_Response>.Fail(SysUser_InsertUser_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
+                    return Result<SysUser_CreateUser_Response>.Fail(SysUser_CreateUser_Response.StatusCodes.Unknown_Error, GetErrorMessage(ex));
                 }
 
                 if (newUser != null)
@@ -89,7 +89,7 @@ namespace SmartMatrix.Application.Features.Core.Identities.Commands
                     response.User = outputUser;
                 }
                                 
-                return Result<SysUser_InsertUser_Response>.Success(response, SysUser_InsertUser_Response.StatusCodes.Success);
+                return Result<SysUser_CreateUser_Response>.Success(response, SysUser_CreateUser_Response.StatusCodes.Success);
             }
         }
     }

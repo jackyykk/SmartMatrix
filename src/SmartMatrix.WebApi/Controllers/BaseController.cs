@@ -16,7 +16,7 @@ namespace SmartMatrix.WebApi.Controllers
     //
     // {action}-{conditions}[optional]-{entity}[optional]
     //
-    // {action}: e.g. insert, update, delete, get, getfirst, getlist, login, logout, etc.
+    // {action}: e.g. create, update, delete, get, getfirst, getlist, login, logout, etc.
     // {conditions}: e.g. by_id, by_name, by_email, by_xxx, etc.
     // {entity}: e.g. main_config
     //

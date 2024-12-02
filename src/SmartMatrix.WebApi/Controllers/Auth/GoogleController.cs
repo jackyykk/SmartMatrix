@@ -247,19 +247,19 @@ namespace SmartMatrix.WebApi.Controllers.Auth
 
                     newUser.Logins.Add(newLogin);
 
-                    var insertUserResult = await _mediator.Send(new SysUser_InsertUser_Command
+                    var createUserResult = await _mediator.Send(new SysUser_CreateUser_Command
                     {
-                        Request = new SysUser_InsertUser_Request
+                        Request = new SysUser_CreateUser_Request
                         {
                             User = newUser
                         }
                     });
 
-                    if (!insertUserResult.Succeeded || insertUserResult.Data == null || insertUserResult.Data.User == null)
+                    if (!createUserResult.Succeeded || createUserResult.Data == null || createUserResult.Data.User == null)
                         return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.User_Insert_Failed, SysUser_PerformLogin_Response.StatusTexts.Login_Failed));
 
                     // Output the user and token
-                    outputUser = insertUserResult.Data.User;
+                    outputUser = createUserResult.Data.User;
                     outputToken = _mapper.Map<SysToken_OutputPayload>(token);
                 }
                 else
