@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
 using SmartMatrix.Application.Interfaces.Services.Essential;
 using SmartMatrix.Core.BaseClasses.Common;
-using SmartMatrix.Domain.Core.Identities.DbEntities;
+using SmartMatrix.Domain.Apps.SimpleNoteApp.DbEntities;
 
 namespace SmartMatrix.DataAccess.DbContexts
 {
-    public class CoreWriteDbContext : CoreBaseDbContext, ICoreWriteDbContext
+    public class AppWriteDbContext : AppBaseDbContext, IAppWriteDbContext
     {
         private readonly IDateTimeService _dateTimeSvc;
         private readonly IAuthenticatedUserService _userSvc;
@@ -16,11 +16,9 @@ namespace SmartMatrix.DataAccess.DbContexts
         public bool HasChanges => ChangeTracker.HasChanges();
 
         // DBSet
-        public DbSet<SysUser> SysUsers { get; set; }
-        public DbSet<SysUserRole> SysUserRoles { get; set; }
-        public DbSet<SysLogin> SysLogins { get; set; }
+        public DbSet<SimpleNote> SimpleNotes { get; set; }        
 
-        public CoreWriteDbContext(DbContextOptions<CoreWriteDbContext> options, IDateTimeService dateTimeSvc, IAuthenticatedUserService userSvc) : base(options)
+        public AppWriteDbContext(DbContextOptions<AppWriteDbContext> options, IDateTimeService dateTimeSvc, IAuthenticatedUserService userSvc) : base(options)
         {
             _dateTimeSvc = dateTimeSvc;
             _userSvc = userSvc;
@@ -46,7 +44,7 @@ namespace SmartMatrix.DataAccess.DbContexts
                         // Set ModifiedBy to be the current user if it's empty
                         entry.Entity.ModifiedBy = string.IsNullOrEmpty(entry.Entity.ModifiedBy) ? _userSvc.UserNameIdentifier : entry.Entity.ModifiedBy;
                         break;
-                        
+
                     case EntityState.Deleted:
                         entry.Entity.DeletedAt = _dateTimeSvc.UtcNow;
                         // Set DeletedBy to be the current user if it's empty

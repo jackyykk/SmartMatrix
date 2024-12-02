@@ -5,13 +5,13 @@ using SmartMatrix.Application.Interfaces.DataAccess.DbConnections;
 using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
 using SmartMatrix.Application.Interfaces.DataAccess.Repositories;
 using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Core.Identities;
-using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Demos.SimpleNoteDemo;
+using SmartMatrix.Application.Interfaces.DataAccess.Repositories.Apps.SimpleNoteApp;
 using SmartMatrix.Application.Interfaces.DataAccess.Transactions;
 using SmartMatrix.DataAccess.DbConnections;
 using SmartMatrix.DataAccess.DbContexts;
 using SmartMatrix.DataAccess.Repositories;
 using SmartMatrix.DataAccess.Repositories.Core.Identities;
-using SmartMatrix.DataAccess.Repositories.Demos.SimpleNoteDemo;
+using SmartMatrix.DataAccess.Repositories.Apps.SimpleNoteApp;
 using SmartMatrix.DataAccess.Transactions;
 
 namespace SmartMatrix.DataAccess.Extensions
@@ -25,15 +25,15 @@ namespace SmartMatrix.DataAccess.Extensions
                 , options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
             services.AddDbContext<CoreWriteDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("CoreWriteConnection")
                 , options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
-            services.AddDbContext<DemoReadDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DemoReadConnection")
+            services.AddDbContext<AppReadDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("AppReadConnection")
                 , options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
-            services.AddDbContext<DemoWriteDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DemoWriteConnection")
+            services.AddDbContext<AppWriteDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("AppWriteConnection")
                 , options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
             
             services.AddScoped<ICoreReadDbContext>(provider => provider.GetService<CoreReadDbContext>()!);
             services.AddScoped<ICoreWriteDbContext>(provider => provider.GetService<CoreWriteDbContext>()!);
-            services.AddScoped<IDemoReadDbContext>(provider => provider.GetService<DemoReadDbContext>()!);
-            services.AddScoped<IDemoWriteDbContext>(provider => provider.GetService<DemoWriteDbContext>()!);
+            services.AddScoped<IAppReadDbContext>(provider => provider.GetService<AppReadDbContext>()!);
+            services.AddScoped<IAppWriteDbContext>(provider => provider.GetService<AppWriteDbContext>()!);
 
             // Register Repositories
             services.AddScoped(typeof(ICoreReadRepo<,>), typeof(CoreReadRepo<,>));
@@ -41,20 +41,20 @@ namespace SmartMatrix.DataAccess.Extensions
             services.AddScoped<ISysUserRepo, SysUserRepo>();            
             services.AddScoped<ISysLoginRepo, SysLoginRepo>();
 
-            services.AddScoped(typeof(IDemoReadRepo<,>), typeof(DemoReadRepo<,>));
-            services.AddScoped(typeof(IDemoWriteRepo<,>), typeof(DemoWriteRepo<,>));
+            services.AddScoped(typeof(IAppReadRepo<,>), typeof(AppReadRepo<,>));
+            services.AddScoped(typeof(IAppWriteRepo<,>), typeof(AppWriteRepo<,>));
             services.AddScoped<ISimpleNoteRepo, SimpleNoteRepo>();
 
             // Register Connections
             services.AddScoped<ICoreWriteDbConnection, CoreWriteDbConnection>();
             services.AddScoped<ICoreReadDbConnection, CoreReadDbConnection>();
 
-            services.AddScoped<IDemoWriteDbConnection, DemoWriteDbConnection>();
-            services.AddScoped<IDemoReadDbConnection, DemoReadDbConnection>();
+            services.AddScoped<IAppWriteDbConnection, AppWriteDbConnection>();
+            services.AddScoped<IAppReadDbConnection, AppReadDbConnection>();
 
             // Unit Of Work
             services.AddScoped<ICoreUnitOfWork, CoreUnitOfWork>();
-            services.AddScoped<IDemoUnitOfWork, DemoUnitOfWork>();
+            services.AddScoped<IAppUnitOfWork, AppUnitOfWork>();
 
             return services;
         }

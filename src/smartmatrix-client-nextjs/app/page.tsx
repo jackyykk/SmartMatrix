@@ -13,20 +13,20 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 export default function Home() {
 
   const [isClient, setIsClient] = useState(false);
-  const [demo, setDemo] = useState('');
+  const [app, setApp] = useState('');
   const router = useRouter();
 
   const handleDemoChange = (event: SelectChangeEvent) => {
-    setDemo(event.target.value as string);
+    setApp(event.target.value as string);
   };
 
   const gotoPage = () => {
-    router.push(`/demos/${demo}`);
+    router.push(`/apps/${app}`);
   };
 
   useEffect(() => {
     setIsClient(true);
-    setDemo('weather-forecast');
+    setApp('weather-forecast');
   }, []);
 
   if (isClient) {
@@ -37,12 +37,12 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
           <Box sx={{ minWidth: 200 }}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Demo</InputLabel>
+              <InputLabel id="app-simple-select-label">Apps</InputLabel>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={demo}
-                label="Demo"
+                labelId="app-simple-select-label"
+                id="app-simple-select"
+                value={app}
+                label="App"
                 onChange={handleDemoChange}
               >
                 <MenuItem value={'weather-forecast'}>Weather Forecast</MenuItem>

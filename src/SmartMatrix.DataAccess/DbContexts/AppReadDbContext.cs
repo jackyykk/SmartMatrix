@@ -2,11 +2,12 @@ using System.Data;
 using Microsoft.EntityFrameworkCore;
 using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
 using SmartMatrix.Application.Interfaces.Services.Essential;
-using SmartMatrix.Domain.Core.Identities.DbEntities;
+using SmartMatrix.Core.BaseClasses.Common;
+using SmartMatrix.Domain.Apps.SimpleNoteApp.DbEntities;
 
 namespace SmartMatrix.DataAccess.DbContexts
 {
-    public class CoreReadDbContext : CoreBaseDbContext, ICoreReadDbContext
+    public class AppReadDbContext : AppBaseDbContext, IAppReadDbContext
     {
         private readonly IDateTimeService _dateTimeSvc;
         private readonly IAuthenticatedUserService _userSvc;
@@ -15,11 +16,9 @@ namespace SmartMatrix.DataAccess.DbContexts
         public bool HasChanges => ChangeTracker.HasChanges();
 
         // DBSet
-        public DbSet<SysUser> SysUsers { get; set; }
-        public DbSet<SysUserRole> SysUserRoles { get; set; }
-        public DbSet<SysLogin> SysLogins { get; set; }
+        public DbSet<SimpleNote> SimpleNotes { get; set; }
         
-        public CoreReadDbContext(DbContextOptions<CoreReadDbContext> options, IDateTimeService dateTimeSvc, IAuthenticatedUserService userSvc) : base(options)
+        public AppReadDbContext(DbContextOptions<AppReadDbContext> options, IDateTimeService dateTimeSvc, IAuthenticatedUserService userSvc) : base(options)
         {
             _dateTimeSvc = dateTimeSvc;
             _userSvc = userSvc;
