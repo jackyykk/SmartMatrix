@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
-import { WeatherForecast } from '../../types/apps/weatherForecastTypes';
+import { WeatherForecast_OutputPayload } from './types/weatherForecastTypes';
 
 export default function WeatherForecastPage() {
     const [isClient, setIsClient] = useState(false);
-    const [weatherData, setWeatherData] = useState<WeatherForecast[]>([]);
+    const [weatherData, setWeatherData] = useState<WeatherForecast_OutputPayload[]>([]);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
@@ -28,7 +28,7 @@ export default function WeatherForecastPage() {
             if (result.succeeded && result.data) {
                 const data = result.data.weatherForecasts
                 // fill in the id field
-                data.forEach((item: WeatherForecast, index: number) => {
+                data.forEach((item: WeatherForecast_OutputPayload, index: number) => {
                     item.id = index + 1;
                 });
                 setWeatherData(data);
@@ -44,8 +44,8 @@ export default function WeatherForecastPage() {
         }
     };
 
-    const backToHome = () => {
-        router.push('/'); // Navigate back to home using the router
+    const backToMain = () => {
+        router.push('/main/'); // Navigate back to main using the router
     };
 
     // table definition
@@ -75,9 +75,9 @@ export default function WeatherForecastPage() {
                 <div className="flex gap-4 items-center flex-col sm:flex-row mb-6">
                     <Button
                         variant="contained"
-                        onClick={backToHome}
+                        onClick={backToMain}
                     >
-                        Back To Home
+                        Back To Main
                     </Button>
 
                     <Button

@@ -12,8 +12,8 @@ export default function SimpleNotesPage() {
         setIsClient(true);
     }, []);
 
-    const backToHome = () => {
-        router.push('/'); // Navigate back to home using the router
+    const backToMain = () => {
+        router.push('/main/'); // Navigate back to main using the router
     };
 
     if (isClient) {
@@ -23,9 +23,9 @@ export default function SimpleNotesPage() {
                 <div className="flex gap-4 items-center flex-col sm:flex-row mb-6">
                     <Button
                         variant="contained"
-                        onClick={backToHome}
+                        onClick={backToMain}
                     >
-                        Back To Home
+                        Back To Main
                     </Button>
                 </div>
 
