@@ -16,6 +16,12 @@ const eslintConfig = [
     {
         files: ["**/*.ts", "**/*.tsx"],
         parser: "@typescript-eslint/parser",
+        parserOptions: {
+            ecmaVersion: 2020,
+            sourceType: "module",
+            project: "./tsconfig.json", // Ensure it points to your tsconfig.json
+            tsconfigRootDir: __dirname,  // Set the root directory for the tsconfig
+        },
         plugins: ["@typescript-eslint"],
         rules: {
             // Add your custom rules here

@@ -5,7 +5,7 @@
             "name": "Launch SmartMatrix.WebApi",
             "type": "coreclr",
             "request": "launch",
-            "launchSettingsProfile": "default",            
+            "launchSettingsProfile": "default",
             "preLaunchTask": "build SmartMatrix.WebApi",
             "program": "${workspaceFolder}/src/SmartMatrix.WebApi/bin/Debug/net8.0/SmartMatrix.WebApi.dll",
             "args": [],
@@ -28,23 +28,38 @@
             "type": "node",
             "request": "launch",
             "runtimeExecutable": "npx",
-            "runtimeArgs": ["next", "dev"],            
+            "runtimeArgs": [
+                "next",
+                "dev"
+            ],
             "cwd": "${workspaceFolder}/src/smartmatrix-client-nextjs",
+            "sourceMaps": true,
             "autoAttachChildProcesses": true,
             "restart": true,
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
             "serverReadyAction": {
                 "action": "openExternally",
-                "pattern": "started server on (https?://\\S+)",
-                "uriFormat": "https://localhost:3000"
-            }
+                "pattern": "started server on (http://localhost:\\d+)",
+                "uriFormat": "https://localhost:3001"
+            },            
+            "sourceMapPathOverrides": {
+                "webpack:///./~/*": "${workspaceFolder}/src/smartmatrix-client-nextjs/node_modules/*",
+                "webpack:///./*": "${workspaceFolder}/src/smartmatrix-client-nextjs/*",
+                "webpack:///*": "*"
+            },
+            "env": {
+                "NODE_ENV": "development"
+            },
         }
     ],
     "compounds": [
         {
             "name": "Launch WebApi and Next.js",
-            "configurations": ["Launch SmartMatrix.WebApi", "Launch smartmatrix-client-nextjs"]
+            "configurations": [
+                "Launch SmartMatrix.WebApi",
+                "Launch smartmatrix-client-nextjs"
+            ]
         }
     ]
 }
