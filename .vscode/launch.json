@@ -45,6 +45,11 @@
                 "uriFormat": "%s",
                 "webRoot": "${workspaceFolder}"
             },
+            "sourceMapPathOverrides": {
+                "webpack:///./~/*": "${workspaceFolder}/src/smartmatrix-client-nextjs/node_modules/*",
+                "webpack:///./*": "${workspaceFolder}/src/smartmatrix-client-nextjs/*",
+                "webpack:///*": "*"
+            },
             "env": {
                 "NODE_ENV": "development"
             },
