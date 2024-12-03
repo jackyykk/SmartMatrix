@@ -83,8 +83,7 @@ const Login = () => {
         }
     }, [router, dispatch, rememberMe]);
 
-    const togglePasswordVisibility = () => {
-        console.log('showPassword: ', showPassword);
+    const togglePasswordVisibility = () => {        
         setShowPassword(!showPassword);
     };
 

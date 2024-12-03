@@ -39,7 +39,7 @@
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
             "serverReadyAction": {
-                "action": "debugWithEdge",
+                "action": "debugWithChrome",
                 "killOnServerStop": true,
                 "pattern": "- Local:.+(https?://.+)",
                 "uriFormat": "%s",
