@@ -24,7 +24,7 @@
             }
         },
         {
-            "name": "Launch smartmatrix-client-nextjs",
+            "name": "Launch smartmatrix-client-nextjs",            
             "type": "node",
             "request": "launch",
             "runtimeExecutable": "npx",
@@ -39,14 +39,11 @@
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
             "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "started server on (http://localhost:\\d+)",
-                "uriFormat": "https://localhost:3001"
-            },            
-            "sourceMapPathOverrides": {
-                "webpack:///./~/*": "${workspaceFolder}/src/smartmatrix-client-nextjs/node_modules/*",
-                "webpack:///./*": "${workspaceFolder}/src/smartmatrix-client-nextjs/*",
-                "webpack:///*": "*"
+                "action": "debugWithEdge",
+                "killOnServerStop": true,
+                "pattern": "- Local:.+(https?://.+)",
+                "uriFormat": "%s",
+                "webRoot": "${workspaceFolder}"
             },
             "env": {
                 "NODE_ENV": "development"
