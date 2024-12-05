@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
+import * as Constants from '../../constants/constants';
 import { WeatherForecast_OutputPayload } from './types/weatherForecastTypes';
 
 export default function WeatherForecastPage() {
@@ -22,7 +23,7 @@ export default function WeatherForecastPage() {
         try {
             if (loading) return;
             setLoading(true);
-            const url = process.env.NEXT_PUBLIC_APISERVER_BASE_URL + '/api/apps/weather_forecast_app/getlist';
+            const url = Constants.API_BASE_URL + Constants.API_APP_WEATHER_FORECAST_GETLIST;
             const response = await fetch(url);
             const result = await response.json();
             if (result.succeeded && result.data) {

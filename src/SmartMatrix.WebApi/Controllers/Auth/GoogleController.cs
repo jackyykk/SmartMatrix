@@ -217,12 +217,7 @@ namespace SmartMatrix.WebApi.Controllers.Auth
                     }
 
                     var user = _mapper.Map<SysUser>(newUser);
-                    foreach(var userRole in user.UserRoles)
-                    {
-                        Console.WriteLine(userRole.SysUserId);
-                        Console.WriteLine(userRole.SysRoleId);
-                    }
-
+                                        
                     var token = _tokenService.GenerateToken(LOGIN_PROVIDER_NAME, googleUserProfile.Email, user);
 
                     if (token == null)

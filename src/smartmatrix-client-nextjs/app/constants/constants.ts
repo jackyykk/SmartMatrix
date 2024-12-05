@@ -3,12 +3,13 @@ export const APP_NAME = 'Smart Matrix';
 export const APP_VERSION = '1.0.0';
 
 // API Endpoints, no slash at the end
-export const API_BASE_URL = 'https://localhost:5001/api';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_APISERVER_BASE_URL + '/api';
 export const API_AUTH_STANDARD_LOGIN = '/auth/standard/login';
 export const API_AUTH_GOOGLE_LOGIN = '/auth/google/login';
 
 export const API_AUTH_STANDARD_RENEW_TOKEN_BY_OTT = '/auth/standard/renew-token-by-ott';
 
+export const API_APP_WEATHER_FORECAST_GETLIST = '/apps/weather_forecast_app/getlist';
 
 
 // Local Storage Keys
