@@ -6,10 +6,11 @@ using SmartMatrix.Domain.Apps.WeatherForecastApp.Entities;
 using SmartMatrix.Domain.Apps.WeatherForecastApp.Messages;
 using SmartMatrix.Domain.Apps.WeatherForecastApp.Payloads;
 
-namespace SmartMatrix.WebApi.Controllers.Apps
+namespace SmartMatrix.WebApi.Controllers.v1_0.Apps
 {
     [ApiController]
-    [Route("api/apps/weather_forecast_app")]
+    [Route("api/v{version:apiVersion}/apps/weather_forecast_app")]
+    [ApiVersion("1.0")]
     public class WeatherForecastAppController : BaseController<WeatherForecastAppController>
     {
         private static readonly string[] Summaries = new[]

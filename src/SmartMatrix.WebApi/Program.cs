@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication;
 using SmartMatrix.Domain.Core.Identities.DbEntities;
 using SmartMatrix.Domain.Constants;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 
 public class Program
 {
@@ -27,7 +29,25 @@ public class Program
             // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(); // Add Swagger services
+
+            // Add API versioning
+            builder.Services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+            });
+
+            // Add versioned API explorer (optional, for Swagger support)
+            builder.Services.AddVersionedApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+            });
+
+            // Add Swagger services
+            builder.Services.AddSwaggerGen();
 
             // Add CORS services and configure the policy to allow any origin
             builder.Services.AddCors(options =>
@@ -140,7 +160,7 @@ public class Program
             // Serve static files and default files (index.html)
             app.UseDefaultFiles();
             app.UseStaticFiles();
-                        
+
             app.MapControllers();
 
             app.Run();

@@ -5,10 +5,11 @@ using SmartMatrix.Application.Features.Apps.SimpleNoteApp.Commands;
 using SmartMatrix.Application.Features.Apps.SimpleNoteApp.Queries;
 using SmartMatrix.Domain.Apps.SimpleNoteApp.Messages;
 
-namespace SmartMatrix.WebApi.Controllers.Apps
+namespace SmartMatrix.WebApi.Controllers.v1_0.Apps
 {
     [ApiController]
-    [Route("api/apps/simple_note_app")]    
+    [Route("api/v{version:apiVersion}/apps/simple_note_app")]
+    [ApiVersion("1.0")]
     public class SimpleNoteAppController : BaseController<SimpleNoteAppController>
     {
         public SimpleNoteAppController(ILogger<SimpleNoteAppController> logger, IConfiguration configuration, IMediator mediator, IMapper mapper)

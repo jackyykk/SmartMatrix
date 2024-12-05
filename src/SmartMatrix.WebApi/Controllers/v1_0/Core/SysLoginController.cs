@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using SmartMatrix.Application.Features.Core.Identities.Commands;
 using SmartMatrix.Domain.Core.Identities.Messages;
 
-namespace SmartMatrix.WebApi.Controllers.Core
+namespace SmartMatrix.WebApi.Controllers.v1_0.Core
 {
     [ApiController]
-    [Route("api/core/syslogin")]
+    [Route("api/v{version:apiVersion}/core/syslogin")]
+    [ApiVersion("1.0")]
     //[Authorize(Policy = WebConstants.Authorizations.Policies.Standard_Api_Policy)]
     public class SysLoginController : BaseController<SysLoginController>
     {

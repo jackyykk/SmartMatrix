@@ -15,10 +15,11 @@ using SmartMatrix.Domain.Core.Identities.Externals;
 using SmartMatrix.Domain.Core.Identities.Messages;
 using SmartMatrix.Domain.Core.Identities.Payloads;
 
-namespace SmartMatrix.WebApi.Controllers.Auth
+namespace SmartMatrix.WebApi.Controllers.v1_0.Auth
 {
     [ApiController]
-    [Route("api/auth/google")]
+    [Route("api/v{version:apiVersion}/auth/google")]
+    [ApiVersion("1.0")]
     public class GoogleController : BaseController<GoogleController>
     {        
         const string LOGIN_PROVIDER_NAME = SysLogin.LoginProviderOptions.Google;

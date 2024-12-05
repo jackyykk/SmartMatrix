@@ -9,10 +9,11 @@ using SmartMatrix.Domain.Core.Identities.DbEntities;
 using SmartMatrix.Domain.Core.Identities.Messages;
 using SmartMatrix.Domain.Core.Identities.Payloads;
 
-namespace SmartMatrix.WebApi.Controllers.Core
+namespace SmartMatrix.WebApi.Controllers.v1_0.Core
 {
     [ApiController]
-    [Route("api/core/systoken")]
+    [Route("api/v{version:apiVersion}/core/systoken")]
+    [ApiVersion("1.0")]
     //[Authorize(Policy = WebConstants.Authorizations.Policies.Standard_Api_Policy)]
     public class SysTokenController : BaseController<SysTokenController>
     {

@@ -9,10 +9,11 @@ using SmartMatrix.Domain.Core.Identities.DbEntities;
 using SmartMatrix.Domain.Core.Identities.Messages;
 using SmartMatrix.Domain.Core.Identities.Payloads;
 
-namespace SmartMatrix.WebApi.Controllers.Auth
+namespace SmartMatrix.WebApi.Controllers.v1_0.Auth
 {
     [ApiController]
-    [Route("api/auth/standard")]
+    [Route("api/v{version:apiVersion}/auth/standard")]
+    [ApiVersion("1.0")]
     public class StandardController : BaseController<StandardController>
     {
         const string LOGIN_PROVIDER_NAME = SysLogin.LoginProviderOptions.Standard;
