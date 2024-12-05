@@ -6,6 +6,6 @@ namespace SmartMatrix.Core.BaseClasses.Common
     public abstract class BasePayload<TId> : IPayload<TId>
     {
         public TId Id { get; set; } = default!;
-        public Guid Guid { get; set; }  // Globally unique identifier
+        public Guid? Guid { get; set; }  // Globally unique identifier
     }
 }
