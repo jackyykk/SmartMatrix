@@ -15,7 +15,7 @@ import { checkSecrets } from '../utils/authSecretUtils';
 const MyAppBar = () => {
     const router = useRouter();
     const dispatch: AppDispatch = useDispatch();    
-    const { isLoggedIn, userName } = useSelector((state: RootState) => state.auth);
+    const { isAuthenticated, userName } = useSelector((state: RootState) => state.auth);
 
     const [isClient, setIsClient] = useState(false);
 
@@ -60,7 +60,7 @@ const MyAppBar = () => {
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     Smart Matrix
                 </Typography>
-                {isLoggedIn ? (
+                {isAuthenticated ? (
                     <div className="flex items-center space-x-4">
                         <Typography variant="body1">Welcome, {userName}!</Typography>
                         <IconButton color="inherit" onClick={handleMenuOpen}>

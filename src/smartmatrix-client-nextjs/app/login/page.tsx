@@ -17,7 +17,7 @@ import { logoutThunk } from '../store/thunks/authThunks'; // Import the logoutTh
 const Login = () => {
     const router = useRouter();
     const dispatch: AppDispatch = useDispatch();
-    const { isLoggedIn, userName } = useSelector((state: RootState) => state.auth);
+    const { isAuthenticated, userName } = useSelector((state: RootState) => state.auth);
 
     const [isClient, setIsClient] = useState(false);
     const [message, setMessage] = useState('');
@@ -165,7 +165,7 @@ const Login = () => {
             <div className="w-full max-w-md p-8 space-y-8 bg-white rounded shadow-md">
                 <h2 className="text-2xl font-bold text-center">Login</h2>
                 {
-                    isLoggedIn ? (
+                    isAuthenticated ? (
                         <div className="text-center">
                             <p className="text-lg">Welcome, {userName}!</p>
                             <button
@@ -240,7 +240,7 @@ const Login = () => {
                     )
                 }
                 {
-                    !isLoggedIn && (
+                    !isAuthenticated && (
                         <>
                             <div className="flex items-center justify-center mt-4">
                                 <span className="text-sm text-gray-600">or</span>
