@@ -1,15 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { SysUser_OutputPayload } from '../../types/core/identitiesTypes';
 
 interface AuthState {
   isAuthenticated: boolean;
   loginName: string | null;
-  userName: string | null;
+  userName: string | null;  
 }
 
 const initialState: AuthState = {
   isAuthenticated: false,
   loginName: null,
-  userName: null,
+  userName: null,  
 };
 
 const authSlice = createSlice({
@@ -24,7 +25,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.isAuthenticated = false;
       state.loginName = null;
-      state.userName = null;
+      state.userName = null;      
     },
   },
 });
