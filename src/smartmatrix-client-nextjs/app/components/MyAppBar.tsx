@@ -10,12 +10,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../store'; // Ensure the import path is correct
 import { login } from '../store/slices/authSlice'; // Import the login and logout actions
 import { logoutThunk } from '../store/thunks/authThunks'; // Import the logoutThunk action
-import { checkSecret } from '../utils/authSecretUtils';
+import { fetchUserThunk } from '../store/thunks/userThunks'; // Import the fetchUserThunk action
+import { getSecret } from '../utils/authSecretUtils';
 
 const MyAppBar = () => {
     const router = useRouter();
-    const dispatch: AppDispatch = useDispatch();    
+    const dispatch: AppDispatch = useDispatch();
     const { isAuthenticated, secret } = useSelector((state: RootState) => state.auth);
+    const { user } = useSelector((state: RootState) => state.user);
 
     const [isClient, setIsClient] = useState(false);
 
@@ -23,13 +25,16 @@ const MyAppBar = () => {
 
     useEffect(() => {
         setIsClient(true);
-        
+
         // Check if the user is already logged in
-        const secret = checkSecret();
+        const secret = getSecret();
         if (secret) {
             dispatch(login({ secret })); // Dispatch the login action
+            if (!user) {
+                dispatch(fetchUserThunk(secret.loginName)); // Dispatch the fetchUserThunk action
+            }
         }
-    }, []);
+    }, [])
 
     const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -53,7 +58,7 @@ const MyAppBar = () => {
     const handleLogin = () => {
         router.push('/login'); // Redirect to login page
     };
-    
+
     return (
         <AppBar position="static">
             <Toolbar>

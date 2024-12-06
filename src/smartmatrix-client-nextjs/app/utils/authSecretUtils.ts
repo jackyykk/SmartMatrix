@@ -37,7 +37,7 @@ export const clearSecret = () => {
     sessionStorage.removeItem(Constants.LSK_AUTH_REFRESH_TOKEN_Expires);
 };
 
-export const checkSecret = () => {
+export const getSecret = () => {
     const loginName = localStorage.getItem(Constants.LSK_AUTH_LOGIN_NAME) || sessionStorage.getItem(Constants.LSK_AUTH_LOGIN_NAME);
     const userName = localStorage.getItem(Constants.LSK_AUTH_USER_NAME) || sessionStorage.getItem(Constants.LSK_AUTH_USER_NAME);
     const accessToken = localStorage.getItem(Constants.LSK_AUTH_ACCESS_TOKEN) || sessionStorage.getItem(Constants.LSK_AUTH_ACCESS_TOKEN);
