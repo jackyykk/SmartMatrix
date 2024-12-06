@@ -41,7 +41,7 @@ const MyInfoPage = () => {
         if (!user) {
             fetchUser();
         }
-    }, [dispatch, user]);
+    }, [user]);
 
     useEffect(() => {
         if (userError) {

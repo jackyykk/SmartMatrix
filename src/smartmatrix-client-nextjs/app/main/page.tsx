@@ -31,7 +31,7 @@ const MainPage = () => {
         setMessage('');
         setError('');
         setApp('weather-forecast');
-    }, [router]);
+    }, []);
 
     const backToHome = () => {
         router.push('/'); // Navigate back to home using the router

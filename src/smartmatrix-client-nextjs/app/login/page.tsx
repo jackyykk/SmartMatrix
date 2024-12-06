@@ -100,7 +100,7 @@ const LoginPage = () => {
         } else {
             setLoading(false);
         }
-    }, [router, dispatch, rememberMe]);
+    }, []);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
