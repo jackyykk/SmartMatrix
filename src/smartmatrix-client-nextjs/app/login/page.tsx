@@ -13,6 +13,7 @@ import { AppDispatch, RootState } from '../store'; // Ensure the import path is 
 import { login } from '../store/slices/authSlice'; // Import the login and logout actions
 import { logoutThunk } from '../store/thunks/authThunks'; // Import the logoutThunk action
 import { AuthSecret, AuthToken } from '../types/utils/authSecretTypes';
+import { setUser } from '../store/slices/userSlice';
 
 
 const Login = () => {
@@ -74,6 +75,9 @@ const Login = () => {
 
                             // Dispatch login action to update AuthState
                             dispatch(login({ secret }));
+
+                            // Dispatch the setUser action
+                            dispatch(setUser({ user: data.user }));
 
                             // Redirect to return Url
                             router.push(returnUrl);
@@ -139,6 +143,9 @@ const Login = () => {
 
                 // Dispatch login action to update AuthState
                 dispatch(login({ secret }));
+
+                // Dispatch the setUser action
+                dispatch(setUser({ user: data.user }));
 
                 // Redirect to return Url
                 router.push(returnUrl);
