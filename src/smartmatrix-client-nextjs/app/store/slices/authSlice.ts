@@ -1,31 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SysUser_OutputPayload } from '../../types/core/identitiesTypes';
+import { AuthSecret } from '../../types/utils/authSecretTypes';
 
 interface AuthState {
   isAuthenticated: boolean;
-  loginName: string | null;
-  userName: string | null;  
+  secret: AuthSecret | null;  
 }
 
 const initialState: AuthState = {
   isAuthenticated: false,
-  loginName: null,
-  userName: null,  
+  secret: null,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<{ loginName: string; userName: string }>) => {
+    login: (state, action: PayloadAction<{ secret: AuthSecret }>) => {
       state.isAuthenticated = true;
-      state.loginName = action.payload.loginName;
-      state.userName = action.payload.userName;
+      state.secret = action.payload.secret;      
     },
     logout: (state) => {
       state.isAuthenticated = false;
-      state.loginName = null;
-      state.userName = null;      
+      state.secret = null;
     },
   },
 });

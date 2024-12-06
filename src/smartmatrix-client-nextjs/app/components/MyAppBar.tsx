@@ -10,12 +10,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from '../store'; // Ensure the import path is correct
 import { login } from '../store/slices/authSlice'; // Import the login and logout actions
 import { logoutThunk } from '../store/thunks/authThunks'; // Import the logoutThunk action
-import { checkSecrets } from '../utils/authSecretUtils';
+import { checkSecret } from '../utils/authSecretUtils';
 
 const MyAppBar = () => {
     const router = useRouter();
     const dispatch: AppDispatch = useDispatch();    
-    const { isAuthenticated, userName } = useSelector((state: RootState) => state.auth);
+    const { isAuthenticated, secret } = useSelector((state: RootState) => state.auth);
 
     const [isClient, setIsClient] = useState(false);
 
@@ -25,9 +25,9 @@ const MyAppBar = () => {
         setIsClient(true);
         
         // Check if the user is already logged in
-        const secrets = checkSecrets();
-        if (secrets) {
-            dispatch(login({ loginName: secrets.loginName, userName: secrets.userName }));
+        const secret = checkSecret();
+        if (secret) {
+            dispatch(login({ secret })); // Dispatch the login action
         }
     }, []);
 
@@ -62,7 +62,7 @@ const MyAppBar = () => {
                 </Typography>
                 {isAuthenticated ? (
                     <div className="flex items-center space-x-4">
-                        <Typography variant="body1">Welcome, {userName}!</Typography>
+                        <Typography variant="body1">Welcome, {secret?.userName}!</Typography>
                         <IconButton color="inherit" onClick={handleMenuOpen}>
                             <FontAwesomeIcon icon={faUser} />
                         </IconButton>

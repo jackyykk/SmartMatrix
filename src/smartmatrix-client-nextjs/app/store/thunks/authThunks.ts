@@ -1,8 +1,8 @@
 import { AppDispatch } from '../index';
-import { clearSecrets } from '../../utils/authSecretUtils';
+import { clearSecret } from '../../utils/authSecretUtils';
 import { logout } from '../slices/authSlice';
 
 export const logoutThunk = () => (dispatch: AppDispatch) => {
-  clearSecrets();
+  clearSecret();
   dispatch(logout());
 };

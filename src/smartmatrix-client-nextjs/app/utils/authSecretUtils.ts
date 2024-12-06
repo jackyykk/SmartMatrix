@@ -1,7 +1,7 @@
 import * as Constants from '../constants/constants';
 import { AuthSecret } from '../types/utils/authSecretTypes';
 
-export const saveSecrets = (secret: AuthSecret, rememberMe: boolean) => {
+export const saveSecret = (secret: AuthSecret, rememberMe: boolean) => {
     const storage = rememberMe ? localStorage : sessionStorage;
 
     const token = secret.token;
@@ -17,7 +17,7 @@ export const saveSecrets = (secret: AuthSecret, rememberMe: boolean) => {
 };
 
 
-export const clearSecrets = () => {
+export const clearSecret = () => {
     localStorage.removeItem(Constants.LSK_AUTH_LOGIN_NAME);
     localStorage.removeItem(Constants.LSK_AUTH_USER_NAME);
     localStorage.removeItem(Constants.LSK_AUTH_ACCESS_TOKEN);
@@ -37,7 +37,7 @@ export const clearSecrets = () => {
     sessionStorage.removeItem(Constants.LSK_AUTH_REFRESH_TOKEN_Expires);
 };
 
-export const checkSecrets = () => {
+export const checkSecret = () => {
     const loginName = localStorage.getItem(Constants.LSK_AUTH_LOGIN_NAME) || sessionStorage.getItem(Constants.LSK_AUTH_LOGIN_NAME);
     const userName = localStorage.getItem(Constants.LSK_AUTH_USER_NAME) || sessionStorage.getItem(Constants.LSK_AUTH_USER_NAME);
     const accessToken = localStorage.getItem(Constants.LSK_AUTH_ACCESS_TOKEN) || sessionStorage.getItem(Constants.LSK_AUTH_ACCESS_TOKEN);
@@ -60,5 +60,6 @@ export const checkSecrets = () => {
             refreshToken,
             refreshToken_LifeInMinutes: parseInt(refreshToken_LifeInMinutes),
             refreshToken_Expires
-    }};
+        }
+    } as AuthSecret;
 };

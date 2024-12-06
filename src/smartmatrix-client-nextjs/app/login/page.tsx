@@ -7,17 +7,18 @@ import * as Constants from '../constants/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { saveSecrets, clearSecrets, checkSecrets } from '../utils/authSecretUtils';
+import { saveSecret, clearSecret, checkSecret } from '../utils/authSecretUtils';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store'; // Ensure the import path is correct
 import { login } from '../store/slices/authSlice'; // Import the login and logout actions
 import { logoutThunk } from '../store/thunks/authThunks'; // Import the logoutThunk action
+import { AuthSecret, AuthToken } from '../types/utils/authSecretTypes';
 
 
 const Login = () => {
     const router = useRouter();
     const dispatch: AppDispatch = useDispatch();
-    const { isAuthenticated, userName } = useSelector((state: RootState) => state.auth);
+    const { isAuthenticated, secret } = useSelector((state: RootState) => state.auth);
 
     const [isClient, setIsClient] = useState(false);
     const [message, setMessage] = useState('');
@@ -54,11 +55,25 @@ const Login = () => {
                         const succeeded = result.succeeded;
                         const data = result.data;
                         if (succeeded && data) {
+                            // Map the API response to AuthSecret type
+                            const secret: AuthSecret = {
+                                loginName: data.loginName,
+                                userName: data.userName,
+                                token: {
+                                    accessToken: data.token.accessToken,
+                                    accessToken_LifeInMinutes: data.token.accessToken_LifeInMinutes,
+                                    accessToken_Expires: data.token.accessToken_Expires,
+                                    refreshToken: data.token.refreshToken,
+                                    refreshToken_LifeInMinutes: data.token.refreshToken_LifeInMinutes,
+                                    refreshToken_Expires: data.token.refreshToken_Expires
+                                } as AuthToken
+                            };
+
                             // Save tokens
-                            saveSecrets(data, rememberMe);
+                            saveSecret(secret, rememberMe);
 
                             // Dispatch login action to update AuthState
-                            dispatch(login({ loginName: data.loginName, userName: data.userName }));
+                            dispatch(login({ secret }));
 
                             // Redirect to return Url
                             router.push(returnUrl);
@@ -83,7 +98,7 @@ const Login = () => {
         }
     }, [router, dispatch, rememberMe]);
 
-    const togglePasswordVisibility = () => {        
+    const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
 
@@ -105,11 +120,25 @@ const Login = () => {
             const succeeded = result.succeeded;
             const data = result.data;
             if (succeeded && data) {
+                // Map the API response to AuthSecret type
+                const secret: AuthSecret = {
+                    loginName: data.loginName,
+                    userName: data.userName,
+                    token: {
+                        accessToken: data.token.accessToken,
+                        accessToken_LifeInMinutes: data.token.accessToken_LifeInMinutes,
+                        accessToken_Expires: data.token.accessToken_Expires,
+                        refreshToken: data.token.refreshToken,
+                        refreshToken_LifeInMinutes: data.token.refreshToken_LifeInMinutes,
+                        refreshToken_Expires: data.token.refreshToken_Expires
+                    } as AuthToken
+                };
+
                 // Save tokens
-                saveSecrets(data, rememberMe);
+                saveSecret(secret, rememberMe);
 
                 // Dispatch login action to update AuthState
-                dispatch(login({ loginName: data.loginName, userName: data.userName }));
+                dispatch(login({ secret }));
 
                 // Redirect to return Url
                 router.push(returnUrl);
@@ -167,7 +196,7 @@ const Login = () => {
                 {
                     isAuthenticated ? (
                         <div className="text-center">
-                            <p className="text-lg">Welcome, {userName}!</p>
+                            <p className="text-lg">Welcome, {secret?.userName}!</p>
                             <button
                                 onClick={handleLogout}
                                 className="w-full px-4 py-2 mt-4 font-medium text-white bg-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring focus:ring-red-200 flex items-center justify-center"
