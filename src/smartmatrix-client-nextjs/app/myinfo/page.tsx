@@ -26,8 +26,7 @@ const MyInfoPage = () => {
     const router = useRouter();
     const dispatch: AppDispatch = useDispatch();
     const { isAuthenticated, secret } = useSelector((state: RootState) => state.auth);
-    const { user } = useSelector((state: RootState) => state.user);
-
+    const { user, error: userError } = useSelector((state: RootState) => state.user);
     const [isClient, setIsClient] = useState(false);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
@@ -43,6 +42,12 @@ const MyInfoPage = () => {
             fetchUser();
         }
     }, [dispatch, user]);
+
+    useEffect(() => {
+        if (userError) {
+            setError(userError);
+        }
+    }, [userError]);
 
     const fetchUser = async () => {
         setLoading(true);

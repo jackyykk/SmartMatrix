@@ -60,10 +60,14 @@ const MyAppBar = () => {
         router.push('/login'); // Redirect to login page
     };
 
+    const handleGoToHome = () => {
+        router.push('/'); // Redirect to home page
+    };
+
     return (
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} onClick={handleGoToHome}>
                     Smart Matrix
                 </Typography>
                 {isAuthenticated ? (

@@ -1,4 +1,4 @@
-import * as Constants from '../constants/constants';
+import * as Constants from '../constants/coreConstants';
 import { AuthSecret } from '../types/utils/authSecretTypes';
 
 export const saveSecret = (secret: AuthSecret, rememberMe: boolean) => {

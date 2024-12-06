@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import * as Constants from '../constants/constants';
-import { AuthSecret } from '../types/utils/authSecretTypes';
+import * as coreConstants from '../constants/coreConstants';
+import * as apiConstants from '../constants/apiConstants';
 import { saveSecret, getSecret } from './authSecretUtils';
 
 const apiProxy = async (config: AxiosRequestConfig): Promise<AxiosResponse> => {
@@ -12,12 +12,13 @@ const apiProxy = async (config: AxiosRequestConfig): Promise<AxiosResponse> => {
 
   // Check if the access token has expired
   const accessTokenExpires = new Date(secret.token.accessToken_Expires);
-  if (new Date() >= accessTokenExpires) {
+  const accessTokenThreshold = new Date(accessTokenExpires.getTime() - coreConstants.ACCESS_TOKEN_REFRESH_THRESHOLD_MINUTES * 60 * 1000);
+  if (new Date() >= accessTokenThreshold) {
     // Refresh the access token
-    const refreshTokenResponse = await axios.post(`${Constants.API_BASE_URL}${Constants.API_CORE_SYSTOKEN_RENEW_TOKEN}`, {
+    const refreshTokenResponse = await axios.post(`${apiConstants.API_BASE_URL}${apiConstants.API_CORE_SYSTOKEN_RENEW_TOKEN}`, {
       refreshToken: secret.token.refreshToken,
     });
-
+    
     const refreshTokenResult = refreshTokenResponse.data;
     if (refreshTokenResult.succeeded) {
       const newToken = refreshTokenResult.data.token;

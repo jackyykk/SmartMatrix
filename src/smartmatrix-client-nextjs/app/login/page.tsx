@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import * as Constants from '../constants/constants';
+import * as apiConstants from '../constants/apiConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
@@ -46,7 +46,7 @@ const LoginPage = () => {
         if (tokensSet) {
             if (onetimeToken && returnUrl) {
                 // Exchange the one-time token for tokens                
-                axios.get(`${Constants.API_BASE_URL}${Constants.API_AUTH_STANDARD_RENEW_TOKEN_BY_OTT}`, {
+                axios.get(`${apiConstants.API_BASE_URL}${apiConstants.API_AUTH_STANDARD_RENEW_TOKEN_BY_OTT}`, {
                     params: { oneTimeToken: onetimeToken }
                 })
                     .then(response => {
@@ -77,7 +77,7 @@ const LoginPage = () => {
                             dispatch(login({ secret }));
 
                             // Dispatch the setUser action
-                            dispatch(setUser({ user: data.user }));
+                            dispatch(setUser({ user: data.user, error: '' }));
 
                             // Redirect to return Url
                             router.push(returnUrl);
@@ -112,7 +112,7 @@ const LoginPage = () => {
         try {
             // it will redirect to returnUrl if it is provided in the query string, redirect to /main otherwise
             const returnUrl = new URLSearchParams(window.location.search).get('returnUrl') || `${window.location.origin}/main`;
-            const response = await axios.post(`${Constants.API_BASE_URL}${Constants.API_AUTH_STANDARD_LOGIN}?returnUrl=${encodeURIComponent(returnUrl)}`, {
+            const response = await axios.post(`${apiConstants.API_BASE_URL}${apiConstants.API_AUTH_STANDARD_LOGIN}?returnUrl=${encodeURIComponent(returnUrl)}`, {
                 loginName,
                 password,
                 returnUrl
@@ -145,7 +145,7 @@ const LoginPage = () => {
                 dispatch(login({ secret }));
 
                 // Dispatch the setUser action
-                dispatch(setUser({ user: data.user }));
+                dispatch(setUser({ user: data.user, error: '' }));
 
                 // Redirect to return Url
                 router.push(returnUrl);
@@ -167,7 +167,7 @@ const LoginPage = () => {
             // it will redirect to returnUrl if it is provided in the query string, redirect to /main otherwise            
             const originUrl = `${window.location.origin}/login`;
             const returnUrl = new URLSearchParams(window.location.search).get('returnUrl') || `${window.location.origin}/main`;
-            window.location.href = `${Constants.API_BASE_URL}${Constants.API_AUTH_GOOGLE_LOGIN}?originUrl=${encodeURIComponent(originUrl)}&returnUrl=${encodeURIComponent(returnUrl)}`;
+            window.location.href = `${apiConstants.API_BASE_URL}${apiConstants.API_AUTH_GOOGLE_LOGIN}?originUrl=${encodeURIComponent(originUrl)}&returnUrl=${encodeURIComponent(returnUrl)}`;
         }
         catch (err) {
             setError('An error occurred during Google login');
