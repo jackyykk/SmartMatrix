@@ -7,7 +7,7 @@ import * as Constants from '../constants/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faSignInAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { saveSecret, clearSecret, getSecret } from '../utils/authSecretUtils';
+import { saveSecret } from '../utils/authSecretUtils';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store'; // Ensure the import path is correct
 import { login } from '../store/slices/authSlice'; // Import the login and logout actions
@@ -16,7 +16,7 @@ import { AuthSecret, AuthToken } from '../types/utils/authSecretTypes';
 import { setUser } from '../store/slices/userSlice';
 
 
-const Login = () => {
+const LoginPage = () => {
     const router = useRouter();
     const dispatch: AppDispatch = useDispatch();
     const { isAuthenticated, secret } = useSelector((state: RootState) => state.auth);
@@ -299,4 +299,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginPage;

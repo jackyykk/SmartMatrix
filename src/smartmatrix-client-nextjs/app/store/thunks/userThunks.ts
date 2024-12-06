@@ -7,23 +7,21 @@ export const fetchUserThunk = (loginName: string) => async (dispatch: AppDispatc
     try {
         const params = new URLSearchParams();
         params.append('partitionKey', `${Constants.PARTITION_KEY}`);
-        params.append('loginName', `${loginName}`);                
+        params.append('loginName', `${loginName}`);
         const queryString = params.toString();
         const url = `${Constants.API_BASE_URL}${Constants.API_CORE_SYSUSER_GETFIRST_BY_LOGIN_NAME}?${queryString}`;
         const response = await apiProxy({
             method: 'GET',
             url: url,
         });
-      const result = response.data;
-      if (result.succeeded && result.data)
-      {
-        dispatch(setUser({ user: result.data }));
-      }
-      else
-      {
-        console.error('Failed to fetch user:', `${result.messages.join(', ')}`);
-      }      
+        const result = response.data;
+        if (result.succeeded && result.data) {
+            dispatch(setUser(result.data));
+        }
+        else {
+            console.error('Failed to fetch user:', `${result.messages.join(', ')}`);
+        }
     } catch (error) {
-      console.error('Failed to fetch user:', error);
+        console.error('Failed to fetch user:', error);
     }
-  };  
+};  

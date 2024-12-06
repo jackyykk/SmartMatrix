@@ -50,8 +50,9 @@ const MyAppBar = () => {
         handleMenuClose();
     };
 
-    const handleShowUserProfile = () => {
+    const handleShowMyInfo = () => {
         // Implement user profile logic here
+        router.push('/myinfo'); // Redirect to my info page
         handleMenuClose();
     };
 
@@ -76,7 +77,7 @@ const MyAppBar = () => {
                             open={Boolean(anchorEl)}
                             onClose={handleMenuClose}
                         >
-                            <MenuItem onClick={handleShowUserProfile}>User Info</MenuItem>
+                            <MenuItem onClick={handleShowMyInfo}>My Info</MenuItem>
                             <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </Menu>
                     </div>

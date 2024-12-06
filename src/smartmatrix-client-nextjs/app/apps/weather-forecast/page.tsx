@@ -8,7 +8,7 @@ import Paper from '@mui/material/Paper';
 import * as Constants from '../../constants/constants';
 import { WeatherForecast_OutputPayload } from './types/weatherForecastTypes';
 
-export default function WeatherForecastPage() {
+const WeatherForecastPage = () => {
     const [isClient, setIsClient] = useState(false);
     const [weatherData, setWeatherData] = useState<WeatherForecast_OutputPayload[]>([]);
     const [loading, setLoading] = useState(false);
@@ -115,3 +115,5 @@ export default function WeatherForecastPage() {
         </main>
     );
 }
+
+export default WeatherForecastPage;

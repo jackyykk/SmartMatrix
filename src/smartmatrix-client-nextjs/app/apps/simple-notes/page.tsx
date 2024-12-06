@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
 
-export default function SimpleNotesPage() {
+const SimpleNotesPage = () => {
     const [isClient, setIsClient] = useState(false);
     const router = useRouter();
 
@@ -38,3 +38,5 @@ export default function SimpleNotesPage() {
         </main>
     );
 }
+
+export default SimpleNotesPage;

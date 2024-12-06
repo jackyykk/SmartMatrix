@@ -10,7 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-export default function MainPage() {
+const MainPage = () => {
     const router = useRouter();
     const [isClient, setIsClient] = useState(false);
     const [message, setMessage] = useState('');
@@ -81,3 +81,5 @@ export default function MainPage() {
         </main>
     );
 }
+
+export default MainPage;
