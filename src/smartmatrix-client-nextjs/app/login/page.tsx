@@ -31,7 +31,7 @@ const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false); // State for password visibility
     const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me"
     const [isSubmitting, setIsSubmitting] = useState(false); // State for button disabled
-    const googleEnabled = process.env.NEXT_PUBLIC_AUTH_GOOGLE_EABLED === 'true'; // Check if Google login is enabled
+    const googleEnabled = process.env.NEXT_PUBLIC_AUTH_GOOGLE_ENABLED === 'true'; // Check if Google login is enabled
 
     useEffect(() => {
         setLoading(true);
