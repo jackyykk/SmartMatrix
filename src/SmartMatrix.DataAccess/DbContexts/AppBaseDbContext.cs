@@ -43,7 +43,7 @@ namespace SmartMatrix.DataAccess.DbContexts
             builder.Entity<SimpleNote>(b =>
             {
                 b.HasKey("Id");
-                b.ToTable("sm_app_simple_notes");
+                b.ToTable("sm_app_smn_simple_notes");
                 b.Property(p => p.Id).HasColumnName("id");
                 b.Property(p => p.Guid).HasColumnName("guid").HasDefaultValueSql(Get_Guid_DefaultValue_Sql());
                 b.Property(p => p.Status).HasColumnName("status");

@@ -31,6 +31,7 @@ const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false); // State for password visibility
     const [rememberMe, setRememberMe] = useState(false); // State for "Remember Me"
     const [isSubmitting, setIsSubmitting] = useState(false); // State for button disabled
+    const googleEnabled = process.env.NEXT_PUBLIC_AUTH_GOOGLE_EABLED === 'true'; // Check if Google login is enabled
 
     useEffect(() => {
         setLoading(true);
@@ -276,7 +277,7 @@ const LoginPage = () => {
                     )
                 }
                 {
-                    !isAuthenticated && (
+                    googleEnabled && !isAuthenticated && (
                         <>
                             <div className="flex items-center justify-center mt-4">
                                 <span className="text-sm text-gray-600">or</span>

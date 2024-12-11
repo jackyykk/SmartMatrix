@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@mui/material';
+import { AppBar, Box, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
@@ -65,11 +65,20 @@ const MyAppBar = () => {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="static" color="primary">
             <Toolbar>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} onClick={handleGoToHome}>
-                    Smart Matrix
-                </Typography>
+                <Box sx={{ flexGrow: 1 }}>
+                    <Button variant='text' sx={{
+                        color: 'white', // Set the text color to white                    
+                        backgroundColor: 'primary.main', // Set the background color
+                        '&:hover': {
+                            backgroundColor: 'primary.dark', // Set the background color on hover
+                        },
+                    }}
+                        onClick={handleGoToHome}>
+                        Smart Matrix
+                    </Button>
+                </Box>
                 {isAuthenticated ? (
                     <div className="flex items-center space-x-4">
                         <Typography variant="body1">Welcome, {secret?.userName}!</Typography>

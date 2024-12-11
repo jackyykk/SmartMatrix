@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
 export default function Home() {
@@ -34,7 +35,18 @@ export default function Home() {
         <div className="line" style={{ left: '90%' }}></div>
       </div>
 
-      <section className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
+      <Box
+        sx={{
+          width: '100vw',
+          marginLeft: 'calc(-50vw + 50%)',
+          padding: '16px',
+          boxSizing: 'border-box',
+          backgroundColor: 'white',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         <motion.div
           ref={section1Ref}
           initial={{ opacity: 0, y: 50 }}
@@ -48,9 +60,20 @@ export default function Home() {
             Explore Apps
           </Button>
         </motion.div>
-      </section>
+      </Box>
 
-      <section className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
+      <Box
+        sx={{
+          width: '100vw',
+          marginLeft: 'calc(-50vw + 50%)',
+          padding: '16px',
+          boxSizing: 'border-box',
+          backgroundColor: 'gray.100',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         <motion.div
           ref={section2Ref}
           initial={{ opacity: 0, y: 50 }}
@@ -61,9 +84,20 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-gray-800 mb-4">Why Choose Us?</h2>
           <p className="text-lg text-gray-600 mb-8">We provide innovative solutions to make your life easier.</p>
         </motion.div>
-      </section>
+      </Box>
 
-      <section className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
+      <Box
+        sx={{
+          width: '100vw',
+          marginLeft: 'calc(-50vw + 50%)',
+          padding: '16px',
+          boxSizing: 'border-box',
+          backgroundColor: 'white',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         <motion.div
           ref={section3Ref}
           initial={{ opacity: 0, y: 50 }}
@@ -80,9 +114,20 @@ export default function Home() {
             <li className="text-lg text-gray-600 mb-2">IoT Solutions</li>
           </ul>
         </motion.div>
-      </section>
+      </Box>
 
-      <section className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
+      <Box
+        sx={{
+          width: '100vw',
+          marginLeft: 'calc(-50vw + 50%)',
+          padding: '16px',
+          boxSizing: 'border-box',
+          backgroundColor: 'gray.100',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         <motion.div
           ref={section4Ref}
           initial={{ opacity: 0, y: 50 }}
@@ -107,9 +152,20 @@ export default function Home() {
             </div>
           </div>
         </motion.div>
-      </section>
+      </Box>
 
-      <section className="flex flex-col items-center justify-center min-h-screen p-4 bg-white">
+      <Box
+        sx={{
+          width: '100vw',
+          marginLeft: 'calc(-50vw + 50%)',
+          padding: '16px',
+          boxSizing: 'border-box',
+          backgroundColor: 'white',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         <motion.div
           ref={section5Ref}
           initial={{ opacity: 0, y: 50 }}
@@ -123,7 +179,7 @@ export default function Home() {
             Sign Up
           </Button>
         </motion.div>
-      </section>
+      </Box>
 
       <footer className="mt-6 flex gap-6 flex-wrap text-gray-600 items-center justify-center">
         &copy; 2024 SmartMatrix. All rights reserved.

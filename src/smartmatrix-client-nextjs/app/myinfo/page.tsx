@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { AppDispatch, RootState } from '../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserThunk } from '../store/thunks/userThunks';
+import { styled } from '@mui/material/styles';
 import {
     Button,
     Container,
@@ -19,6 +20,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
+    tableCellClasses,
     Paper
 } from '@mui/material';
 
@@ -65,47 +67,103 @@ const MyInfoPage = () => {
         setTabIndex(newValue);
     };
 
+    const StyledTableRowHead = styled(TableCell)(({ theme }) => ({
+        [`&.${tableCellClasses.body}`]: {
+            backgroundColor: theme.palette.common.black,
+            color: theme.palette.common.white,
+            fontSize: 14,
+            width: '25%',
+            minWidth: '180px',
+        },
+    }));
+
+    const StyledTableCell = styled(TableCell)(({ theme }) => ({
+        [`&.${tableCellClasses.head}`]: {
+            backgroundColor: theme.palette.common.black,
+            color: theme.palette.common.white,
+        },
+        [`&.${tableCellClasses.body}`]: {
+            fontSize: 14,
+        },
+    }));
+
+    const StyledTableRow = styled(TableRow)(({ theme }) => ({
+        '&:nth-of-type(odd)': {
+            backgroundColor: theme.palette.action.hover,
+        },
+        // hide last border
+        '&:last-child td, &:last-child th': {
+            border: 0,
+        },
+    }));
+
     if (!isClient) {
         return null;
     }
 
     return (
-        <Container maxWidth="sm">
-            <Box mt={4}>
-                <Typography variant="h4" gutterBottom>
-                    My Info
-                </Typography>
-                <Tabs value={tabIndex} onChange={handleTabChange}>
+        <Container maxWidth="lg">
+            <Box mt={4}>                
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                    <Typography variant="h5" gutterBottom>
+                        My Info
+                    </Typography>
+                    <Button variant="contained" color="primary" onClick={fetchUser}>
+                        Refresh
+                    </Button>
+                </Box>
+                <Tabs value={tabIndex} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
                     <Tab label="General Info" />
                     <Tab label="Configuration" />
                 </Tabs>
                 {tabIndex === 0 && (
-                    <>
+                    <Box
+                        sx={{
+                            padding: '16px',
+                            backgroundColor: 'white',
+                        }}>
                         {loading ? (
                             <CircularProgress />
                         ) : (
                             <>
-                                <Typography variant="body1">Username: {user?.userName}</Typography>
-                                <Typography variant="body1">Display Name: {user?.displayName}</Typography>
-                                <Typography variant="body1">Email: {user?.email}</Typography>
+                                <Box mt={2}>
+                                    <TableContainer component={Paper}>
+                                        <Table size="small">
+                                            <TableBody>
+                                                <TableRow>
+                                                    <StyledTableRowHead>Username</StyledTableRowHead>
+                                                    <StyledTableCell>{user?.userName}</StyledTableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <StyledTableRowHead>Display Name</StyledTableRowHead>
+                                                    <StyledTableCell>{user?.displayName}</StyledTableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <StyledTableRowHead>Email</StyledTableRowHead>
+                                                    <StyledTableCell>{user?.email}</StyledTableCell>
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </Box>
                                 <Box mt={2}>
                                     <Typography variant="h6">Logins</Typography>
                                     <TableContainer component={Paper}>
-                                        <Table>
+                                        <Table size="small">
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell>Provider</TableCell>
-                                                    <TableCell>Type</TableCell>
-                                                    <TableCell>Login Name</TableCell>
+                                                    <StyledTableCell>Provider</StyledTableCell>
+                                                    <StyledTableCell>Type</StyledTableCell>
+                                                    <StyledTableCell>Login Name</StyledTableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
                                                 {user?.logins.map((login) => (
-                                                    <TableRow key={login.id}>
-                                                        <TableCell>{login.loginProvider}</TableCell>
-                                                        <TableCell>{login.loginType}</TableCell>
-                                                        <TableCell>{login.loginName}</TableCell>
-                                                    </TableRow>
+                                                    <StyledTableRow key={login.id}>
+                                                        <StyledTableCell>{login.loginProvider}</StyledTableCell>
+                                                        <StyledTableCell>{login.loginType}</StyledTableCell>
+                                                        <StyledTableCell>{login.loginName}</StyledTableCell>
+                                                    </StyledTableRow >
                                                 ))}
                                             </TableBody>
                                         </Table>
@@ -114,37 +172,40 @@ const MyInfoPage = () => {
                                 <Box mt={2}>
                                     <Typography variant="h6">Roles</Typography>
                                     <TableContainer component={Paper}>
-                                        <Table>
+                                        <Table size="small">
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell>Role Name</TableCell>
-                                                    <TableCell>Role Description</TableCell>
+                                                    <StyledTableCell>Role Name</StyledTableCell>
+                                                    <StyledTableCell>Role Description</StyledTableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
                                                 {user?.roles.map((role) => (
-                                                    <TableRow key={role.id}>
-                                                        <TableCell>{role.roleName}</TableCell>
-                                                        <TableCell>{role.description}</TableCell>
-                                                    </TableRow>
+                                                    <StyledTableRow key={role.id}>
+                                                        <StyledTableCell>{role.roleName}</StyledTableCell>
+                                                        <StyledTableCell>{role.description}</StyledTableCell>
+                                                    </StyledTableRow >
                                                 ))}
                                             </TableBody>
                                         </Table>
                                     </TableContainer>
                                 </Box>
-                                {message && <Typography color="success.main">{message}</Typography>}
-                                {error && <Typography color="error.main">{error}</Typography>}
                                 <Box mt={2}>
-                                    <Button variant="contained" color="primary" onClick={fetchUser}>
-                                        Refresh
-                                    </Button>
+                                    {message && <Typography color="success.main">{message}</Typography>}
+                                    {error && <Typography color="error.main">{error}</Typography>}
                                 </Box>
                             </>
                         )}
-                    </>
+                    </Box>
                 )}
                 {tabIndex === 1 && (
-                    <Typography variant="body1">Configuration content goes here...</Typography>
+                    <Box
+                        sx={{
+                            padding: '16px',
+                            backgroundColor: 'white',
+                        }}>
+                        <Typography variant="body1">Configuration content goes here...</Typography>
+                    </Box>
                 )}
             </Box>
         </Container>
