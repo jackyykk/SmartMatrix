@@ -57,7 +57,7 @@ export default function Home() {
           <h1 className="text-5xl font-bold text-gray-800 mb-4">Welcome to Smart Matrix</h1>
           <p className="text-lg text-gray-600 mb-8">Your platform for smart apps and solutions.</p>
           <Button variant="contained" color="primary" onClick={() => router.push('/main')}>
-            Explore Apps
+            Explore Tools and Apps
           </Button>
         </motion.div>
       </Box>

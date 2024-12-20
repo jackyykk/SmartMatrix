@@ -7,4 +7,4 @@ export const API_AUTH_STANDARD_RENEW_TOKEN_BY_OTT = '/v1.0/auth/standard/renew-t
 export const API_CORE_SYSTOKEN_RENEW_TOKEN = '/v1.0/core/systoken/renew-token';
 export const API_CORE_SYSUSER_GETFIRST_BY_LOGIN_NAME = '/v1.0/core/sysuser/getfirst-by_login_name';
 
-export const API_APP_WEATHER_FORECAST_GETLIST = '/v1.0/apps/weather_forecast_app/getlist';
+export const API_APP_WEATHER_FORECAST_GETLIST = '/v1.0/tools/weather_forecast_tool/getlist';

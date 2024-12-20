@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using SmartMatrix.DataAccess.AuditLogging;
+using SmartMatrix.Domain.Tools.SimpleNoteTool.DbEntities;
 
 namespace SmartMatrix.DataAccess.DbContexts
 {
-    public abstract class AppBaseDbContext : AuditableDbContext
+    public abstract class ToolBaseDbContext : AuditableDbContext
     {
-        public AppBaseDbContext(DbContextOptions options) : base(options) { }
+        public ToolBaseDbContext(DbContextOptions options) : base(options) { }
 
         public void SetConnection(string connectionString)
         {            
@@ -37,7 +38,29 @@ namespace SmartMatrix.DataAccess.DbContexts
                 b.Property(p => p.NewValues).HasColumnName("new_values");
                 b.Property(p => p.AffectedColumns).HasColumnName("affected_columns");
                 b.Property(p => p.PrimaryKey).HasColumnName("primary_key");
-            });            
+            });
+
+            builder.Entity<SimpleNote>(b =>
+            {
+                b.HasKey("Id");
+                b.ToTable("sm_tool_smn_simple_notes");
+                b.Property(p => p.Id).HasColumnName("id");
+                b.Property(p => p.Guid).HasColumnName("guid").HasDefaultValueSql(Get_Guid_DefaultValue_Sql());
+                b.Property(p => p.Status).HasColumnName("status");
+                b.Property(p => p.IsDeleted).HasColumnName("is_deleted");
+                b.Property(p => p.CreatedAt).HasColumnName("created_at");
+                b.Property(p => p.CreatedBy).HasColumnName("created_by");                                
+                b.Property(p => p.ModifiedAt).HasColumnName("modified_at");
+                b.Property(p => p.ModifiedBy).HasColumnName("modified_by");                
+                b.Property(p => p.DeletedAt).HasColumnName("deleted_at");
+                b.Property(p => p.DeletedBy).HasColumnName("deleted_by");
+                b.Property(p => p.InternalRemark).HasColumnName("internal_remark");
+                b.Property(p => p.Category).HasColumnName("category");
+                b.Property(p => p.Title).HasColumnName("title");
+                b.Property(p => p.Body).HasColumnName("body");
+                b.Property(p => p.Owner).HasColumnName("owner");
+                b.Ignore(p => p.SkipAudit);
+            });
         }
     }
 }

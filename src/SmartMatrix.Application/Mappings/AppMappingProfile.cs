@@ -1,8 +1,8 @@
 using AutoMapper;
-using SmartMatrix.Domain.Apps.SimpleNoteApp.DbEntities;
-using SmartMatrix.Domain.Apps.SimpleNoteApp.Payloads;
-using SmartMatrix.Domain.Apps.WeatherForecastApp.Entities;
-using SmartMatrix.Domain.Apps.WeatherForecastApp.Payloads;
+using SmartMatrix.Domain.Tools.SimpleNoteTool.DbEntities;
+using SmartMatrix.Domain.Tools.SimpleNoteTool.Payloads;
+using SmartMatrix.Domain.Tools.WeatherForecastTool.Entities;
+using SmartMatrix.Domain.Tools.WeatherForecastTool.Payloads;
 
 namespace SmartMatrix.Application.Mappings
 {    

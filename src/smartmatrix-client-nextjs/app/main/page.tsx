@@ -16,21 +16,21 @@ const MainPage = () => {
     const [message, setMessage] = useState('');
     const [error, setError] = useState('');
 
-    const [app, setApp] = useState('');
+    const [tool, setTool] = useState('');
 
-    const handleAppChange = (event: SelectChangeEvent) => {
-        setApp(event.target.value as string);
+    const handleToolChange = (event: SelectChangeEvent) => {
+        setTool(event.target.value as string);
     };
 
     const gotoPage = () => {
-        router.push(`/apps/${app}`);
+        router.push(`/tools/${tool}`);
     };
 
     useEffect(() => {
         setIsClient(true);
         setMessage('');
         setError('');
-        setApp('weather-forecast');
+        setTool('weather-forecast');
     }, []);
 
     const backToHome = () => {
@@ -54,13 +54,13 @@ const MainPage = () => {
             <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
                 <Box sx={{ minWidth: 200 }}>
                     <FormControl fullWidth>
-                        <InputLabel id="app-simple-select-label">App</InputLabel>
+                        <InputLabel id="tool-simple-select-label">Tool</InputLabel>
                         <Select
-                            labelId="app-simple-select-label"
-                            id="app-simple-select"
-                            value={app}
-                            label="App"
-                            onChange={handleAppChange}
+                            labelId="tool-simple-select-label"
+                            id="tool-simple-select"
+                            value={tool}
+                            label="Tool"
+                            onChange={handleToolChange}
                         >
                             <MenuItem value={'weather-forecast'}>Weather Forecast</MenuItem>
                             <MenuItem value={'simple-notes'}>Simple Notes</MenuItem>

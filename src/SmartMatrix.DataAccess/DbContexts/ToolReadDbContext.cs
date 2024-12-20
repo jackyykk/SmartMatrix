@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using SmartMatrix.Application.Interfaces.DataAccess.DbContexts;
 using SmartMatrix.Application.Interfaces.Services.Essential;
 using SmartMatrix.Core.BaseClasses.Common;
+using SmartMatrix.Domain.Tools.SimpleNoteTool.DbEntities;
 
 namespace SmartMatrix.DataAccess.DbContexts
 {
-    public class AppReadDbContext : AppBaseDbContext, IAppReadDbContext
+    public class ToolReadDbContext : ToolBaseDbContext, IToolReadDbContext
     {
         private readonly IDateTimeService _dateTimeSvc;
         private readonly IAuthenticatedUserService _userSvc;
@@ -14,9 +15,10 @@ namespace SmartMatrix.DataAccess.DbContexts
         public IDbConnection Connection => Database.GetDbConnection();
         public bool HasChanges => ChangeTracker.HasChanges();
 
-        // DBSet        
+        // DBSet
+        public DbSet<SimpleNote> SimpleNotes { get; set; }
         
-        public AppReadDbContext(DbContextOptions<AppReadDbContext> options, IDateTimeService dateTimeSvc, IAuthenticatedUserService userSvc) : base(options)
+        public ToolReadDbContext(DbContextOptions<ToolReadDbContext> options, IDateTimeService dateTimeSvc, IAuthenticatedUserService userSvc) : base(options)
         {
             _dateTimeSvc = dateTimeSvc;
             _userSvc = userSvc;
