@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SmartMatrix.Core.BaseClasses.Common;
 using SmartMatrix.Domain.Constants;
@@ -10,8 +11,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         #region Properties
 
         public string PartitionKey { get; set; } = PartitionKeyOptions.SmartMatrix;
-        public string Type { get; set; } = TypeOptions.NormalRole;
-        public string Category { get; set; } = CategoryOptions.Normal;
+        public string Classification { get; set; } = ClassificationOptions.Normal;
+        public string Type { get; set; } = TypeOptions.Standard;        
         public string RoleCode { get; set; }
         public string RoleName { get; set; }
         public string Description { get; set; }
@@ -29,15 +30,15 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             public const string SmartMatrix = CommonConstants.PartitionKeys.Sys_SmartMatrix;
         }
 
-        public class TypeOptions
+        public class ClassificationOptions
         {            
-            public const string BuiltInRole = "built-in-role";
-            public const string NormalRole = "normal-role";            
+            public const string BuiltIn = "built_in";
+            public const string Normal = "normal";            
         }
 
-        public class CategoryOptions
+        public class TypeOptions
         {
-            public const string Normal = "normal";
+            public const string Standard = "standard";
             public const string API = "api";            
         }
 
@@ -83,8 +84,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 DeletedBy = x.DeletedBy,
                 InternalRemark = x.InternalRemark,
                 PartitionKey = x.PartitionKey,
-                Type = x.Type,
-                Category = x.Category,
+                Classification = x.Classification,
+                Type = x.Type,                
                 RoleCode = x.RoleCode,
                 RoleName = x.RoleName,                
                 Description = x.Description
@@ -97,8 +98,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             {
                 CreatedBy = OwnerOptions.System,
                 PartitionKey = x.PartitionKey,
-                Type = x.Type,
-                Category = x.Category,
+                Classification = x.Classification,
+                Type = x.Type,                
                 RoleCode = x.RoleCode,
                 RoleName = x.RoleName,                
                 Description = x.Description

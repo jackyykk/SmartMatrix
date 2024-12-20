@@ -3,7 +3,7 @@ using SmartMatrix.Domain.Core.Identities.Payloads;
 
 namespace SmartMatrix.Domain.Core.Identities.Messages
 {
-    public class SysUser_GetFirstByType_Response
+    public class SysUser_GetFirstByClassificationAndType_Response
     {
         public static class StatusCodes
         {

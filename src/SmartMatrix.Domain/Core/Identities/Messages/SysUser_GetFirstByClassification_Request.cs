@@ -1,8 +1,8 @@
 namespace SmartMatrix.Domain.Core.Identities.Messages
 {
-    public class SysUser_GetFirstByType_Request
+    public class SysUser_GetFirstByClassification_Request
     {
         public string PartitionKey { get; set; }
-        public string Type { get; set; }        
+        public string Classification { get; set; }        
     }
 }

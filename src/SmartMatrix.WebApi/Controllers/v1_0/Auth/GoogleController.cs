@@ -23,7 +23,7 @@ namespace SmartMatrix.WebApi.Controllers.v1_0.Auth
     public class GoogleController : BaseController<GoogleController>
     {        
         const string LOGIN_PROVIDER_NAME = SysLogin.LoginProviderOptions.Google;
-        public string Default_UserProfile = SysUser_OutputPayload.TypeOptions.BuiltIn_Normal_User_Profile;
+        public string Default_BuiltIn_UserProfile = SysUser_OutputPayload.TypeOptions.Normal_User_Profile;
 
         protected readonly ITokenService _tokenService;
 
@@ -170,18 +170,19 @@ namespace SmartMatrix.WebApi.Controllers.v1_0.Auth
                 if (getUserResult.Data.User == null)
                 {
 
-                    if (Default_UserProfile != SysUser_OutputPayload.TypeOptions.BuiltIn_Normal_User_Profile)
+                    if (Default_BuiltIn_UserProfile != SysUser_OutputPayload.TypeOptions.Normal_User_Profile)
                     {
                         return Ok(Result<SysUser_PerformLogin_Response>.Fail(SysUser_PerformLogin_Response.StatusCodes.Configuration_Error, SysUser_PerformLogin_Response.StatusTexts.Configuration_Error));
                     }
 
                     // Register the user as normal user if not exists
-                    var getUserProfileResult = await _mediator.Send(new SysUser_GetFirstByType_Query
+                    var getUserProfileResult = await _mediator.Send(new SysUser_GetFirstByClassificationAndType_Query
                     {
-                        Request = new SysUser_GetFirstByType_Request
+                        Request = new SysUser_GetFirstByClassificationAndType_Request
                         {
-                            PartitionKey = SysUser_OutputPayload.PartitionKeyOptions.SmartMatrix,
-                            Type = SysUser_OutputPayload.TypeOptions.BuiltIn_Normal_User_Profile   // Use BuiltIn_Normal_User_Profile as the template
+                            PartitionKey = SysUser_OutputPayload.PartitionKeyOptions.SmartMatrix,                            
+                            Classification = SysUser_OutputPayload.ClassificationOptions.BuiltIn,    // Use Normal_User_Profile as the template
+                            Type = SysUser_OutputPayload.TypeOptions.Normal_User_Profile
                         }
                     });
 
@@ -201,7 +202,8 @@ namespace SmartMatrix.WebApi.Controllers.v1_0.Auth
                     var newUser = new SysUser_InputPayload
                     {
                         PartitionKey = SysUser_OutputPayload.PartitionKeyOptions.SmartMatrix,
-                        Type = SysUser_OutputPayload.TypeOptions.Normal_User,
+                        Classification = SysUser_OutputPayload.ClassificationOptions.Normal,
+                        Type = SysUser_OutputPayload.TypeOptions.Standard,
                         UserName = googleUserProfile.Email,
                         DisplayName = googleUserProfile.UserName,
                         GivenName = googleUserProfile.GivenName,

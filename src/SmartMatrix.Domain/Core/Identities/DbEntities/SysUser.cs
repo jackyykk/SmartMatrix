@@ -11,7 +11,8 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
         #region Properties
 
         public string PartitionKey { get; set; } = PartitionKeyOptions.SmartMatrix;
-        public string Type { get; set; } = TypeOptions.Normal_User;
+        public string Classification { get; set; } = ClassificationOptions.Normal;
+        public string Type { get; set; } = TypeOptions.Standard;
         public string UserName { get; set; }
         public string DisplayName { get; set; }
         public string GivenName { get; set; }
@@ -32,11 +33,16 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             public const string SmartMatrix = CommonConstants.PartitionKeys.Sys_SmartMatrix;
         }
 
+        public class ClassificationOptions
+        {            
+            public const string BuiltIn = "built_in";
+            public const string Normal = "normal";
+        }
+
         public class TypeOptions
         {
-            public const string BuiltIn_Normal_User_Profile = "built_in_normal_user_profile";
-            public const string BuiltIn_User = "built_in_user";
-            public const string Normal_User = "normal_user";
+            public const string Standard = "standard";
+            public const string Normal_User_Profile = "normal_user_profile";
         }
 
         public class StatusOptions
@@ -71,6 +77,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 DeletedBy = x.DeletedBy,
                 InternalRemark = x.InternalRemark,
                 PartitionKey = x.PartitionKey,
+                Classification = x.Classification,
                 Type = x.Type,
                 UserName = x.UserName,
                 DisplayName = x.DisplayName,
@@ -108,6 +115,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
                 DeletedBy = x.DeletedBy,
                 InternalRemark = x.InternalRemark,
                 PartitionKey = x.PartitionKey,
+                Classification = x.Classification,
                 Type = x.Type,
                 UserName = x.UserName,
                 DisplayName = x.DisplayName,
@@ -128,6 +136,7 @@ namespace SmartMatrix.Domain.Core.Identities.DbEntities
             {
                 CreatedBy = OwnerOptions.System,
                 PartitionKey = x.PartitionKey,
+                Classification = x.Classification,
                 Type = x.Type,
                 UserName = x.UserName,
                 DisplayName = x.DisplayName,

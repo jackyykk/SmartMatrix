@@ -11,8 +11,8 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         #region Properties
 
         public string PartitionKey { get; set; }
-        public string Type { get; set; }
-        public string Category { get; set; }
+        public string Classification { get; set; }
+        public string Type { get; set; }        
         public string RoleCode { get; set; }
         public string RoleName { get; set; }
         public string Description { get; set; }        
@@ -26,16 +26,16 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
             public const string SmartMatrix = CommonConstants.PartitionKeys.Sys_SmartMatrix;
         }
 
-        public class TypeOptions
-        {
-            public const string BuiltInRole = "built-in-role";
-            public const string NormalRole = "normal-role";
+        public class ClassificationOptions
+        {            
+            public const string BuiltIn = "built_in";
+            public const string Normal = "normal";            
         }
 
-        public class CategoryOptions
+        public class TypeOptions
         {
-            public const string Normal = "normal";
-            public const string API = "api";
+            public const string Standard = "standard";
+            public const string API = "api";            
         }
 
         public class RoleCodeOptions
@@ -79,8 +79,8 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
                 DeletedBy = DeletedBy,
                 InternalRemark = InternalRemark,
                 PartitionKey = PartitionKey,
-                Type = Type,
-                Category = Category,
+                Classification = Classification,                
+                Type = Type,                
                 RoleCode = RoleCode,
                 RoleName = RoleName,
                 Description = Description,

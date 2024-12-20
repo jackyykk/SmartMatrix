@@ -10,6 +10,7 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
         #region Properties
 
         public string PartitionKey { get; set; }
+        public string Classification { get; set; }
         public string Type { get; set; }
         public string UserName { get; set; }
         public string DisplayName { get; set; }
@@ -29,11 +30,16 @@ namespace SmartMatrix.Domain.Core.Identities.Payloads
             public const string SmartMatrix = CommonConstants.PartitionKeys.Sys_SmartMatrix;
         }
 
+        public class ClassificationOptions
+        {            
+            public const string BuiltIn = "built_in";
+            public const string Normal = "normal";
+        }
+
         public class TypeOptions
         {
-            public const string BuiltIn_Normal_User_Profile = "built_in_normal_user_profile";
-            public const string BuiltIn_User = "built_in_user";
-            public const string Normal_User = "normal_user";
+            public const string Standard = "standard";
+            public const string Normal_User_Profile = "normal_user_profile";
         }
 
         public class StatusOptions

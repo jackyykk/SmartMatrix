@@ -58,13 +58,32 @@ namespace SmartMatrix.DataAccess.Repositories.Core.Identities
             return user;
         }
 
-        public async Task<SysUser?> GetFirstByTypeAsync(string partitionKey, string type)
+        public async Task<SysUser?> GetFirstByClassificationAsync(string partitionKey, string classification)
         {
             // Get SysUser Copy To Avoid Cyclic References
             // Get Latest Un-Deleted User and Un-Deleted Logins
             var user = await _readRepo.Entities
                 .Where(x => !x.IsDeleted)
                 .Where(x => x.PartitionKey == partitionKey)
+                .Where(x => x.Classification == classification)
+                .Include(x => x.Logins)
+                .Include(x => x.UserRoles)
+                    .ThenInclude(x => x.Role)
+                .OrderByDescending(x => x.Id)
+                .Select(x => SysUser.Copy(x, x.Logins.Where(l => !l.IsDeleted).ToList(), x.UserRoles.Where(ur => !ur.IsDeleted).ToList()))
+                .FirstOrDefaultAsync();
+
+            return user;
+        }
+
+        public async Task<SysUser?> GetFirstByClassificationAndTypeAsync(string partitionKey, string classification, string type)
+        {
+            // Get SysUser Copy To Avoid Cyclic References
+            // Get Latest Un-Deleted User and Un-Deleted Logins
+            var user = await _readRepo.Entities
+                .Where(x => !x.IsDeleted)
+                .Where(x => x.PartitionKey == partitionKey)
+                .Where(x => x.Classification == classification)
                 .Where(x => x.Type == type)
                 .Include(x => x.Logins)
                 .Include(x => x.UserRoles)

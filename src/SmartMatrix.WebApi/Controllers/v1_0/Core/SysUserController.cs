@@ -62,10 +62,10 @@ namespace SmartMatrix.WebApi.Controllers.v1_0.Core
             return Ok(Result<SysUser_GetTokenContent_Response>.Success(response));
         }
 
-        [HttpGet("getfirst-by_type")]
-        public async Task<IActionResult> GetFirstByType([FromQuery] SysUser_GetFirstByType_Request request)
+        [HttpGet("getfirst-by_class_name")]
+        public async Task<IActionResult> GetFirstByClassName([FromQuery] SysUser_GetFirstByClassification_Request request)
         {
-            var result = await _mediator.Send(new SysUser_GetFirstByType_Query
+            var result = await _mediator.Send(new SysUser_GetFirstByClassification_Query
             {
                 Request = request
             });
