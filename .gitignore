@@ -2,7 +2,6 @@
 private/
 node_modules/
 publish/
-package-lock.json
 yarn.lock
 
 # User-specific files
