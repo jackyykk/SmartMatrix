@@ -5,10 +5,6 @@ const nextConfig = {
   images: {
     domains: [], // Add your image domains here
   },
-  i18n: {
-    locales: ['en'], // Add your supported locales here
-    defaultLocale: 'en',
-  },
   webpack: (config, options) => {    
     if (!options.dev) {
       config.devtool = options.isServer ? false : 'source-map'  // Enable source maps in production mode for client-side
