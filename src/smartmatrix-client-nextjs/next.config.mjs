@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
   reactStrictMode: true, // Enable React Strict Mode
   productionBrowserSourceMaps: true, // Enable source maps in production
   images: {
