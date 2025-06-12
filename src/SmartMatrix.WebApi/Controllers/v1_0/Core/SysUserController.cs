@@ -32,7 +32,7 @@ namespace SmartMatrix.WebApi.Controllers.v1_0.Core
         /// Extract My Info from Token
         /// </summary>
         /// <returns></returns>
-        [HttpGet("get-my-info")]
+        [HttpGet("get-my_info")]
         public IActionResult GetTokenContent()
         {
             SysUser_GetTokenContent_Response response = new SysUser_GetTokenContent_Response();

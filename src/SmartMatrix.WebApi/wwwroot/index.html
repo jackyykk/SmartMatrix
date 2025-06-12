@@ -97,15 +97,16 @@
             });
 
         // Fetch the main config from the API and display the environment
-        fetch('/api/config/get-main-config')
+        fetch('/api/config/get-main_config')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('environment').innerText = `Environment: ${data.environment}`;
                 document.getElementById('description').innerText = `Description: ${data.description}`;
             })
             .catch(error => {
-                console.error('Error fetching environment:', error);
+                console.error('Error fetching configuration:', error);
                 document.getElementById('environment').innerText = 'Environment: Error loading environment';
+                document.getElementById('description').innerText = 'Description: Error loading description';
             });
     </script>
 </body>
