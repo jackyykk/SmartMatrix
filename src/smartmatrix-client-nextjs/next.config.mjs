@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // output: 'export', // Uncomment only if you want to export a static site in development environment. It will not work in production.
   reactStrictMode: true, // Enable React Strict Mode
   productionBrowserSourceMaps: true, // Enable source maps in production
   images: {
